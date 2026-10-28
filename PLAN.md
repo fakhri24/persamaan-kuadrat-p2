@@ -40,6 +40,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
     - Tiga kotak input angka berdampingan: $a = [ \dots ]$, $b = [ \dots ]$, $c = [ \dots ]$
     - Tombol "Periksa Jawaban" & tombol "Ganti Persamaan Lain"
     - Area pesan umpan balik ramah / refleksi pedagogis jika salah tanda minus atau tertukar koefisien
+    - Tombol fleksibel "Lanjut ke Modul Diskriminan" (selalu aktif kapan saja siswa siap)
 
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
 *Fokus Belajar: CSS Grid split-screen 50/50, Flexbox, Styling ekspresi KaTeX, Desain responsive mobile (stacking).*
