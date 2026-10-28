@@ -6,13 +6,13 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 ---
 
 ## Ringkasan Progres
-- [x] **Fase 0**: Inisialisasi Repositori & Template Dasar (5 File Inti)
-- [ ] **Fase 1**: Kerangka Semantik UI & Formula Dasar Matematika (HTML)
-- [ ] **Fase 2**: Penataan Visual Game & Responsivitas (CSS)
-- [ ] **Fase 3**: Logika Perhitungan Diskriminan & Interaktivitas DOM (JS)
-- [ ] **Fase 4**: Mekanik Game & Tantangan Soal (Scaffolding Siswa: Main Quest & Side Quest)
-- [ ] **Fase 5**: Feedback Visual, Scoring, Audio/Animasi, & Polish
-- [ ] **Fase 6**: Deploy GitHub Pages & Uji Coba Pengguna
+- [x] **Fase 0**: Inisialisasi Repositori & Template Dasar (5 File Inti) + Setup GitHub Pages
+- [ ] **Fase 1**: Fondasi Materi & Kuis Identifikasi Koefisien (HTML + KaTeX)
+- [ ] **Fase 2**: Penataan Gaya Dual-Panel 50-50 & Card Visual (CSS)
+- [ ] **Fase 3**: Logika Generator Persamaan & Kuis Identifikasi a, b, c (JS)
+- [ ] **Fase 4**: Modul Inti Diskriminan: Menghitung D via Slot Drag-Drop & Tanda Akar ABC
+- [ ] **Fase 5**: Level Quest & Soal Tantangan (Main Quest & Side Quest)
+- [ ] **Fase 6**: Finishing, Polish, & Dokumentasi Belajar
 
 ---
 
@@ -26,58 +26,50 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Membuat template dasar `script.js`
 - [x] Inisialisasi remote repository GitHub dan branching GitHub Pages (https://fakhri24.github.io/persamaan-kuadrat-p2/)
 
-### Fase 1: Kerangka Dasar Antarmuka (HTML)
-*Fokus Belajar: Semantic HTML5, Stage Progression Container, Kepingan Draggable, Dropzone Formula, dan Card Kaitan Rumus ABC.*
-- [ ] Header & Status Bar Petualangan (Indikator Stage/Level, Progress Bar Capaian, & Lencana Penguasaan)
-- [ ] Container Quest Terpadu (Stage 1: Main Quest Esensial, Stage 2: Main Quest Parameter $k$, Stage 3: Side Quest Pengayaan)
-- [ ] Bank Kepingan Koefisien (Elemen Draggable untuk nilai $a, b, c$)
-- [ ] Slot Interaktif Rumus Diskriminan (Dropzone):
-  - Dropzone slot untuk $b$: `( [ Drop b ] )²`
-  - Dropzone slot untuk $a$: `- 4( [ Drop a ] )`
-  - Dropzone slot untuk $c$: `( [ Drop c ] )`
-- [ ] Area Kalkulasi Bertahap (Step-by-step reveal: Hitung $b^2$, hitung $4ac$, hasil akhir $D$)
-- [ ] Kartu Kaitan Rumus ABC: Visualisasi $x = \frac{-b \pm \sqrt{D}}{2a}$ yang menunjukkan nilai di dalam tanda akar
-- [ ] Pilihan Kesimpulan Sifat Akar (3 Tombol: 2 Akar Riil Berbeda, Akar Kembar, Tidak Riil)
-- [ ] Kotak Umpan Balik Reflektif (Kartu petunjuk konstruktif ramah saat siswa butuh arahan)
-- [ ] Tombol & Modal Bantuan Sandbox ("🎲 Coba Angka Bebas / Uji Rumus Sendiri")
+### Fase 1: Fondasi Materi & Kuis Identifikasi Koefisien (HTML + KaTeX)
+*Fokus Belajar: Integrasi KaTeX CDN untuk matematika LaTeX, Struktur Semantic Split Layout, Form Input Angka.*
+- [ ] Menghubungkan library KaTeX CDN (CSS + JS + auto-render extension) dengan delimiter `$...$` dan `$$...$$`
+- [ ] Struktur Layout Dual-Panel (Grid/Flex 50% - 50%):
+  - **Panel Kiri (Materi Inti)**:
+    - Display persamaan kuadrat umum: $ax^2 + bx + c = 0$ dengan penjelasan koefisien $a$, $b$, dan konstanta $c$
+    - Display rumus ABC: $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
+    - Penanda fokus visual pada bagian di dalam akar: $D = b^2 - 4ac$
+    - Tombol konfirmasi interaktif: "Saya Sudah Paham! Mulai Kuis Cepat"
+  - **Panel Kanan (Kuis Singkat Identifikasi)**:
+    - Wadah soal persamaan kuadrat acak
+    - Tiga slot input/tebakan nilai $a$, $b$, dan $c$ (lengkap dengan penanganan tanda positif/negatif)
+    - Tombol "Periksa Jawaban" & tombol "Ganti Persamaan Lain"
+    - Area pesan umpan balik ramah / refleksi
 
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
-*Fokus Belajar: CSS Variables, Styling kepingan drag-and-drop, Dropzone hover/active states, Visual feedback benar/salah, dan Responsive design.*
-- [ ] Desain tema modern, bersih, dan edukatif (Dark UI elegan)
-- [ ] Status bar dan progress bar penyelesaian quest
-- [ ] Kepingan kartu draggable: cursor grab, bayangan elevasi, dan warna pembeda koefisien
-- [ ] Dropzone slot box dengan animasi border berkedip / dashed saat siap menerima kepingan
-- [ ] Indikator visual berbasis tanda diskriminan di dalam akar:
-  - Hijau: $D > 0 \rightarrow \sqrt{+ \dots}$ (2 solusi riil berlainan)
-  - Kuning: $D = 0 \rightarrow \sqrt{0}$ (Solusi kembar)
-  - Merah: $D < 0 \rightarrow \sqrt{- \dots}$ (Tidak ada akar riil)
-- [ ] Modal/popover untuk mode Sandbox "Coba Angka Bebas"
+*Fokus Belajar: CSS Grid split-screen 50/50, Flexbox, Styling ekspresi KaTeX, Desain responsive mobile (stacking).*
+- [ ] Variabel warna tema edukatif & modern
+- [ ] Desain split container (50% kiri dan 50% kanan di desktop, vertikal stack di HP)
+- [ ] Styling kartu rumus KaTeX dengan background kontras dan sorotan warna (highlight)
+- [ ] Animasi transisi membuka panel kanan setelah tombol konfirmasi ditekan
+- [ ] Styling input kuis identifikasi nilai $a, b, c$ dan tombol interaktif
 
-### Fase 3: Logika Matematika, Stage State, & DOM (JavaScript)
-*Fokus Belajar: Drag & Drop API / Touch Pointer events, state machine stage quest, kalkulasi step-by-step, update DOM dinamis.*
-- [ ] Struktur Data Soal (Database JSON lokal untuk Main Quest & Side Quest)
-- [ ] Mekanisme Drag-and-Drop (Mendukung mouse drag & touch pointer pada layar HP)
-- [ ] Penempatan koefisien pada dropzone yang tepat ($b, a, c$) dan validasi posisi
-- [ ] Kalkulasi bertahap otomatis saat ketiga slot terisi:
-  1. $b^2$
-  2. $4 \times a \times c$
-  3. $D = b^2 - 4ac$
-- [ ] Dinamika rumus ABC: animasi penarikan akar $\sqrt{D}$
-- [ ] Validasi pilihan kesimpulan siswa dan pemberian feedback pedagogis
-- [ ] Logika tombol sandbox bebas (generate angka acak untuk coba-coba)
+### Fase 3: Logika Generator Persamaan & Kuis Identifikasi (JavaScript)
+*Fokus Belajar: Math.floor(Math.random()), integrasi renderMathInElement (KaTeX), event listener click, validasi angka.*
+- [ ] Inisialisasi rendering KaTeX saat DOM siap
+- [ ] Logika tombol konfirmasi di panel kiri untuk membuka/mengaktifkan panel kanan
+- [ ] Fungsi pembuat persamaan kuadrat acak yang natural (variasi tanda minus, $a=1$, dll.)
+- [ ] Pengecekan jawaban siswa untuk nilai $a$, $b$, dan $c$
+- [ ] Umpan balik langsung: highlight hijau jika benar, petunjuk ramah jika keliru (misal: "Hati-hati dengan tanda minus pada koefisien $b$")
+- [ ] Tombol lanjut ke Modul Menghitung Diskriminan setelah berhasil menjawab
 
-### Fase 4: Mekanik Game & Scaffolding Pedagogis
-*Fokus Belajar: Logika kelulusan stage, unlocking level berikutnya, petunjuk bertingkat (hints).*
-- [ ] Stage 1: Main Quest 1a ($D>0$), 1b ($D<0$), 1c ($D=0$) dengan slot kepingan drag-and-drop
-- [ ] Stage 2: Main Quest No. 4 ($kx^2 - kx + 3 = 0$):
-  - Drag parameter $k$ ke slot formula
-  - Membimbing aljabar $k^2 - 12k = 0 \rightarrow k(k - 12) = 0$
-  - Interaktif refleksi kritis: eliminasi $k = 0$ karena syarat $a \neq 0$, menyisakan $k = 12$
-- [ ] Stage 3: Side Quest Pengayaan:
-  - Soal No. 2: $px^2 - (2p-2)x + p = 0$ dengan syarat 2 akar riil berbeda ($D > 0$)
-  - Soal No. 8: $mx^2 + (m-5)x - 20 = 0$ dengan akar saling berlawanan ($b = 0 \rightarrow m - 5 = 0 \rightarrow m = 5$)
-  - Konsep akar berkebalikan ($a = c$)
-- [ ] Sistem reward: Badge penguasaan "Master Diskriminan" & rangkuman capaian belajar
+### Fase 4: Modul Inti Diskriminan & Interaksi Slot (Pengembangan Lanjutan)
+*Fokus Belajar: Drag and drop kartu koefisien, kalkulasi bertahap b^2 - 4ac, kaitan dengan tanda di dalam akar ABC.*
+- [ ] Kepingan koefisien $a, b, c$ yang dapat di-drag ke template slot rumus `( [b] )² - 4( [a] )( [c] )`
+- [ ] Breakdown langkah perhitungan otomatis ($b^2$, lalu $4ac$, lalu hasil akhir $D$)
+- [ ] Animasi visualisasi nilai di dalam akar rumus ABC $\sqrt{D}$
+- [ ] Pemilihan sifat akar (2 akar riil berbeda, akar kembar, tidak riil)
+
+### Fase 5: Level Quest & Scaffolding Tantangan (Main & Side Quest)
+*Fokus Belajar: State machine quest bertingkat, penanganan soal parameter aljabar kx^2 - kx + 3 = 0.*
+- [ ] Main Quest Stage 1: Latihan esensial 1a ($D>0$), 1b ($D<0$), 1c ($D=0$)
+- [ ] Main Quest Stage 2: Soal parameter $k$ dengan panduan aljabar pemfaktoran dan eliminasi syarat $a \neq 0$
+- [ ] Side Quest Stage 3: Pengayaan parameter $p$ dan akar saling berlawanan/berkebalikan ($b=0$ / $a=c$)
 
 ### Fase 5: Evaluasi & Finishing
 - [ ] Review kode bersama pengguna (penjelasan baris per baris)
