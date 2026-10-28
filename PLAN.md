@@ -30,11 +30,11 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 *Fokus Belajar: Integrasi KaTeX CDN untuk matematika LaTeX, Struktur Semantic Split Layout, Form Input Angka.*
 - [x] Menghubungkan library KaTeX CDN (CSS + JS + auto-render extension) dengan delimiter `$...$` dan `$$...$$`
 - [x] Struktur Layout Dual-Panel (Grid/Flex 50% - 50%):
-  - **Panel Kiri (Materi Inti)**:
-    - Display persamaan kuadrat umum: $ax^2 + bx + c = 0$ dengan penjelasan koefisien $a$, $b$, dan konstanta $c$
-    - Display rumus ABC: $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
-    - Penanda fokus visual pada bagian di dalam akar: $D = b^2 - 4ac$
-    - Tombol konfirmasi interaktif: "Saya Sudah Paham! Mulai Kuis Cepat"
+  - **Panel Kiri (Materi Inti - Clean UI & Pop-up On-Demand)**:
+    - Display persamaan kuadrat umum: $ax^2 + bx + c = 0$ dengan tombol pop-up `ℹ️ Keterangan` koefisien
+    - Display rumus ABC: $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$ dengan tombol pop-up `💡 Keterangan Penting!` diskriminan
+    - Dialog Modal interaktif untuk rincian koefisien $a, b, c$ dan penjelasan bagian di dalam akar
+    - Tombol konfirmasi interaktif: "Saya Sudah Paham! Buka Kuis Cepat"
   - **Panel Kanan (Kuis Singkat Identifikasi)**:
     - Wadah soal persamaan kuadrat acak dengan urutan suku teracak dinamis (misal: $c + ax^2 + bx = 0$ atau $bx + c + ax^2 = 0$)
     - Tiga kotak input angka berdampingan: $a = [ \dots ]$, $b = [ \dots ]$, $c = [ \dots ]$

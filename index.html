@@ -23,10 +23,6 @@
   <div id="app" class="app-container">
     <!-- Header Utama -->
     <header class="app-header">
-      <div class="header-tag">
-        <span class="badge">Matematika Fase E / Kelas X</span>
-        <span class="badge badge-accent">Standar TKA Nasional</span>
-      </div>
       <h1>Petualangan Diskriminan Persamaan Kuadrat</h1>
       <p class="subtitle">Memahami karakteristik dan sifat akar melalui analisis nilai $D = b^2 - 4ac$</p>
     </header>
@@ -45,52 +41,25 @@
 
         <!-- Bagian Bentuk Umum -->
         <article class="concept-card">
-          <h3>1. Bentuk Umum Persamaan Kuadrat</h3>
+          <div class="concept-card-top">
+            <h3>1. Bentuk Umum Persamaan Kuadrat</h3>
+            <button id="btn-show-keterangan-abc" class="btn btn-pill-info" type="button" title="Lihat keterangan koefisien">
+              <span>ℹ️ Keterangan</span>
+            </button>
+          </div>
           <p class="math-display">$$ax^2 + bx + c = 0$$</p>
-          <p class="concept-desc">Perhatikan setiap bagian dari persamaan di atas:</p>
-          <ul class="coefficient-list">
-            <li>
-              <span class="chip chip-a">$a$</span>
-              <div>
-                <strong>Koefisien $x^2$</strong>
-                <p>Angka yang menempel pada $x^2$. Syarat mutlak: $a \neq 0$.</p>
-              </div>
-            </li>
-            <li>
-              <span class="chip chip-b">$b$</span>
-              <div>
-                <strong>Koefisien $x$</strong>
-                <p>Angka yang menempel pada variabel $x$ berpangkat 1.</p>
-              </div>
-            </li>
-            <li>
-              <span class="chip chip-c">$c$</span>
-              <div>
-                <strong>Konstanta</strong>
-                <p>Bilangan murni yang berdiri sendiri tanpa variabel $x$.</p>
-              </div>
-            </li>
-          </ul>
         </article>
 
         <!-- Bagian Rumus ABC & Posisi Diskriminan -->
         <article class="concept-card">
-          <h3>2. Rumus ABC & "Kunci Rahasia" Diskriminan</h3>
-          <p>Untuk mencari akar-akar solusi ($x$), kita menggunakan rumus ABC:</p>
-          <p class="math-display">$$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$</p>
-          
-          <div class="highlight-box">
-            <h4>💡 Mengapa Bagian di Dalam Akar Begitu Spesial?</h4>
-            <p>
-              Perhatikan nilai di dalam tanda akar: <strong>$b^2 - 4ac$</strong>. Nilai ini disebut sebagai 
-              <strong>Diskriminan ($D$)</strong>:
-            </p>
-            <p class="math-display formula-d">$$D = b^2 - 4ac$$</p>
-            <p class="highlight-note">
-              Nilai $D$ inilah yang menentukan apakah persamaan memiliki <strong>2 akar berbeda</strong>, 
-              <strong>akar kembar</strong>, atau <strong>tidak memiliki akar riil</strong>!
-            </p>
+          <div class="concept-card-top">
+            <h3>2. Rumus ABC</h3>
+            <button id="btn-show-keterangan-d" class="btn btn-pill-warning" type="button" title="Lihat keterangan penting diskriminan">
+              <span>💡 Keterangan Penting!</span>
+            </button>
           </div>
+          <p class="concept-desc">Rumus untuk mencari akar-akar persamaan kuadrat:</p>
+          <p class="math-display">$$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$</p>
         </article>
 
         <!-- Tombol Aksi Konfirmasi Pemahaman -->
@@ -174,6 +143,79 @@
     <footer class="app-footer">
       <p>&copy; 2026 Pembelajaran Interaktif Persamaan Kuadrat &bull; Dibangun secara bertahap bersama</p>
     </footer>
+  </div>
+
+  <!-- ========================================================
+       MODAL 1: Keterangan Koefisien a, b, dan c
+       ======================================================== -->
+  <div id="modal-abc" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-abc-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-abc-title">ℹ️ Keterangan Koefisien Persamaan Kuadrat</h3>
+        <button id="btn-close-modal-abc" class="modal-close-btn" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="concept-desc">Pada bentuk umum: $$ax^2 + bx + c = 0$$</p>
+        <ul class="coefficient-list">
+          <li>
+            <span class="chip chip-a">$a$</span>
+            <div>
+              <strong>Koefisien $x^2$</strong>
+              <p>Angka yang menempel pada variabel $x^2$. Syarat mutlak: $a \neq 0$.</p>
+            </div>
+          </li>
+          <li>
+            <span class="chip chip-b">$b$</span>
+            <div>
+              <strong>Koefisien $x$</strong>
+              <p>Angka yang menempel pada variabel $x$ berpangkat 1.</p>
+            </div>
+          </li>
+          <li>
+            <span class="chip chip-c">$c$</span>
+            <div>
+              <strong>Konstanta</strong>
+              <p>Bilangan murni yang berdiri sendiri tanpa ada variabel $x$.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-close-modal-abc-footer" class="btn btn-secondary">Mengerti & Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: Keterangan Penting "Kunci Rahasia" Diskriminan
+       ======================================================== -->
+  <div id="modal-d" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-d-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-d-title">💡 Keterangan Penting: "Kunci Rahasia" Diskriminan</h3>
+        <button id="btn-close-modal-d" class="modal-close-btn" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Perhatikan kembali letak di dalam tanda akar pada rumus ABC:</p>
+        <p class="math-display">$$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$</p>
+        
+        <div class="highlight-box">
+          <h4>Mengapa Bagian di Dalam Akar Begitu Spesial?</h4>
+          <p>
+            Nilai di dalam tanda akar, yaitu <strong>$b^2 - 4ac$</strong>, disebut sebagai 
+            <strong>Diskriminan ($D$)</strong>:
+          </p>
+          <p class="math-display formula-d">$$D = b^2 - 4ac$$</p>
+          <p class="highlight-note">
+            Nilai $D$ inilah yang menentukan apakah persamaan memiliki <strong>2 akar berbeda</strong> ($D > 0$), 
+            <strong>akar kembar</strong> ($D = 0$), atau <strong>tidak memiliki akar riil</strong> ($D < 0$)!
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-close-modal-d-footer" class="btn btn-secondary">Mengerti & Tutup</button>
+      </div>
+    </div>
   </div>
 
   <!-- Script JavaScript vanilla kita -->

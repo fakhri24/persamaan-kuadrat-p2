@@ -32,6 +32,59 @@ document.addEventListener('DOMContentLoaded', () => {
   const feedbackEl = document.getElementById('quiz-feedback');
   const btnLanjut = document.getElementById('btn-lanjut-diskriminan');
 
+  // Referensi Elemen Pop-up Modal Keterangan
+  const btnShowKeteranganAbc = document.getElementById('btn-show-keterangan-abc');
+  const modalAbc = document.getElementById('modal-abc');
+  const btnCloseModalAbc = document.getElementById('btn-close-modal-abc');
+  const btnCloseModalAbcFooter = document.getElementById('btn-close-modal-abc-footer');
+
+  const btnShowKeteranganD = document.getElementById('btn-show-keterangan-d');
+  const modalD = document.getElementById('modal-d');
+  const btnCloseModalD = document.getElementById('btn-close-modal-d');
+  const btnCloseModalDFooter = document.getElementById('btn-close-modal-d-footer');
+
+  // ========================================================================
+  // LOGIKA MODAL POP-UP (KETERANGAN BERSIH & MINIMALIS)
+  // ========================================================================
+  function bukaModal(modalElement) {
+    if (!modalElement) return;
+    modalElement.classList.remove('hidden');
+    // Render ulang KaTeX di dalam modal jika ada formula baru
+    renderRumusMatematika(modalElement);
+  }
+
+  function tutupModal(modalElement) {
+    if (!modalElement) return;
+    modalElement.classList.add('hidden');
+  }
+
+  // Event Listener Buka Modal
+  btnShowKeteranganAbc.addEventListener('click', () => bukaModal(modalAbc));
+  btnShowKeteranganD.addEventListener('click', () => bukaModal(modalD));
+
+  // Event Listener Tutup Modal via Tombol X dan Footer
+  btnCloseModalAbc.addEventListener('click', () => tutupModal(modalAbc));
+  btnCloseModalAbcFooter.addEventListener('click', () => tutupModal(modalAbc));
+  btnCloseModalD.addEventListener('click', () => tutupModal(modalD));
+  btnCloseModalDFooter.addEventListener('click', () => tutupModal(modalD));
+
+  // Klik di luar kartu modal (area backdrop gelap) untuk menutup
+  [modalAbc, modalD].forEach(modal => {
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        tutupModal(modal);
+      }
+    });
+  });
+
+  // Tekan tombol keyboard ESC untuk menutup semua modal yang aktif
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      tutupModal(modalAbc);
+      tutupModal(modalD);
+    }
+  });
+
   // ========================================================================
   // EVENT LISTENER: Tombol "Saya Sudah Paham!"
   // ========================================================================
