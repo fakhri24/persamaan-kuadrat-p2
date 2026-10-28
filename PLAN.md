@@ -75,7 +75,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 
 ### Fase 5: Level Quest & Scaffolding Tantangan (Main & Side Quest)
 *Fokus Belajar: State machine quest bertingkat, penanganan soal parameter aljabar kx^2 - kx + 3 = 0.*
-- [x] Main Quest Stage 1 (Langkah 6 - Misi Buku Supermath): 3 soal tetap Latihan 5.2 No. 1a ($D>0$), 1b ($D<0$), 1c ($D=0$) di halaman 133, masing-masing 5 pilihan kesimpulan ($D$ + sifat akar), hanya konfirmasi benar/salah tanpa pembahasan, plus instruksi mencatat langkah lengkap di buku tulis
+- [x] Main Quest Stage 1 (Langkah 6 - Misi Buku Supermath): 3 soal tetap Latihan 5.2 No. 1a ($D>0$), 1b ($D<0$), 1c ($D=0$) di halaman 133, masing-masing 5 pilihan kesimpulan ($D$ + sifat akar), ditampilkan satu per satu dengan tombol "Aman? / Oke lanjut!" setelah jawaban benar, hanya konfirmasi benar/salah tanpa pembahasan, plus instruksi mencatat langkah lengkap di buku tulis
 - [ ] Main Quest Stage 2: Soal parameter $k$ dengan panduan aljabar pemfaktoran dan eliminasi syarat $a \neq 0$
 - [ ] Side Quest Stage 3: Pengayaan parameter $p$ dan akar saling berlawanan/berkebalikan ($b=0$ / $a=c$)
 

@@ -404,7 +404,9 @@ document.addEventListener('DOMContentLoaded', () => {
     rendered: false,
     benar: 0,
     terjawab: [false, false, false],
-    soal: []
+    soal: [],
+    aktif: 0,      // kartu soal yang sedang terbuka
+    selesai: false // true setelah tombol "Oke lanjut!" di soal terakhir ditekan
   };
 
   // ------------------------------------------------------------------------
@@ -1196,14 +1198,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
     questState.terjawab = [false, false, false];
     questState.benar = 0;
+    questState.aktif = 0;
+    questState.selesai = false;
     questState.rendered = true;
 
+    questDoneNote.classList.add('hidden');
     questList.innerHTML = '';
 
     questState.soal.forEach((soal, index) => {
       const kartu = document.createElement('article');
       kartu.className = 'quest-card';
       kartu.dataset.soal = String(index);
+
+      // Hanya soal pertama yang tampil; sisanya dibuka satu per satu
+      if (index > 0) kartu.classList.add('hidden');
 
       kartu.innerHTML = `
         <div class="quest-card-head">
@@ -1219,6 +1227,10 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>`).join('')}
         </div>
         <p class="quest-feedback" aria-live="polite"></p>
+        <div class="quest-ask hidden">
+          <span class="quest-ask-label">Aman?</span>
+          <button type="button" class="btn-step-next quest-next">Oke lanjut!</button>
+        </div>
       `;
 
       questList.appendChild(kartu);
@@ -1234,9 +1246,8 @@ document.addEventListener('DOMContentLoaded', () => {
     questDots.forEach((dot) => {
       const index = Number(dot.dataset.soal);
       dot.classList.toggle('selesai', questState.terjawab[index]);
+      dot.classList.toggle('aktif', index === questState.aktif && !questState.selesai);
     });
-
-    questDoneNote.classList.toggle('hidden', questState.benar !== SOAL_MISI.length);
   }
 
   function jawabMisiKuis(kartu, tombol) {
@@ -1261,12 +1272,16 @@ document.addEventListener('DOMContentLoaded', () => {
       feedback.className = 'quest-feedback success';
       feedback.textContent = '✔ Benar!';
 
+      // Munculkan tombol "Aman? / Oke lanjut!" setelah jawaban benar
+      const ask = kartu.querySelector('.quest-ask');
+      if (ask) ask.classList.remove('hidden');
+
       updateQuestProgress();
 
-      if (questState.benar === SOAL_MISI.length && window.innerWidth < 900) {
+      if (window.innerWidth < 900) {
         setTimeout(() => {
-          questDoneNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 250);
+          ask.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 200);
       }
       return;
     }
@@ -1276,6 +1291,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     feedback.className = 'quest-feedback error';
     feedback.textContent = '✘ Belum tepat. Hitung ulang di buku, lalu pilih lagi.';
+  }
+
+  // Siswa menekan "Oke lanjut!": buka soal berikutnya, atau tutup misi
+  function lanjutSoal(kartu) {
+    const index = Number(kartu.dataset.soal);
+    const ask = kartu.querySelector('.quest-ask');
+    if (ask) ask.classList.add('hidden');
+
+    if (index < questState.soal.length - 1) {
+      // Ringkas soal yang sudah lewat supaya fokus tetap ke satu soal aktif
+      kartu.classList.add('ringkas');
+
+      const berikut = questList.querySelector(`.quest-card[data-soal="${index + 1}"]`);
+      if (!berikut) return;
+
+      berikut.classList.remove('hidden');
+      berikut.classList.add('muncul');
+      questState.aktif = index + 1;
+      updateQuestProgress();
+
+      if (window.innerWidth < 900) {
+        setTimeout(() => {
+          berikut.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 200);
+      }
+      return;
+    }
+
+    // Soal terakhir sudah dikonfirmasi: tutup misi
+    questState.selesai = true;
+    questState.aktif = -1;
+    updateQuestProgress();
+
+    questDoneNote.classList.remove('hidden');
+    questDoneNote.classList.add('muncul');
+
+    if (window.innerWidth < 900) {
+      setTimeout(() => {
+        questDoneNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 250);
+    }
   }
 
   // ------------------------------------------------------------------------
@@ -1332,6 +1388,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Delegasi klik untuk 15 tombol pilihan yang dibuat dinamis
   questList.addEventListener('click', (event) => {
+    // Tombol "Oke lanjut!" setelah soal terjawab benar
+    const tombolLanjut = event.target.closest('.quest-next');
+    if (tombolLanjut) {
+      lanjutSoal(tombolLanjut.closest('.quest-card'));
+      return;
+    }
+
     const tombol = event.target.closest('.quest-option');
     if (!tombol) return;
 

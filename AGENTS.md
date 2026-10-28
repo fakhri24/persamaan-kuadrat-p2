@@ -115,3 +115,9 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
   - *Tanpa pembahasan*: jawaban benar hanya "✔ Benar!" lalu kartu terkunci dan bertanda centang; jawaban salah hanya "✘ Belum tepat, hitung ulang di buku, lalu pilih lagi" tanpa petunjuk atau bocoran. Tidak ada penjelasan langkah sama sekali — sesuai permintaan, pembahasan hidup di catatan siswa.
   - *Progres*: skor "x dari 3", titik 1a/1b/1c berubah hijau saat benar, dan setelah 3/3 muncul ajakan menunjukkan catatan ke guru. Tombol "Ulangi misi" membangun ulang kartu dan mengacak ulang opsi.
   - Progres misi dipertahankan saat siswa keluar-masuk layar; stage 6 baru dirender saat pertama kali dibuka agar KaTeX tidak bekerja sia-sia di halaman awal.
+- **[2026-10-28] Revisi Langkah 6 - Soal Ditampilkan Satu per Satu**: Tiga kartu soal tidak lagi ditumpuk sekaligus.
+  - Hanya **satu soal** yang tampil pada satu waktu. Setelah jawaban benar, muncul baris konfirmasi **"Aman?" + tombol "Oke lanjut!"** di kanan bawah kartu.
+  - Menekan tombol itu meringkas kartu yang sudah lewat menjadi satu baris centang (`.quest-card.ringkas`, hanya menyisakan "No. 1x" + ✓), lalu membuka soal berikutnya dengan animasi dan (di HP) menggulir halus ke kartu baru.
+  - Tombol konfirmasi **hanya muncul setelah jawaban benar**, sehingga siswa tidak bisa melompati soal; jawaban salah tetap harus dicoba ulang tanpa petunjuk.
+  - Setelah konfirmasi soal terakhir, barulah pesan "Misi selesai!" muncul di panel kiri. Titik progres (1a/1b/1c) diberi cincin indigo untuk menandai soal yang sedang aktif.
+  - Uji: hanya 1 kartu terlihat saat masuk, kartu lama terringkas setelah lanjut, resets kembali ke 1a, dan state tetap utuh saat keluar-masuk layar.

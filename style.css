@@ -1847,3 +1847,51 @@ body.is-dragging {
     font-size: 1.05rem;
   }
 }
+
+/* --- Konfirmasi "Aman? / Oke lanjut!" per soal --- */
+.quest-ask {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.1rem;
+  animation: fadeIn 0.25s ease;
+}
+
+.quest-ask-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.quest-card.muncul {
+  animation: fadeIn 0.3s ease;
+}
+
+.quest-done-note.muncul {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Titik soal yang sedang dibuka */
+.quest-dot.aktif {
+  border-color: var(--color-primary);
+  color: #c7d2fe;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.16);
+}
+
+/* Soal yang sudah dilewati diringkas jadi satu baris centang */
+.quest-card.ringkas {
+  padding: 0.55rem 0.8rem;
+  opacity: 0.75;
+  border-color: rgba(16, 185, 129, 0.28);
+}
+
+.quest-card.ringkas .quest-equation,
+.quest-card.ringkas .quest-prompt,
+.quest-card.ringkas .quest-options,
+.quest-card.ringkas .quest-feedback,
+.quest-card.ringkas .quest-ask {
+  display: none !important;
+}
