@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   
   <!-- File CSS eksternal kita dengan cache-buster -->
-  <link rel="stylesheet" href="style.css?v=3.4">
+  <link rel="stylesheet" href="style.css?v=3.5">
 
   <!-- 2. KaTeX JS Core & Auto-render Extension -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -228,16 +228,113 @@
               <p class="steps-lead">Buka satu langkah setiap kali. Klik <strong>"Oke lanjut!"</strong> kalau langkah itu sudah aman.</p>
               <ol id="step-list" class="step-list"></ol>
 
-              <div id="root-checker" class="root-checker hidden">
-                <p class="root-question">Berdasarkan nilai $D$ tersebut, bagaimana sifat akar persamaannya?</p>
-                <div id="root-options" class="root-options" role="group" aria-label="Pilihan sifat akar">
-                  <button type="button" class="root-option" data-akar="dua">Dua akar riil berbeda</button>
-                  <button type="button" class="root-option" data-akar="kembar">Akar kembar (satu akar)</button>
-                  <button type="button" class="root-option" data-akar="tidak">Tidak punya akar riil</button>
+              <!-- Penutup Langkah 4: ajakan pindah ke Langkah 5 -->
+              <div id="next-stage-card" class="next-stage-card hidden">
+                <div class="next-stage-head">
+                  <span class="next-stage-icon" aria-hidden="true">🏁</span>
+                  <div>
+                    <h3>Semua langkah aman!</h3>
+                    <p>Sekarang rangkum polanya dalam 3 baris, lalu uji reaksi kilatmu dengan flashcard.</p>
+                  </div>
+                </div>
+                <button id="btn-ke-langkah5" class="btn btn-accent" type="button">
+                  <span>Lanjut ke Rangkuman &amp; Latihan</span>
+                  <span class="btn-arrow">&rarr;</span>
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           LANGKAH 5: RANGKUMAN RUMUS CEPAT + FLASHCARD
+           Panel kiri  : 3 baris aturan tanda D (rumus cepat)
+           Panel kanan : kartu acak berisi nilai D + 3 pilihan sifat akar
+           ======================================================== -->
+      <section id="stage-flashcard" class="stage-diskriminan hidden" aria-labelledby="stage5-heading">
+        <div class="stage-topbar">
+          <button id="btn-kembali-hitung" class="btn-back" type="button">
+            <span aria-hidden="true">&larr;</span> Hitung Diskriminan
+          </button>
+          <span class="stage-mission">⚡ Langkah 5 &middot; Rangkuman &amp; Latihan Kilat</span>
+        </div>
+
+        <div class="split-layout">
+          <!-- PANEL KIRI: RUMUS CEPAT -->
+          <section class="panel panel-left">
+            <div class="card-header">
+              <span class="step-pill">Langkah 5</span>
+              <h2 id="stage5-heading">Rumus Cepat Sifat Akar</h2>
+            </div>
+
+            <p class="concept-desc">Cukup perhatikan satu angka: nilai $D = b^2 - 4ac$.</p>
+
+            <div class="quickrule-list">
+              <div class="quickrule quickrule-positif">
+                <span class="quickrule-badge">$D &gt; 0$</span>
+                <div class="quickrule-body">
+                  <p class="quickrule-title">Dua akar riil berbeda</p>
+                  <p class="quickrule-note">$\sqrt{D}$ bilangan riil, lalu tanda $\pm$ memberi dua nilai $x$.</p>
                 </div>
               </div>
 
-              <div id="root-feedback" class="feedback-card hidden"></div>
+              <div class="quickrule quickrule-nol">
+                <span class="quickrule-badge">$D = 0$</span>
+                <div class="quickrule-body">
+                  <p class="quickrule-title">Akar kembar (satu akar)</p>
+                  <p class="quickrule-note">$\sqrt{0} = 0$, sehingga kedua akar berimpit.</p>
+                </div>
+              </div>
+
+              <div class="quickrule quickrule-negatif">
+                <span class="quickrule-badge">$D &lt; 0$</span>
+                <div class="quickrule-body">
+                  <p class="quickrule-title">Tidak punya akar riil</p>
+                  <p class="quickrule-note">$\sqrt{D}$ bukan bilangan riil, jadi tidak ada nilai $x$ riil.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PANEL KANAN: FLASHCARD -->
+          <section class="panel panel-right">
+            <div class="card-header">
+              <span class="step-pill step-pill-alt">Latihan Kilat</span>
+              <h2>Flashcard Sifat Akar</h2>
+            </div>
+
+            <div id="flashcard-play" class="flashcard-play">
+              <div class="flashcard-status">
+                <span id="flashcard-progress">Kartu 1 dari 9</span>
+                <span id="flashcard-score" class="flashcard-score">Skor 0</span>
+              </div>
+              <div class="flashcard-bar" aria-hidden="true">
+                <span id="flashcard-bar-fill"></span>
+              </div>
+
+              <div id="flashcard" class="flashcard">
+                <span class="label-badge">Nilai Diskriminan</span>
+                <div id="flashcard-d" class="flashcard-d"></div>
+                <p class="flashcard-hint">Cukup lihat tandanya. Termasuk yang mana?</p>
+              </div>
+
+              <div id="flashcard-options" class="root-options" role="group" aria-label="Pilihan sifat akar">
+                <button type="button" class="root-option" data-akar="dua">Dua akar riil berbeda</button>
+                <button type="button" class="root-option" data-akar="kembar">Akar kembar (satu akar)</button>
+                <button type="button" class="root-option" data-akar="tidak">Tidak punya akar riil</button>
+              </div>
+
+              <div id="flashcard-feedback" class="feedback-card hidden" aria-live="polite"></div>
+
+              <button id="btn-ulang-flashcard" class="btn-link flashcard-reset" type="button">↺ Mulai ulang putaran</button>
+            </div>
+
+            <div id="flashcard-done" class="flashcard-done hidden">
+              <div class="done-icon" aria-hidden="true">🎉</div>
+              <h3>Satu putaran selesai!</h3>
+              <p id="flashcard-result">Skor kamu: 0 dari 9</p>
+              <button id="btn-ulang-putaran" class="btn btn-secondary" type="button">↺ Ulangi putaran</button>
             </div>
           </section>
         </div>
@@ -318,6 +415,6 @@
   </div>
 
   <!-- Script JavaScript vanilla kita dengan cache-buster -->
-  <script src="script.js?v=3.4" defer></script>
+  <script src="script.js?v=3.5" defer></script>
 </body>
 </html>

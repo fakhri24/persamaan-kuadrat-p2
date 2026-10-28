@@ -298,12 +298,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const stepsLocked = document.getElementById('steps-locked');
   const stepsArea = document.getElementById('steps-area');
   const stepList = document.getElementById('step-list');
-  const rootChecker = document.getElementById('root-checker');
-  const rootOptions = Array.from(document.querySelectorAll('#root-options .root-option'));
-  const rootFeedback = document.getElementById('root-feedback');
+  const nextStageCard = document.getElementById('next-stage-card');
+  const btnKeLangkah5 = document.getElementById('btn-ke-langkah5');
+
+  // Referensi Langkah 5: rangkuman + flashcard
+  const stage5Section = document.getElementById('stage-flashcard');
+  const btnKembaliHitung = document.getElementById('btn-kembali-hitung');
+  const flashcardEl = document.getElementById('flashcard');
+  const flashcardPlay = document.getElementById('flashcard-play');
+  const flashcardDone = document.getElementById('flashcard-done');
+  const flashcardProgress = document.getElementById('flashcard-progress');
+  const flashcardScore = document.getElementById('flashcard-score');
+  const flashcardBarFill = document.getElementById('flashcard-bar-fill');
+  const flashcardD = document.getElementById('flashcard-d');
+  const flashcardOptions = Array.from(document.querySelectorAll('#flashcard-options .root-option'));
+  const flashcardFeedback = document.getElementById('flashcard-feedback');
+  const flashcardResult = document.getElementById('flashcard-result');
+  const btnUlangFlashcard = document.getElementById('btn-ulang-flashcard');
+  const btnUlangPutaran = document.getElementById('btn-ulang-putaran');
 
   const SUBTITLE_STAGE1 = 'Memahami karakteristik dan sifat akar melalui analisis nilai $D = b^2 - 4ac$';
   const SUBTITLE_STAGE2 = 'Susun nilai $D = b^2 - 4ac$, hitung bertahap, lalu simpulkan sifat akarnya.';
+  const SUBTITLE_STAGE5 = 'Cukup lihat tanda $D$ untuk mengetahui sifat akar tanpa menghitung ulang.';
 
   // State misi diskriminan
   let soalD = null;              // { a, b, c } soal aktif di Stage 2
@@ -314,8 +330,18 @@ document.addEventListener('DOMContentLoaded', () => {
   let dragState = null;          // data seret aktif (pointer)
   let suppressSlotClickUntil = 0;
   let stage2Locked = false;      // true setelah susunan benar
-  let rootLocked = false;        // true setelah sifat akar dijawab benar
   let stepEls = [];              // 4 kartu langkah yang dibuka satu per satu
+
+  // State flashcard Langkah 5
+  const JUMLAH_KARTU = 9;
+  const flash = {
+    queue: [],
+    index: 0,
+    skor: 0,
+    locked: false,
+    selesai: false,
+    timer: null
+  };
 
   // ------------------------------------------------------------------------
   // Perpindahan stage
@@ -405,7 +431,6 @@ document.addEventListener('DOMContentLoaded', () => {
     trayValues = acakUrutan([a, b, c]);
     selectedChipIndex = null;
     stage2Locked = false;
-    rootLocked = false;
 
     // Tampilkan persamaan (urutan suku tetap diacak seperti kuis sebelumnya)
     stage2Equation.innerHTML = `$$${buatLatexPersamaan(soalD)} = 0$$`;
@@ -420,17 +445,11 @@ document.addEventListener('DOMContentLoaded', () => {
     stepList.innerHTML = '';
     stepEls = [];
 
-    // Kesimpulan (pilihan sifat akar) kembali tersembunyi
-    rootChecker.classList.add('hidden');
-    rootChecker.classList.remove('muncul');
-
-    rootOptions.forEach((tombol) => {
-      tombol.disabled = false;
-      tombol.classList.remove('correct', 'wrong');
-    });
+    // Ajakan ke Langkah 5 kembali tersembunyi
+    nextStageCard.classList.add('hidden');
+    nextStageCard.classList.remove('muncul');
 
     sembunyikanFeedback(slotFeedback);
-    sembunyikanFeedback(rootFeedback);
 
     btnCekSlot.disabled = false;
     btnResetSlots.disabled = false;
@@ -867,50 +886,168 @@ document.addEventListener('DOMContentLoaded', () => {
     if (index < stepEls.length - 1) {
       tampilkanStep(index + 1);
     } else {
-      tampilkanKesimpulan();
+      tampilkanAjakanLangkah5();
     }
   }
 
-  // Setelah langkah 4 aman: munculkan pertanyaan sifat akar
-  function tampilkanKesimpulan() {
-    rootChecker.classList.remove('hidden');
-    rootChecker.classList.add('muncul');
+  // Setelah langkah 4 aman: tawarkan pindah ke Langkah 5 (rangkuman + flashcard)
+  function tampilkanAjakanLangkah5() {
+    nextStageCard.classList.remove('hidden');
+    nextStageCard.classList.add('muncul');
 
     if (window.innerWidth < 900) {
       setTimeout(() => {
-        rootChecker.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        nextStageCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 250);
     }
   }
 
-  // ------------------------------------------------------------------------
-  // Pemilihan sifat akar
-  // ------------------------------------------------------------------------
-  function jawabSifatAkar(jenis, tombol) {
-    if (rootLocked) return;
-    if (rootChecker.classList.contains('hidden')) return; // kesimpulan belum terbuka
+  // ========================================================================
+  // LANGKAH 5: RANGKUMAN RUMUS CEPAT + FLASHCARD
+  // Satu putaran = 9 kartu dengan komposisi adil 3× D>0, 3× D=0, 3× D<0
+  // ========================================================================
+  const KARTU_POSITIF = [1, 4, 8, 9, 12, 16, 17, 20, 21, 24, 25, 32, 36, 41, 45, 49, 60];
+  const KARTU_NEGATIF = [-1, -3, -4, -7, -8, -11, -12, -15, -16, -20, -23, -24, -27, -32, -36];
 
-    const jawabanBenar = hasilD > 0 ? 'dua' : (hasilD === 0 ? 'kembar' : 'tidak');
+  function masukLangkah5() {
+    stage2Section.classList.add('hidden');
+    stage5Section.classList.remove('hidden');
 
-    if (jenis === jawabanBenar) {
-      rootLocked = true;
+    // Putar ulang animasi masuk stage
+    stage5Section.classList.remove('tampil');
+    void stage5Section.offsetWidth;
+    stage5Section.classList.add('tampil');
+
+    aturSubtitle(SUBTITLE_STAGE5);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Lanjutkan putaran yang sedang berjalan; mulai baru bila belum ada / sudah selesai
+    if (flash.queue.length === 0 || flash.selesai) {
+      mulaiPutaranFlashcard();
+    } else {
+      tampilkanKartuAktif();
+    }
+  }
+
+  function kembaliKeHitung() {
+    // Kalau siswa keluar saat kartu sedang dijawab, jangan ulang kartu yang sama
+    if (flash.locked && !flash.selesai) {
+      flash.index++;
+      if (flash.index >= flash.queue.length) flash.selesai = true;
+      flash.locked = false;
+    }
+    bersihkanTimerFlashcard();
+
+    stage5Section.classList.add('hidden');
+    stage2Section.classList.remove('hidden');
+    aturSubtitle(SUBTITLE_STAGE2);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function ambilAcak(pool, jumlah) {
+    return acakUrutan(pool).slice(0, jumlah);
+  }
+
+  // Kantong kartu: tepat 3 positif, 3 nol, 3 negatif, lalu diacak.
+  // Dengan begitu peluang tiap tanda = 1/3 persis, bukan kira-kira.
+  function buatKantongKartu() {
+    const kartu = [];
+
+    ambilAcak(KARTU_POSITIF, 3).forEach((D) => kartu.push({ D, jenis: 'dua' }));
+    for (let i = 0; i < 3; i++) kartu.push({ D: 0, jenis: 'kembar' });
+    ambilAcak(KARTU_NEGATIF, 3).forEach((D) => kartu.push({ D, jenis: 'tidak' }));
+
+    return acakUrutan(kartu);
+  }
+
+  function bersihkanTimerFlashcard() {
+    if (flash.timer) {
+      clearTimeout(flash.timer);
+      flash.timer = null;
+    }
+  }
+
+  function mulaiPutaranFlashcard() {
+    bersihkanTimerFlashcard();
+
+    flash.queue = buatKantongKartu();
+    flash.index = 0;
+    flash.skor = 0;
+    flash.locked = false;
+    flash.selesai = false;
+
+    flashcardDone.classList.add('hidden');
+    flashcardPlay.classList.remove('hidden');
+
+    tampilkanKartuAktif();
+  }
+
+  function tampilkanKartuAktif() {
+    bersihkanTimerFlashcard();
+    flash.locked = false;
+
+    const kartu = flash.queue[flash.index];
+    if (!kartu) {
+      selesaikanPutaran();
+      return;
+    }
+
+    flashcardProgress.textContent = `Kartu ${flash.index + 1} dari ${flash.queue.length}`;
+    flashcardScore.textContent = `Skor ${flash.skor}`;
+    flashcardBarFill.style.width = `${(flash.index / flash.queue.length) * 100}%`;
+
+    // Nilai D warna netral: jangan diberi warna sesuai tanda agar tidak membocorkan jawaban
+    flashcardD.innerHTML = `$$D = ${kartu.D}$$`;
+    renderRumusMatematika(flashcardD);
+
+    flashcardOptions.forEach((tombol) => {
+      tombol.disabled = false;
+      tombol.classList.remove('correct', 'wrong');
+    });
+    sembunyikanFeedback(flashcardFeedback);
+
+    flashcardEl.classList.remove('kartu-masuk');
+    void flashcardEl.offsetWidth; // paksa reflow supaya animasi kartu diputar ulang
+    flashcardEl.classList.add('kartu-masuk');
+  }
+
+  function jawabFlashcard(jenis, tombol) {
+    if (flash.locked) return;
+
+    const kartu = flash.queue[flash.index];
+    if (!kartu) return;
+
+    if (jenis === kartu.jenis) {
+      flash.locked = true;
+      flash.skor++;
+      flashcardScore.textContent = `Skor ${flash.skor}`;
       tombol.classList.add('correct');
-      rootOptions.forEach((opsi) => { opsi.disabled = true; });
+
+      flashcardOptions.forEach((opsi) => { opsi.disabled = true; });
+
+      flashcardBarFill.style.width = `${((flash.index + 1) / flash.queue.length) * 100}%`;
 
       let penjelasan = '';
-      if (hasilD > 0) {
-        penjelasan = `Karena $D = ${hasilD} > 0$, nilai $\\sqrt{D}$ nyata dan tanda $\\pm$ menghasilkan dua nilai $x$ yang berbeda.`;
-      } else if (hasilD === 0) {
-        penjelasan = `Karena $D = 0$, maka $\\sqrt{D} = 0$ sehingga kedua akar berimpit menjadi satu akar kembar.`;
+      if (kartu.jenis === 'dua') {
+        penjelasan = `Karena $D = ${kartu.D} > 0$, $\\sqrt{D}$ bilangan riil dan tanda $\\pm$ memberi dua akar berbeda.`;
+      } else if (kartu.jenis === 'kembar') {
+        penjelasan = `Karena $D = 0$, maka $\\sqrt{0} = 0$ sehingga kedua akar berimpit (akar kembar).`;
       } else {
-        penjelasan = `Karena $D = ${hasilD} < 0$, $\\sqrt{${hasilD}}$ bukan bilangan riil sehingga persamaan tidak punya akar riil.`;
+        penjelasan = `Karena $D = ${kartu.D} < 0$, $\\sqrt{${kartu.D}}$ bukan bilangan riil, jadi tidak ada akar riil.`;
       }
 
-      tampilkanFeedback(
-        rootFeedback,
-        'success',
-        `✅ <strong>Benar!</strong> ${penjelasan}<br><br>Klik <em>"Soal Baru"</em> untuk mencoba persamaan lain.`
-      );
+      tampilkanFeedback(flashcardFeedback, 'success', `✅ <strong>Tepat!</strong> ${penjelasan}`);
+
+      // Beri jeda singkat untuk membaca umpan balik sebelum kartu berikutnya
+      flash.timer = setTimeout(() => {
+        flash.index++;
+        if (flash.index >= flash.queue.length) {
+          selesaikanPutaran();
+        } else {
+          tampilkanKartuAktif();
+        }
+      }, 1200);
+
       return;
     }
 
@@ -918,15 +1055,39 @@ document.addEventListener('DOMContentLoaded', () => {
     tombol.addEventListener('animationend', () => tombol.classList.remove('wrong'), { once: true });
 
     let petunjuk = '';
-    if (hasilD > 0) {
-      petunjuk = 'Hmm, belum tepat. Perhatikan nilai $D$ yang positif. Apakah $\\sqrt{D}$ menghasilkan bilangan nyata? Lalu apa efek tanda $\\pm$ pada jawaban?';
-    } else if (hasilD === 0) {
-      petunjuk = 'Hmm, belum tepat. Di sini $D = 0$. Berapa nilai $\\sqrt{0}$? Kalau angka di bawah akar nol, apakah masih ada dua jawaban berbeda?';
+    if (kartu.jenis === 'dua') {
+      petunjuk = `Perhatikan $D = ${kartu.D}$ yang positif. Apakah $\\sqrt{D}$ menghasilkan bilangan riil? Lalu apa efek tanda $\\pm$?`;
+    } else if (kartu.jenis === 'kembar') {
+      petunjuk = 'Perhatikan $D = 0$. Berapa nilai $\\sqrt{0}$? Kalau angka di bawah akar nol, apakah masih ada dua jawaban berbeda?';
     } else {
-      petunjuk = 'Hmm, belum tepat. Di sini $D$ bernilai negatif. Bisakah bilangan riil memiliki akar kuadrat dari bilangan negatif?';
+      petunjuk = `Perhatikan $D = ${kartu.D}$ yang negatif. Bisakah bilangan riil memiliki akar kuadrat dari bilangan negatif?`;
     }
 
-    tampilkanFeedback(rootFeedback, 'error', `🔍 <strong>Ayo pikirkan sekali lagi.</strong><br>${petunjuk}`);
+    tampilkanFeedback(flashcardFeedback, 'error', `🔍 <strong>Ayo pikirkan sekali lagi.</strong><br>${petunjuk}`);
+  }
+
+  function selesaikanPutaran() {
+    bersihkanTimerFlashcard();
+    flash.selesai = true;
+    flash.locked = false;
+
+    flashcardPlay.classList.add('hidden');
+    flashcardDone.classList.remove('hidden');
+
+    let pujian = 'Terus berlatih, ya!';
+    if (flash.skor === JUMLAH_KARTU) {
+      pujian = 'Sempurna, semua jawaban tepat!';
+    } else if (flash.skor >= 7) {
+      pujian = 'Hebat, hampir sempurna!';
+    }
+
+    flashcardResult.innerHTML = `Skor kamu: <strong>${flash.skor} dari ${JUMLAH_KARTU}</strong>. ${pujian}`;
+
+    if (window.innerWidth < 900) {
+      setTimeout(() => {
+        flashcardDone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 200);
+    }
   }
 
   // ------------------------------------------------------------------------
@@ -966,8 +1127,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  rootOptions.forEach((tombol) => {
-    tombol.addEventListener('click', () => jawabSifatAkar(tombol.dataset.akar, tombol));
+  // Tombol penutup Langkah 4 → Langkah 5, dan navigasi balik
+  btnKeLangkah5.addEventListener('click', masukLangkah5);
+  btnKembaliHitung.addEventListener('click', kembaliKeHitung);
+  btnUlangFlashcard.addEventListener('click', mulaiPutaranFlashcard);
+  btnUlangPutaran.addEventListener('click', mulaiPutaranFlashcard);
+
+  flashcardOptions.forEach((tombol) => {
+    tombol.addEventListener('click', () => jawabFlashcard(tombol.dataset.akar, tombol));
   });
 
   // Delegasi klik: tombol "Oke lanjut!" pada kartu langkah yang dibuat dinamis

@@ -71,6 +71,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Animasi visualisasi nilai di dalam akar rumus ABC $\sqrt{D}$
 - [x] Pemilihan sifat akar (2 akar riil berbeda, akar kembar, tidak riil) dengan umpan balik konstruktif
 - [x] Tombol "Soal Baru" untuk mengulang misi dengan persamaan acak berikutnya
+- [x] **Langkah 5**: Panel rangkuman rumus cepat 3 baris ($D>0$, $D=0$, $D<0$) + flashcard 9 kartu (komposisi adil 3 tiap tanda) dengan skor, progress bar, dan lanjut otomatis
 
 ### Fase 5: Level Quest & Scaffolding Tantangan (Main & Side Quest)
 *Fokus Belajar: State machine quest bertingkat, penanganan soal parameter aljabar kx^2 - kx + 3 = 0.*
