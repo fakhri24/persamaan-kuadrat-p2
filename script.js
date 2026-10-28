@@ -298,8 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const stepsLocked = document.getElementById('steps-locked');
   const stepsArea = document.getElementById('steps-area');
   const stepList = document.getElementById('step-list');
-  const sqrtFormula = document.getElementById('sqrt-formula');
-  const sqrtNote = document.getElementById('sqrt-note');
+  const rootChecker = document.getElementById('root-checker');
   const rootOptions = Array.from(document.querySelectorAll('#root-options .root-option'));
   const rootFeedback = document.getElementById('root-feedback');
 
@@ -316,6 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let suppressSlotClickUntil = 0;
   let stage2Locked = false;      // true setelah susunan benar
   let rootLocked = false;        // true setelah sifat akar dijawab benar
+  let stepEls = [];              // 4 kartu langkah yang dibuka satu per satu
 
   // ------------------------------------------------------------------------
   // Perpindahan stage
@@ -418,8 +418,11 @@ document.addEventListener('DOMContentLoaded', () => {
     stepsLocked.classList.remove('hidden');
     stepsArea.classList.add('hidden');
     stepList.innerHTML = '';
-    sqrtFormula.innerHTML = '';
-    sqrtNote.textContent = '';
+    stepEls = [];
+
+    // Kesimpulan (pilihan sifat akar) kembali tersembunyi
+    rootChecker.classList.add('hidden');
+    rootChecker.classList.remove('muncul');
 
     rootOptions.forEach((tombol) => {
       tombol.disabled = false;
@@ -731,12 +734,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ------------------------------------------------------------------------
-  // Bedah perhitungan: b² → 4ac → D, lalu visualisasi akar
+  // Bedah perhitungan bertahap: b² → 4ac → D → √D → kesimpulan
+  // Setiap kartu muncul satu per satu lewat tombol "Oke lanjut!"
   // ------------------------------------------------------------------------
   function bukaBedahPerhitungan() {
     stepsLocked.classList.add('hidden');
     stepsArea.classList.remove('hidden');
     renderLangkahPerhitungan();
+
+    // Langkah 1 langsung terbuka; langkah 2-4 menunggu konfirmasi siswa
+    tampilkanStep(0);
 
     if (window.innerWidth < 900) {
       setTimeout(() => {
@@ -755,43 +762,125 @@ document.addEventListener('DOMContentLoaded', () => {
     const b2 = b * b;
     const ac4 = 4 * a * c;
 
+    // Tombol konfirmasi yang menempel di sisi kanan tiap kartu langkah
+    const tombolLanjut = `
+        <div class="step-ask">
+          <span class="step-ask-label">Aman?</span>
+          <button type="button" class="btn-step-next">Oke lanjut!</button>
+        </div>`;
+
     stepList.innerHTML = `
-      <li class="step-item">
-        <span class="step-num">1</span>
-        <div class="step-body">
-          <p class="step-title">Kuadratkan koefisien $b$</p>
-          <p class="step-math">$$b^2 = ${dalamKurung(b)}^2 = ${b2}$$</p>
+      <li class="step-item hidden">
+        <div class="step-card">
+          <span class="step-num">1</span>
+          <div class="step-body">
+            <p class="step-title">Kuadratkan koefisien $b$</p>
+            <p class="step-math">$$b^2 = ${dalamKurung(b)}^2 = ${b2}$$</p>
+          </div>
         </div>
+        ${tombolLanjut}
       </li>
-      <li class="step-item">
-        <span class="step-num">2</span>
-        <div class="step-body">
-          <p class="step-title">Kalikan $4 \\cdot a \\cdot c$</p>
-          <p class="step-math">$$4ac = 4 \\times ${dalamKurung(a)} \\times ${dalamKurung(c)} = ${ac4}$$</p>
+      <li class="step-item hidden">
+        <div class="step-card">
+          <span class="step-num">2</span>
+          <div class="step-body">
+            <p class="step-title">Kalikan $4 \\cdot a \\cdot c$</p>
+            <p class="step-math">$$4ac = 4 \\times ${dalamKurung(a)} \\times ${dalamKurung(c)} = ${ac4}$$</p>
+          </div>
         </div>
+        ${tombolLanjut}
       </li>
-      <li class="step-item">
-        <span class="step-num">3</span>
-        <div class="step-body">
-          <p class="step-title">Kurangkan: $D = b^2 - 4ac$</p>
-          <p class="step-math">$$D = ${b2} - ${dalamKurung(ac4)} = ${hasilD}$$</p>
+      <li class="step-item hidden">
+        <div class="step-card">
+          <span class="step-num">3</span>
+          <div class="step-body">
+            <p class="step-title">Kurangkan: $D = b^2 - 4ac$</p>
+            <p class="step-math">$$D = ${b2} - ${dalamKurung(ac4)} = ${hasilD}$$</p>
+          </div>
         </div>
+        ${tombolLanjut}
+      </li>
+      <li class="step-item step-item-sqrt hidden">
+        <div class="step-card step-card-sqrt">
+          <span class="step-num step-num-amber">4</span>
+          <div class="step-body">
+            <p class="step-title step-title-amber">Masukkan nilai $D$ ke dalam akar rumus ABC</p>
+            <div id="sqrt-formula" class="math-display"></div>
+            <p id="sqrt-note" class="sqrt-note"></p>
+          </div>
+        </div>
+        ${tombolLanjut}
       </li>
     `;
-    renderRumusMatematika(stepList);
 
-    // Visualisasi: nilai D dimasukkan kembali ke dalam akar rumus ABC
-    sqrtFormula.innerHTML = `$$x = \\frac{-(${b}) \\pm \\sqrt{${hasilD}}}{2(${a})}$$`;
-    renderRumusMatematika(sqrtFormula);
+    stepEls = Array.from(stepList.querySelectorAll('.step-item'));
+
+    renderRumusMatematika(stepList);
+    renderSqrtVisual();
+  }
+
+  // Kartu langkah 4: nilai D dimasukkan kembali ke dalam akar rumus ABC
+  function renderSqrtVisual() {
+    const formula = document.getElementById('sqrt-formula');
+    const catatan = document.getElementById('sqrt-note');
+    if (!formula || !catatan) return;
+
+    formula.innerHTML = `$$x = \\frac{-(${soalD.b}) \\pm \\sqrt{${hasilD}}}{2(${soalD.a})}$$`;
+    renderRumusMatematika(formula);
 
     if (hasilD > 0) {
-      sqrtNote.innerHTML = `Nilai $D$ positif, sehingga $\\sqrt{D}$ adalah bilangan riil. Tanda $\\pm$ memberi <strong>dua</strong> jawaban berbeda.`;
+      catatan.innerHTML = `Nilai $D$ positif, sehingga $\\sqrt{D}$ adalah bilangan riil. Tanda $\\pm$ memberi <strong>dua</strong> jawaban berbeda.`;
     } else if (hasilD === 0) {
-      sqrtNote.innerHTML = `Nilai $D = 0$, sehingga $\\sqrt{0} = 0$. Bagian $\\pm$ hilang dan hanya tersisa <strong>satu</strong> akar (akar kembar).`;
+      catatan.innerHTML = `Nilai $D = 0$, sehingga $\\sqrt{0} = 0$. Bagian $\\pm$ hilang dan hanya tersisa <strong>satu</strong> akar (akar kembar).`;
     } else {
-      sqrtNote.innerHTML = `Nilai $D$ negatif. Bilangan riil tidak punya akar kuadrat dari bilangan negatif, jadi <strong>tidak ada akar riil</strong>.`;
+      catatan.innerHTML = `Nilai $D$ negatif. Bilangan riil tidak punya akar kuadrat dari bilangan negatif, jadi <strong>tidak ada akar riil</strong>.`;
     }
-    renderRumusMatematika(sqrtNote);
+    renderRumusMatematika(catatan);
+  }
+
+  // Membuka satu kartu langkah (index 0-3)
+  function tampilkanStep(index) {
+    const langkah = stepEls[index];
+    if (!langkah) return;
+
+    langkah.classList.remove('hidden');
+    langkah.classList.add('step-muncul');
+
+    if (window.innerWidth < 900) {
+      setTimeout(() => {
+        langkah.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 200);
+    }
+  }
+
+  // Siswa menekan "Oke lanjut!": tandai aman, lalu buka langkah berikutnya
+  function selesaikanStep(langkah) {
+    const tombol = langkah.querySelector('.btn-step-next');
+    const ask = langkah.querySelector('.step-ask');
+    if (!tombol || !ask) return;
+
+    tombol.disabled = true;
+    ask.innerHTML = '<span class="step-done" aria-label="Langkah sudah aman">✓</span>';
+
+    const index = stepEls.indexOf(langkah);
+
+    if (index < stepEls.length - 1) {
+      tampilkanStep(index + 1);
+    } else {
+      tampilkanKesimpulan();
+    }
+  }
+
+  // Setelah langkah 4 aman: munculkan pertanyaan sifat akar
+  function tampilkanKesimpulan() {
+    rootChecker.classList.remove('hidden');
+    rootChecker.classList.add('muncul');
+
+    if (window.innerWidth < 900) {
+      setTimeout(() => {
+        rootChecker.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 250);
+    }
   }
 
   // ------------------------------------------------------------------------
@@ -799,6 +888,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ------------------------------------------------------------------------
   function jawabSifatAkar(jenis, tombol) {
     if (rootLocked) return;
+    if (rootChecker.classList.contains('hidden')) return; // kesimpulan belum terbuka
 
     const jawabanBenar = hasilD > 0 ? 'dua' : (hasilD === 0 ? 'kembar' : 'tidak');
 
@@ -878,6 +968,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   rootOptions.forEach((tombol) => {
     tombol.addEventListener('click', () => jawabSifatAkar(tombol.dataset.akar, tombol));
+  });
+
+  // Delegasi klik: tombol "Oke lanjut!" pada kartu langkah yang dibuat dinamis
+  stepList.addEventListener('click', (event) => {
+    const tombol = event.target.closest('.btn-step-next');
+    if (!tombol) return;
+
+    const langkah = tombol.closest('.step-item');
+    if (langkah) selesaikanStep(langkah);
   });
 
 

@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   
   <!-- File CSS eksternal kita dengan cache-buster -->
-  <link rel="stylesheet" href="style.css?v=3.3">
+  <link rel="stylesheet" href="style.css?v=3.4">
 
   <!-- 2. KaTeX JS Core & Auto-render Extension -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -225,16 +225,10 @@
             </div>
 
             <div id="steps-area" class="steps-area hidden">
-              <p class="steps-lead">Kerjakan bertahap, satu langkah setiap baris:</p>
+              <p class="steps-lead">Buka satu langkah setiap kali. Klik <strong>"Oke lanjut!"</strong> kalau langkah itu sudah aman.</p>
               <ol id="step-list" class="step-list"></ol>
 
-              <div class="sqrt-visual">
-                <p class="sqrt-title">Nilai $D$ kembali ke dalam akar rumus ABC</p>
-                <div id="sqrt-formula" class="math-display"></div>
-                <p id="sqrt-note" class="sqrt-note"></p>
-              </div>
-
-              <div class="root-checker">
+              <div id="root-checker" class="root-checker hidden">
                 <p class="root-question">Berdasarkan nilai $D$ tersebut, bagaimana sifat akar persamaannya?</p>
                 <div id="root-options" class="root-options" role="group" aria-label="Pilihan sifat akar">
                   <button type="button" class="root-option" data-akar="dua">Dua akar riil berbeda</button>
@@ -324,6 +318,6 @@
   </div>
 
   <!-- Script JavaScript vanilla kita dengan cache-buster -->
-  <script src="script.js?v=3.3" defer></script>
+  <script src="script.js?v=3.4" defer></script>
 </body>
 </html>

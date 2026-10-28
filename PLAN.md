@@ -67,6 +67,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Kepingan koefisien $a, b, c$ yang dapat di-drag ke template slot rumus `( [b] )² - 4( [a] )( [c] )` (mouse + sentuh, plus fallback ketuk-kepingan-lalu-ketuk-slot)
 - [x] Generator soal Stage 2 yang seimbang untuk tiga kemungkinan: $D > 0$, $D = 0$ (dikonstruksi pasti kembar), dan $D < 0$
 - [x] Breakdown langkah perhitungan otomatis ($b^2$, lalu $4ac$, lalu hasil akhir $D$) yang terbuka setelah susunan slot tepat
+- [x] Bedah perhitungan dibagi 4 langkah bertahap: tiap kartu punya tombol "Aman? / Oke lanjut!" di sisi kanan, langkah berikutnya baru muncul setelah dikonfirmasi, dan pertanyaan sifat akar muncul di akhir
 - [x] Animasi visualisasi nilai di dalam akar rumus ABC $\sqrt{D}$
 - [x] Pemilihan sifat akar (2 akar riil berbeda, akar kembar, tidak riil) dengan umpan balik konstruktif
 - [x] Tombol "Soal Baru" untuk mengulang misi dengan persamaan acak berikutnya
