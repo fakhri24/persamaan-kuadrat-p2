@@ -98,12 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
     generatePersamaanAcak();
     inputA.focus();
 
-    // Scroll halus ke panel kuis pada tampilan mobile
-    panelKuis.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // Scroll halus ke panel kuis hanya pada tampilan mobile (layar sempit)
+    if (window.innerWidth < 900) {
+      panelKuis.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   });
 
   // ========================================================================
-  // FUNGSI: Generator Persamaan Kuadrat Acak (Anti-Hafalan Urutan)
+  // FUNGSI: Generator Persamaan Kuadrat Acak (Anti-Hafalan Urutan: 6 Permutasi Lengkap)
   // ========================================================================
   function generatePersamaanAcak() {
     // 1. Pilih nilai a yang tidak boleh nol (-5 s/d 5, kecuali 0)
@@ -132,16 +134,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const sukuB = formatSukuB(b);
     const sukuC = formatSukuC(c);
 
-    // Kumpulan pola pengacakan urutan suku (Anti-Hafalan)
+    // Kumpulan 6 variasi permutasi urutan suku (Peluang kemunculan posisi masing-masing suku seimbang 1/3)
     const polaUrutan = [
-      // Pola 1 (Standar): ax^2 + bx + c = 0
+      // 1. [A, B, C] -> ax^2 + bx + c = 0 (Bentuk Standar)
       gabungSuku([sukuA, sukuB, sukuC]),
-      // Pola 2 (Konstanta di awal): c + bx + ax^2 = 0
-      gabungSuku([sukuC, sukuB, sukuA]),
-      // Pola 3 (Suku x di awal): bx + ax^2 + c = 0
+      // 2. [A, C, B] -> ax^2 + c + bx = 0
+      gabungSuku([sukuA, sukuC, sukuB]),
+      // 3. [B, A, C] -> bx + ax^2 + c = 0
       gabungSuku([sukuB, sukuA, sukuC]),
-      // Pola 4 (Suku x di akhir): ax^2 + c + bx = 0
-      gabungSuku([sukuA, sukuC, sukuB])
+      // 4. [B, C, A] -> bx + c + ax^2 = 0
+      gabungSuku([sukuB, sukuC, sukuA]),
+      // 5. [C, A, B] -> c + ax^2 + bx = 0
+      gabungSuku([sukuC, sukuA, sukuB]),
+      // 6. [C, B, A] -> c + bx + ax^2 = 0
+      gabungSuku([sukuC, sukuB, sukuA])
     ];
 
     // Pilih salah satu pola secara acak

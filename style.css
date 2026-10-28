@@ -119,12 +119,13 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
+  width: 100%;
 }
 
 @media (min-width: 900px) {
   .split-layout {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
   }
 }
 
@@ -138,6 +139,8 @@ body {
   flex-direction: column;
   gap: 1.25rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  min-width: 0; /* KUNCI 50:50: Mencegah konten anak melebarkan kolom grid melebihi 50% */
+  width: 100%;
 }
 
 .card-header {
@@ -425,11 +428,12 @@ body {
 /* Input Grid */
 .inputs-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
 .input-group {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -438,6 +442,7 @@ body {
 .input-group label {
   font-size: 0.85rem;
   font-weight: 600;
+  word-break: break-word;
 }
 
 .input-group small {
@@ -457,6 +462,8 @@ body {
   padding: 0.6rem;
   border-radius: var(--radius-sm);
   outline: none;
+  width: 100%;
+  min-width: 0;
   transition: border-color var(--transition-fast);
 }
 
@@ -496,13 +503,6 @@ body {
   border: 0;
   border-top: 1px solid var(--border-color);
   margin: 0.5rem 0;
-}
-
-.app-footer {
-  text-align: center;
-  color: var(--text-dim);
-  font-size: 0.85rem;
-  padding-top: 1rem;
 }
 
 /* ==========================================================================

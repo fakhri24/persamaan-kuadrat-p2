@@ -36,7 +36,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
     - Dialog Modal interaktif untuk rincian koefisien $a, b, c$ dan penjelasan bagian di dalam akar
     - Tombol konfirmasi interaktif: "Saya Sudah Paham! Buka Kuis Cepat"
   - **Panel Kanan (Kuis Singkat Identifikasi)**:
-    - Wadah soal persamaan kuadrat acak dengan urutan suku teracak dinamis (misal: $c + ax^2 + bx = 0$ atau $bx + c + ax^2 = 0$)
+    - Wadah soal persamaan kuadrat acak dengan 6 variasi permutasi urutan suku ($3! = 6$) agar seimbang
     - Tiga kotak input angka berdampingan: $a = [ \dots ]$, $b = [ \dots ]$, $c = [ \dots ]$
     - Tombol "Periksa Jawaban" & tombol "Ganti Persamaan Lain"
     - Area pesan umpan balik ramah / refleksi pedagogis jika salah tanda minus atau tertukar koefisien
@@ -45,7 +45,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
 *Fokus Belajar: CSS Grid split-screen 50/50, Flexbox, Styling ekspresi KaTeX, Desain responsive mobile (stacking).*
 - [x] Variabel warna tema edukatif & modern
-- [x] Desain split container (50% kiri dan 50% kanan di desktop, vertikal stack di HP)
+- [x] Desain split container rigid 50:50 dengan `minmax(0, 1fr)` dan `min-width: 0`
 - [x] Styling kartu rumus KaTeX dengan background kontras dan sorotan warna (highlight)
 - [x] Animasi transisi membuka panel kanan setelah tombol konfirmasi ditekan
 - [x] Styling input kuis identifikasi nilai $a, b, c$ dan tombol interaktif
@@ -54,7 +54,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 *Fokus Belajar: Math.floor(Math.random()), integrasi renderMathInElement (KaTeX), event listener click, validasi angka.*
 - [x] Inisialisasi rendering KaTeX saat DOM siap
 - [x] Logika tombol konfirmasi di panel kiri untuk membuka/mengaktifkan panel kanan
-- [x] Fungsi pembuat persamaan kuadrat acak yang natural (variasi tanda minus, $a=1$, dll.)
+- [x] Fungsi pembuat persamaan kuadrat acak dengan 6 variasi permutasi posisi suku aljabar
 - [x] Pengecekan jawaban siswa untuk nilai $a$, $b$, dan $c$
 - [x] Umpan balik langsung: highlight hijau jika benar, petunjuk ramah jika keliru (misal: "Hati-hati dengan tanda minus pada koefisien $b$")
 - [x] Tombol lanjut ke Modul Menghitung Diskriminan setelah berhasil menjawab

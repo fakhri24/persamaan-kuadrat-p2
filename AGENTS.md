@@ -48,9 +48,17 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
   2. *Panel Kanan (50%)*: Muncul setelah siswa mengonfirmasi pemahaman di panel kiri. Menyajikan persamaan kuadrat acak dan kuis singkat bagi siswa untuk melatih ketepatan mengidentifikasi nilai $a$, $b$, dan $c$ (termasuk tanda negatif) sebelum masuk ke perhitungan diskriminan.
 - **[2026-10-28] Mekanik Kuis Koefisien (Anti-Hafalan Urutan & 3 Input Box)**:
   - Siswa mengetik nilai $a$, $b$, dan $c$ pada 3 input box berdampingan lalu menekan tombol "Periksa Jawaban".
-  - *Fitur Anti-Hafalan*: Urutan suku pada persamaan sengaja diacak secara dinamis (misal: bentuk standar $ax^2 + bx + c = 0$, bentuk terbalik $c + bx + ax^2 = 0$, atau suku $x^2$ di tengah $bx + ax^2 + c = 0$). Hal ini memastikan siswa benar-benar memahami bahwa $a$ menempel pada $x^2$, $b$ menempel pada $x$, dan $c$ adalah konstanta murni tanpa $x$.
-- **[2026-10-28] Transisi Fleksibel Antar-Modul**: Tombol "Lanjut ke Modul Diskriminan" selalu aktif dan dapat diakses kapan saja tanpa batasan skor minimum. Siswa diberi kebebasan penuh mencoba kuis identifikasi koefisien sebanyak yang mereka inginkan sebelum melangkah ke analisis diskriminan.
+  - *Fitur Anti-Hafalan (6 Permutasi Lengkap)*: Urutan suku pada persamaan kuadrat menggunakan seluruh kombinasi matematis ($3! = 6$ variasi):
+    1. $ax^2 + bx + c = 0$
+    2. $ax^2 + c + bx = 0$
+    3. $bx + ax^2 + c = 0$
+    4. $bx + c + ax^2 = 0$
+    5. $c + ax^2 + bx = 0$
+    6. $c + bx + ax^2 = 0$  
+    Hal ini memastikan bobot posisi suku $x^2$, $x$, dan konstanta terdistribusi seimbang (masing-masing 33.3% di posisi depan) tanpa bias.
+- **[2026-10-28] Standar Layout Simetris CSS Grid (50:50 Rigid)**:
+  - Menggunakan `grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)` dan `min-width: 0` pada panel kontainer. Hal ini mencegah perilaku default `1fr` (`minmax(auto, 1fr)`) yang dapat terdistorsi melebar akibat konten form/input di panel kanan.
 - **[2026-10-28] Desain Minimalis & Pop-up Keterangan On-Demand**:
-  - Badge kurikulum pada header dihapus untuk menjaga kebersihan visual (clean UI).
+  - Badge kurikulum pada header dan footer copyright dihapus untuk memaksimalkan fokus visual aplikasi.
   - Teks penjelasan rincian koefisien ($a, b, c$) dan keterangan penting Diskriminan ($D$) pada panel kiri disembunyikan secara default, digantikan tombol pop-up modal (`ℹ️ Keterangan` dan `💡 Keterangan Penting!`). Hal ini mengurangi beban kognitif siswa (cognitive load) sehingga antarmuka tetap bersih dan siswa membuka penjelasan saat dibutuhkan saja.
 - **[2026-10-28] Alur Pembelajaran Terpadu (Story Mode Linier)**: Alur aplikasi dirancang sebagai progresi petualangan bertahap (Stage-by-Stage). Dimulai langsung dari Stage 1 (Main Quest: Latihan 5.2 No. 1a, 1b, 1c), menuju Stage 2 (Main Quest: Menentukan nilai parameter $k$ untuk akar kembar), hingga Stage 3 (Side Quest: Parameter $p$ dan $m$ dengan kondisi akar khusus). Di setiap stage, terdapat slot interaktif dan tombol bantuan "Coba Angka Bebas / Sandbox" jika siswa ingin menguji coba secara bebas.
