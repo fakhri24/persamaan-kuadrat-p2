@@ -24,7 +24,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Membuat template dasar `index.html`
 - [x] Membuat template dasar `style.css`
 - [x] Membuat template dasar `script.js`
-- [ ] Inisialisasi remote repository GitHub dan branching GitHub Pages
+- [x] Inisialisasi remote repository GitHub dan branching GitHub Pages (https://fakhri24.github.io/persamaan-kuadrat-p2/)
 
 ### Fase 1: Kerangka Dasar Antarmuka (HTML)
 *Fokus Belajar: Semantic HTML5, Form input kuadrat ($a, b, c$), Card display, dan Tombol Aksi.*
