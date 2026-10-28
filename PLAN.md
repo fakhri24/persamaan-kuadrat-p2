@@ -67,9 +67,15 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 
 ### Fase 4: Mekanik Game & Scaffolding Pedagogis
 *Fokus Belajar: Logika kelulusan stage, unlocking level berikutnya, petunjuk bertingkat (hints).*
-- [ ] Stage 1: Main Quest 1a ($D>0$), 1b ($D<0$), 1c ($D=0$)
-- [ ] Stage 2: Main Quest No. 4 ($kx^2 - kx + 3 = 0$, mencari nilai $k$ dengan syarat $D=0$ dan $a \neq 0$)
-- [ ] Stage 3: Side Quest No. 2 ($px^2 - (2p-2)x + p = 0$) & No. 8 (akar saling berlawanan $b=0$)
+- [ ] Stage 1: Main Quest 1a ($D>0$), 1b ($D<0$), 1c ($D=0$) dengan slot kepingan drag-and-drop
+- [ ] Stage 2: Main Quest No. 4 ($kx^2 - kx + 3 = 0$):
+  - Drag parameter $k$ ke slot formula
+  - Membimbing aljabar $k^2 - 12k = 0 \rightarrow k(k - 12) = 0$
+  - Interaktif refleksi kritis: eliminasi $k = 0$ karena syarat $a \neq 0$, menyisakan $k = 12$
+- [ ] Stage 3: Side Quest Pengayaan:
+  - Soal No. 2: $px^2 - (2p-2)x + p = 0$ dengan syarat 2 akar riil berbeda ($D > 0$)
+  - Soal No. 8: $mx^2 + (m-5)x - 20 = 0$ dengan akar saling berlawanan ($b = 0 \rightarrow m - 5 = 0 \rightarrow m = 5$)
+  - Konsep akar berkebalikan ($a = c$)
 - [ ] Sistem reward: Badge penguasaan "Master Diskriminan" & rangkuman capaian belajar
 
 ### Fase 5: Evaluasi & Finishing
