@@ -45,7 +45,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
 *Fokus Belajar: CSS Grid split-screen 50/50, Flexbox, Styling ekspresi KaTeX, Desain responsive mobile (stacking).*
 - [x] Variabel warna tema edukatif & modern
-- [x] Latar belakang animasi gradasi dinamis (*ambient gradient shift*)
+- [x] Latar belakang animasi gradasi dinamis (Strategi 1 & Strategi 2: Dual Spotlight Aurora Glow Mesh)
 - [x] Desain split container rigid 50:50 dengan `minmax(0, 1fr)` dan `min-width: 0`
 - [x] Styling kartu rumus KaTeX dengan background kontras dan sorotan warna (highlight)
 - [x] Animasi transisi membuka panel kanan setelah tombol konfirmasi ditekan

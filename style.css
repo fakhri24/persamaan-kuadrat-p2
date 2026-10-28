@@ -49,23 +49,103 @@
 
 body {
   font-family: var(--font-family);
-  background: linear-gradient(135deg, #1e1b4b 0%, #090d16 50%, #2e1065 100%);
-  background-size: 200% 200%;
-  animation: bgGradientShift 14s ease infinite alternate;
+  background-color: #060913;
   color: var(--text-main);
   min-height: 100vh;
   line-height: 1.5;
   display: flex;
   justify-content: center;
   padding: 1.5rem 1rem;
+  position: relative;
+  overflow-x: hidden;
 }
 
-@keyframes bgGradientShift {
+/* ==========================================================================
+   AMBIENT AURORA & SPOTLIGHT GLOW MESH BACKDROP (STRATEGI 2)
+   ========================================================================== */
+.ambient-glow-backdrop {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform, opacity;
+}
+
+/* Spotlight 1: Indigo Nebula di pojok kiri atas */
+.glow-orb-1 {
+  width: min(550px, 80vw);
+  height: min(550px, 80vw);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, rgba(99, 102, 241, 0) 70%);
+  top: -100px;
+  left: -80px;
+  animation: orbFloat1 15s ease-in-out infinite alternate;
+}
+
+/* Spotlight 2: Violet Aurora di pojok kanan bawah */
+.glow-orb-2 {
+  width: min(600px, 85vw);
+  height: min(600px, 85vw);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.38) 0%, rgba(139, 92, 246, 0) 70%);
+  bottom: -120px;
+  right: -100px;
+  animation: orbFloat2 18s ease-in-out infinite alternate;
+}
+
+/* Spotlight 3: Cyan Accent halus di area tengah */
+.glow-orb-3 {
+  width: min(380px, 60vw);
+  height: min(380px, 60vw);
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.22) 0%, rgba(14, 165, 233, 0) 70%);
+  top: 40%;
+  left: 25%;
+  animation: orbFloat3 12s ease-in-out infinite alternate;
+}
+
+@keyframes orbFloat1 {
   0% {
-    background-position: 0% 0%;
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(60px, 45px) scale(1.15);
+    opacity: 0.7;
   }
   100% {
-    background-position: 100% 100%;
+    transform: translate(30px, 80px) scale(0.95);
+    opacity: 0.55;
+  }
+}
+
+@keyframes orbFloat2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate(-50px, -60px) scale(1.18);
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate(-90px, -20px) scale(1);
+    opacity: 0.5;
+  }
+}
+
+@keyframes orbFloat3 {
+  0% {
+    transform: translate(0, 0) scale(0.9);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate(45px, -30px) scale(1.25);
+    opacity: 0.4;
   }
 }
 
@@ -82,31 +162,6 @@ body {
 .app-header {
   text-align: center;
   padding: 1rem 0;
-}
-
-.header-tag {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.badge {
-  display: inline-block;
-  background: rgba(99, 102, 241, 0.15);
-  color: #a5b4fc;
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  border: 1px solid rgba(99, 102, 241, 0.3);
-}
-
-.badge-accent {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fcd34d;
-  border-color: rgba(245, 158, 11, 0.3);
 }
 
 .app-header h1 {
@@ -140,10 +195,12 @@ body {
   }
 }
 
-/* Panel Card */
+/* Panel Card dengan Frosted Glassmorphism Modern */
 .panel {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  background-color: rgba(30, 41, 59, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
   padding: 1.75rem;
   display: flex;

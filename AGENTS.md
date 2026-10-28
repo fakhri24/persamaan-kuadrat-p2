@@ -61,6 +61,10 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
 - **[2026-10-28] Desain Minimalis & Pop-up Keterangan On-Demand**:
   - Badge kurikulum pada header dan footer copyright dihapus untuk memaksimalkan fokus visual aplikasi.
   - Teks penjelasan rincian koefisien ($a, b, c$) dan keterangan penting Diskriminan ($D$) pada panel kiri disembunyikan secara default, digantikan tombol pop-up modal (`ℹ️ Keterangan` dan `💡 Keterangan Penting!`). Hal ini mengurangi beban kognitif siswa (cognitive load) sehingga antarmuka tetap bersih dan siswa membuka penjelasan saat dibutuhkan saja.
-- **[2026-10-28] Latar Belakang Gradasi Animasi Dinamis**:
-  - Menerapkan background bergerak halus (*animated gradient shift*) menggunakan palet warna gelap (midnight navy, deep indigo, dan slate) dengan durasi siklus 18 detik agar tampilan berkesan hidup dan modern tanpa mengganggu kenyamanan membaca rumus matematika.
+- **[2026-10-28] Latar Belakang Gradasi Animasi Dinamis (Evolusi Strategi 1 & 2)**:
+  - Telah diimplementasikan perpaduan Strategi 1 (gradasi linear kontras tinggi) lalu ditingkatkan ke **Strategi 2 (Dual Spotlight & Radial Ambient Aurora Mesh)**:
+    1. Lapisan dasar gelap ruang angkasa (`#060913`).
+    2. Tiga bola cahaya (*glow orbs*) terdistribusi secara strategis: Indigo Nebula di kiri atas, Violet Aurora di kanan bawah, dan Cyan Accent di tengah.
+    3. Menggunakan animasi mengapung halus (`@keyframes orbFloat1, 2, 3`) dengan durasi berbeda (12s, 15s, 18s) sehingga tampak organik dan hidup.
+    4. Kartu antarmuka (`.panel`) menggunakan *frosted glassmorphism* (`backdrop-filter: blur(16px)` dan semi-transparan `rgba(30, 41, 59, 0.82)`) agar aura cahaya di belakang memancar lembut di tepi kartu tanpa mengorbankan kenyamanan membaca rumus matematika.
 - **[2026-10-28] Alur Pembelajaran Terpadu (Story Mode Linier)**: Alur aplikasi dirancang sebagai progresi petualangan bertahap (Stage-by-Stage). Dimulai langsung dari Stage 1 (Main Quest: Latihan 5.2 No. 1a, 1b, 1c), menuju Stage 2 (Main Quest: Menentukan nilai parameter $k$ untuk akar kembar), hingga Stage 3 (Side Quest: Parameter $p$ dan $m$ dengan kondisi akar khusus). Di setiap stage, terdapat slot interaktif dan tombol bantuan "Coba Angka Bebas / Sandbox" jika siswa ingin menguji coba secara bebas.
