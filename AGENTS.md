@@ -74,4 +74,10 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
     3. *Constellation Graph Nodes*: Titik-titik node yang saling terhubung garis jaring saat berdekatan.
     4. *Floating Math Symbols*: Simbol matematika riil ($\pi, \sum, \int, \sqrt{\dots}, \infty, \Delta, \theta, \lambda, \partial, \nabla$) yang melayang dinamis pada node konstelasi.
     5. *Performa Tinggi*: Berjalan pada 60 FPS menggunakan `requestAnimationFrame` dan penskalaan Retina display DPR tanpa lag.
+- **[2026-10-28] Peningkatan Responsivitas Penuh Garis & Simbol terhadap Mouse (Axiom Engine)**:
+  - *Dynamic Pointer Links*: Kursor mouse bertindak sebagai simpul aktif konstelasi. Garis-garis dinamis terhubung dari kursor ke seluruh node dalam `mouseRadius`, dan garis antar-node di sekitar kursor menyala cyan terang.
+  - *Repel Fisika & Pendar Simbol*: Node dan simbol matematika terdorong menjauh secara pegas halus saat didekati kursor, serta membesar dan berpendar cyan terang (`shadowBlur: 10`).
+  - *Active Cursor Node*: Titik inti cyan (`#38BDF8`) dan cincin pendar bernapas di posisi kursor.
+  - *Pemicu Gelombang Kejut (Shockwave Ripple)*: Klik atau ketukan di mana saja memicu gelombang kejut radial yang memutar jarum medan vektor dan mendorong node keluar.
+  - *Frosted Glassmorphism Kedalaman*: Kartu panel disesuaikan ke `rgba(15, 23, 42, 0.72)` dengan `backdrop-filter: blur(12px)` agar pergerakan garis dan simbol di baliknya terlihat hidup tanpa mengorbankan keterbacaan KaTeX.
 - **[2026-10-28] Alur Pembelajaran Terpadu (Story Mode Linier)**: Alur aplikasi dirancang sebagai progresi petualangan bertahap (Stage-by-Stage). Dimulai langsung dari Stage 1 (Main Quest: Latihan 5.2 No. 1a, 1b, 1c), menuju Stage 2 (Main Quest: Menentukan nilai parameter $k$ untuk akar kembar), hingga Stage 3 (Side Quest: Parameter $p$ dan $m$ dengan kondisi akar khusus). Di setiap stage, terdapat slot interaktif dan tombol bantuan "Coba Angka Bebas / Sandbox" jika siswa ingin menguji coba secara bebas.
