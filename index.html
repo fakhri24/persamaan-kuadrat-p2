@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   
   <!-- File CSS eksternal kita dengan cache-buster -->
-  <link rel="stylesheet" href="style.css?v=3.7">
+  <link rel="stylesheet" href="style.css?v=3.8">
 
   <!-- 2. KaTeX JS Core & Auto-render Extension -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -396,7 +396,11 @@
             </div>
 
             <div id="quest-done-note" class="quest-done-note hidden">
-              🎉 <strong>Misi selesai!</strong> Tunjukkan catatan langkah lengkapmu ke guru.
+              <p>🎉 <strong>Misi selesai!</strong> Tunjukkan catatan langkah lengkapmu ke guru.</p>
+              <button id="btn-ke-soal4" class="btn btn-accent" type="button">
+                <span>Lanjut ke Latihan 5.2 No. 4</span>
+                <span class="btn-arrow">&rarr;</span>
+              </button>
             </div>
 
             <button id="btn-ulang-misi" class="btn-link flashcard-reset" type="button">↺ Ulangi misi</button>
@@ -411,6 +415,87 @@
 
             <div id="quest-list" class="quest-list"></div>
           </section>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           LANGKAH 7: SOAL TANTANGAN PARAMETER k (Latihan 5.2 No. 4)
+           Satu soal, 5 pilihan, konfirmasi benar/salah, lalu tombol Selesai!
+           ======================================================== -->
+      <section id="stage-tantangan" class="stage-diskriminan hidden" aria-labelledby="stage7-heading">
+        <div class="stage-topbar">
+          <button id="btn-kembali-misi" class="btn-back" type="button">
+            <span aria-hidden="true">&larr;</span> Latihan 5.2 No. 1
+          </button>
+          <span class="stage-mission">🧩 Langkah 7 &middot; Soal Tantangan Parameter</span>
+        </div>
+
+        <div class="split-layout">
+          <!-- PANEL KIRI: BRIEFING -->
+          <section class="panel panel-left">
+            <div class="card-header">
+              <span class="step-pill">Langkah 7</span>
+              <h2 id="stage7-heading">Tantangan: Nilai $k$</h2>
+            </div>
+
+            <div class="book-card">
+              <span class="book-icon" aria-hidden="true">📘</span>
+              <div>
+                <span class="book-label">Buku Supermath</span>
+                <p class="book-detail">Latihan 5.2 &middot; No. 4</p>
+                <p class="book-page">Halaman 133</p>
+              </div>
+            </div>
+
+            <div class="notebook-box">
+              <h3>✍️ Tulis di buku tulismu</h3>
+              <p>Tulis langkah lengkapnya: susun $D = 0$, faktorkan persamaan dalam $k$, lalu tentukan nilai $k$ yang sah.</p>
+              <p class="notebook-note">Jangan lupa periksa syarat $a \neq 0$. Di aplikasi ini hanya ada benar atau salah.</p>
+            </div>
+
+            <p class="concept-desc">Soal ini berbeda: jawabannya berupa <strong>nilai $k$</strong>, bukan sifat akar.</p>
+          </section>
+
+          <!-- PANEL KANAN: SATU SOAL -->
+          <section class="panel panel-right">
+            <div class="card-header">
+              <span class="step-pill step-pill-alt">No. 4</span>
+              <h2>Soal Tantangan</h2>
+            </div>
+
+            <article id="soal4-card" class="quest-card">
+              <div class="quest-card-head">
+                <span class="quest-code">Latihan 5.2 No. 4</span>
+                <span class="quest-check" aria-hidden="true">✓</span>
+              </div>
+              <div class="quest-equation">$$kx^2 - kx + 3 = 0$$</div>
+              <p class="quest-prompt">Persamaan tersebut memiliki <strong>akar kembar</strong>. Tentukan nilai $k$ yang tepat.</p>
+              <div id="soal4-options" class="quest-options" role="group" aria-label="Pilihan nilai k"></div>
+              <p id="soal4-feedback" class="quest-feedback" aria-live="polite"></p>
+            </article>
+
+            <button id="btn-selesai" class="btn btn-accent btn-selesai hidden" type="button">
+              <span>Selesai!</span>
+              <span aria-hidden="true">🎉</span>
+            </button>
+          </section>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           LAYAR PENUTUP: SELAMAT!
+           ======================================================== -->
+      <section id="stage-finale" class="finale hidden" aria-labelledby="finale-title">
+        <div class="finale-card">
+          <div class="finale-emoji" aria-hidden="true">🎉</div>
+          <h2 id="finale-title" class="finale-title">Selamat!</h2>
+          <p class="finale-text">
+            Sekarang kamu sudah memahami arti Diskriminan $D = b^2 - 4ac$ dan pengaruhnya terhadap sifat akar:
+            bisa punya dua akar, satu akar (kembar), atau tidak ada akar riil.
+          </p>
+          <p class="finale-next">
+            Selanjutnya... siap-siap belajar <strong>Teorema Vieta</strong>! See you!
+          </p>
         </div>
       </section>
   </div>
@@ -489,6 +574,6 @@
   </div>
 
   <!-- Script JavaScript vanilla kita dengan cache-buster -->
-  <script src="script.js?v=3.7" defer></script>
+  <script src="script.js?v=3.8" defer></script>
 </body>
 </html>

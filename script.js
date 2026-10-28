@@ -326,11 +326,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const questDots = Array.from(document.querySelectorAll('.quest-dot'));
   const questDoneNote = document.getElementById('quest-done-note');
   const btnUlangMisi = document.getElementById('btn-ulang-misi');
+  const btnKeSoal4 = document.getElementById('btn-ke-soal4');
+
+  // Referensi Langkah 7: soal tantangan parameter k + layar penutup
+  const stage7Section = document.getElementById('stage-tantangan');
+  const btnKembaliMisi = document.getElementById('btn-kembali-misi');
+  const soal4Card = document.getElementById('soal4-card');
+  const soal4Options = document.getElementById('soal4-options');
+  const soal4Feedback = document.getElementById('soal4-feedback');
+  const btnSelesai = document.getElementById('btn-selesai');
+  const stageFinale = document.getElementById('stage-finale');
+  const appHeader = document.querySelector('.app-header');
 
   const SUBTITLE_STAGE1 = 'Memahami karakteristik dan sifat akar melalui analisis nilai $D = b^2 - 4ac$';
   const SUBTITLE_STAGE2 = 'Susun nilai $D = b^2 - 4ac$, hitung bertahap, lalu simpulkan sifat akarnya.';
   const SUBTITLE_STAGE5 = 'Cukup lihat tanda $D$ untuk mengetahui sifat akar tanpa menghitung ulang.';
   const SUBTITLE_STAGE6 = 'Kerjakan Latihan 5.2 halaman 133 di buku tulismu, lalu pilih kesimpulannya di sini.';
+  const SUBTITLE_STAGE7 = 'Selesaikan soal parameter $k$ di buku tulismu, lalu pilih satu nilai yang tepat.';
 
   // State misi diskriminan
   let soalD = null;              // { a, b, c } soal aktif di Stage 2
@@ -407,6 +419,24 @@ document.addEventListener('DOMContentLoaded', () => {
     soal: [],
     aktif: 0,      // kartu soal yang sedang terbuka
     selesai: false // true setelah tombol "Oke lanjut!" di soal terakhir ditekan
+  };
+
+  // ------------------------------------------------------------------------
+  // Langkah 7: Latihan 5.2 No. 4 - kx² - kx + 3 = 0 memiliki akar kembar.
+  // D = 0 -> k² - 12k = 0 -> k(k - 12) = 0 -> k = 0 atau k = 12.
+  // k = 0 gugur karena a = 0 (bukan persamaan kuadrat), jadi k = 12.
+  // ------------------------------------------------------------------------
+  const SOAL4_OPSI = [
+    { teks: 'k = 12', benar: true },
+    { teks: 'k = 0' },
+    { teks: 'k = 0 atau k = 12' },
+    { teks: 'k = 3' },
+    { teks: 'k = 4' }
+  ];
+
+  const soal4State = {
+    rendered: false,
+    selesai: false
   };
 
   // ------------------------------------------------------------------------
@@ -1335,6 +1365,99 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ------------------------------------------------------------------------
+  // Langkah 7: soal tantangan parameter k + layar penutup
+  // ------------------------------------------------------------------------
+  function masukLangkah7() {
+    stage6Section.classList.add('hidden');
+    stage7Section.classList.remove('hidden');
+
+    stage7Section.classList.remove('tampil');
+    void stage7Section.offsetWidth;
+    stage7Section.classList.add('tampil');
+
+    aturSubtitle(SUBTITLE_STAGE7);
+
+    if (!soal4State.rendered) {
+      renderSoal4();
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function kembaliKeMisiBuku() {
+    stage7Section.classList.add('hidden');
+    stage6Section.classList.remove('hidden');
+    aturSubtitle(SUBTITLE_STAGE6);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderSoal4() {
+    soal4State.rendered = true;
+    soal4State.selesai = false;
+
+    soal4Card.classList.remove('terjawab');
+    soal4Feedback.className = 'quest-feedback';
+    soal4Feedback.textContent = '';
+    btnSelesai.classList.add('hidden');
+    soal4Options.innerHTML = '';
+
+    // Acak urutan 5 pilihan
+    acakUrutan(SOAL4_OPSI).forEach((opsi) => {
+      const tombol = document.createElement('button');
+      tombol.type = 'button';
+      tombol.className = 'quest-option';
+      tombol.dataset.benar = opsi.benar ? '1' : '0';
+      tombol.innerHTML = `<strong>${opsi.teks}</strong>`;
+      soal4Options.appendChild(tombol);
+    });
+  }
+
+  function jawabSoal4(tombol) {
+    if (soal4State.selesai) return;
+
+    const benar = tombol.dataset.benar === '1';
+
+    if (benar) {
+      soal4State.selesai = true;
+      soal4Card.classList.add('terjawab');
+
+      soal4Options.querySelectorAll('.quest-option').forEach((opsiTombol) => {
+        opsiTombol.disabled = true;
+        opsiTombol.classList.remove('wrong');
+      });
+      tombol.classList.add('correct');
+
+      soal4Feedback.className = 'quest-feedback success';
+      soal4Feedback.textContent = '✔ Benar!';
+
+      btnSelesai.classList.remove('hidden');
+
+      if (window.innerWidth < 900) {
+        setTimeout(() => {
+          btnSelesai.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 250);
+      }
+      return;
+    }
+
+    tombol.classList.add('wrong');
+    tombol.addEventListener('animationend', () => tombol.classList.remove('wrong'), { once: true });
+
+    soal4Feedback.className = 'quest-feedback error';
+    soal4Feedback.textContent = '✘ Belum tepat. Hitung ulang di buku, lalu pilih lagi.';
+  }
+
+  function selesaikanPetualangan() {
+    stage7Section.classList.add('hidden');
+    stageFinale.classList.remove('hidden');
+
+    // Semua bagian sebelumnya (termasuk judul halaman) disembunyikan
+    appHeader.classList.add('hidden');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ------------------------------------------------------------------------
   // Helper umpan balik
   // ------------------------------------------------------------------------
   function tampilkanFeedback(elemen, tipe, html) {
@@ -1400,6 +1523,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const kartu = tombol.closest('.quest-card');
     if (kartu) jawabMisiKuis(kartu, tombol);
+  });
+
+  // Navigasi Langkah 6 → 7 dan tombol penutup
+  btnKeSoal4.addEventListener('click', masukLangkah7);
+  btnKembaliMisi.addEventListener('click', kembaliKeMisiBuku);
+  btnSelesai.addEventListener('click', selesaikanPetualangan);
+
+  soal4Options.addEventListener('click', (event) => {
+    const tombol = event.target.closest('.quest-option');
+    if (tombol) jawabSoal4(tombol);
   });
 
   // Delegasi klik: tombol "Oke lanjut!" pada kartu langkah yang dibuat dinamis

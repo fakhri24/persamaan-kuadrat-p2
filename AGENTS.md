@@ -121,3 +121,9 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
   - Tombol konfirmasi **hanya muncul setelah jawaban benar**, sehingga siswa tidak bisa melompati soal; jawaban salah tetap harus dicoba ulang tanpa petunjuk.
   - Setelah konfirmasi soal terakhir, barulah pesan "Misi selesai!" muncul di panel kiri. Titik progres (1a/1b/1c) diberi cincin indigo untuk menandai soal yang sedang aktif.
   - Uji: hanya 1 kartu terlihat saat masuk, kartu lama terringkas setelah lanjut, resets kembali ke 1a, dan state tetap utuh saat keluar-masuk layar.
+- **[2026-10-28] Langkah 7 - Soal Tantangan Parameter k & Layar Penutup**: Tahap terakhir petualangan sebelum Teorema Vieta.
+  - *Perpindahan*: setelah 3/3 soal Latihan 5.2 No. 1 benar dan dikonfirmasi, pesan "Misi selesai!" di panel kiri memuat tombol "Lanjut ke Latihan 5.2 No. 4" yang membuka Langkah 7 (Langkah 6 disembunyikan, ada tombol balik).
+  - *Soal*: $kx^2 - kx + 3 = 0$ memiliki akar kembar, tentukan nilai $k$. Lima pilihan: $k=12$ (benar), $k=0$, $k=0$ atau $k=12$, $k=3$, $k=4$; urutan diacak. Hanya konfirmasi ✔/✘ tanpa pembahasan, salah boleh diulang.
+  - *Briefing kiri*: info buku (Supermath - Latihan 5.2 No. 4 - Halaman 133) dan kotak catatan yang meminta menulis langkah lengkap: susun $D=0$, faktorkan, lalu periksa syarat $a \\neq 0$.
+  - *Tombol "Selesai!"* hanya muncul setelah jawaban benar. Menekannya menyembunyikan stage 7 **dan** header halaman, lalu menampilkan layar penutup besar dengan teks "Selamat!" berisi rangkuman arti Diskriminan dan ajakan belajar Teorema Vieta.
+  - Layar penutup memakai gradien teks, animasi pop ikon, dan tetap responsif di HP; tidak ada tombol kembali (akhir alur) — siswa memulai ulang dengan memuat ulang halaman.

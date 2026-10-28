@@ -1895,3 +1895,99 @@ body.is-dragging {
 .quest-card.ringkas .quest-ask {
   display: none !important;
 }
+
+/* ==========================================================================
+   LANGKAH 7 & LAYAR PENUTUP
+   ========================================================================== */
+
+/* CTA lanjut di kartu selesai misi */
+.quest-done-note p {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin-bottom: 0.65rem;
+}
+
+.quest-done-note .btn {
+  width: 100%;
+}
+
+/* Tombol Selesai! setelah soal parameter k benar */
+.btn-selesai {
+  width: 100%;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 0.95rem 1.25rem;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Layar penutup besar */
+.finale {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  animation: fadeIn 0.5s ease;
+}
+
+.finale-card {
+  width: 100%;
+  max-width: 820px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.2), rgba(15, 23, 42, 0.86) 62%);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: var(--radius-lg);
+  padding: clamp(2rem, 6vw, 3.5rem) clamp(1.2rem, 4vw, 3rem);
+  box-shadow: 0 30px 80px rgba(2, 6, 23, 0.55);
+}
+
+.finale-emoji {
+  font-size: clamp(2.4rem, 8vw, 3.6rem);
+  animation: finalePop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.finale-title {
+  font-size: clamp(2.3rem, 7vw, 3.8rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  background: linear-gradient(90deg, #a5b4fc, #38bdf8, #c4b5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.finale-text {
+  max-width: 650px;
+  font-size: clamp(1rem, 2.4vw, 1.3rem);
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+.finale-next {
+  max-width: 650px;
+  font-size: clamp(1.1rem, 2.8vw, 1.45rem);
+  font-weight: 700;
+  color: #fcd34d;
+}
+
+.finale-next strong {
+  color: #fde68a;
+}
+
+@keyframes finalePop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
