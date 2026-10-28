@@ -27,45 +27,47 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Inisialisasi remote repository GitHub dan branching GitHub Pages (https://fakhri24.github.io/persamaan-kuadrat-p2/)
 
 ### Fase 1: Kerangka Dasar Antarmuka (HTML)
-*Fokus Belajar: Semantic HTML5, Komponen Generator Acak, Slot Input Interaktif Formula `(..)^2 - 4(..)(..)`, dan Kartu Rumus ABC.*
-- [ ] Header & Navigasi Mode (Eksplorasi Acak & Quest Tantangan)
-- [ ] Section Generator Persamaan: Tampilan persamaan acak $ax^2 + bx + c = 0$ dan tombol "Kocok Persamaan"
-- [ ] Slot Interaktif Rumus Diskriminan:
+*Fokus Belajar: Semantic HTML5, Stage Progression Container, Slot Formula Interaktif, dan Card Kaitan Rumus ABC.*
+- [ ] Header & Status Bar Petualangan (Indikator Stage/Level, Nyawa/Bintang, & Poin)
+- [ ] Container Quest Terpadu (Stage 1: Main Quest Esensial, Stage 2: Main Quest Parameter $k$, Stage 3: Side Quest Pengayaan)
+- [ ] Slot Interaktif Rumus Diskriminan per Soal:
   - Kotak slot untuk $b$: `( [ b ] )²`
   - Kotak slot untuk $a$: `- 4( [ a ] )`
   - Kotak slot untuk $c$: `( [ c ] )`
-- [ ] Area Kalkulasi Bertahap (Step-by-step reveal: Hitung $b^2$, hitung $4ac$, lalu hasil akhir $D$)
-- [ ] Kartu Kaitan Rumus ABC: Visualisasi $x = \frac{-b \pm \sqrt{D}}{2a}$ yang menunjukkan isi di dalam akar
+- [ ] Area Kalkulasi Bertahap (Step-by-step reveal: Hitung $b^2$, hitung $4ac$, hasil akhir $D$)
+- [ ] Kartu Kaitan Rumus ABC: Visualisasi $x = \frac{-b \pm \sqrt{D}}{2a}$ yang menunjukkan nilai di dalam tanda akar
 - [ ] Pilihan Kesimpulan Sifat Akar (3 Tombol: 2 Akar Riil Berbeda, Akar Kembar, Tidak Riil)
-- [ ] Section Quest & Tantangan: Soal esensial (Main Quest) & pengayaan parameter (Side Quest)
+- [ ] Tombol & Modal Bantuan Sandbox ("🎲 Coba Angka Bebas / Uji Rumus Sendiri")
 
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
-*Fokus Belajar: CSS Variables, Styling kartu rumus aljabar, Animasi dadu/generator, dan Feedback warna status akar.*
-- [ ] Desain tema visual kartu matematika modern yang nyaman dibaca
-- [ ] Animasi visual saat menekan tombol "Kocok Persamaan"
-- [ ] Slot box bergaya kalkulator aljabar untuk nilai $a, b, c$
-- [ ] Indikator visual berbasis status tanda akar:
-  - Hijau: $D > 0 \rightarrow \sqrt{+ \dots}$ menghasilkan 2 solusi riil berlainan ($\pm$)
-  - Kuning: $D = 0 \rightarrow \sqrt{0}$ bernilai 0, solusi kembar ($x = -b / 2a$)
-  - Merah: $D < 0 \rightarrow \sqrt{- \dots}$ isi akar negatif, tidak memiliki akar riil (imajiner)
+*Fokus Belajar: CSS Variables, Styling stage petualangan bertingkat, Visual feedback benar/salah, dan Responsive design.*
+- [ ] Desain tema modern, bersih, dan edukatif (Dark UI elegan)
+- [ ] Status bar dan progress bar penyelesaian quest
+- [ ] Slot box interaktif dengan efek fokus dan highlight koefisien
+- [ ] Indikator visual berbasis tanda diskriminan di dalam akar:
+  - Hijau: $D > 0 \rightarrow \sqrt{+ \dots}$ (2 solusi riil berlainan)
+  - Kuning: $D = 0 \rightarrow \sqrt{0}$ (Solusi kembar)
+  - Merah: $D < 0 \rightarrow \sqrt{- \dots}$ (Tidak ada akar riil)
+- [ ] Modal/popover untuk mode Sandbox "Coba Angka Bebas"
 
-### Fase 3: Logika Generator, Substitusi Rumus, & DOM (JavaScript)
-*Fokus Belajar: Math.random(), event listener click/input, kalkulasi step-by-step, manipulasi innerHTML/textContent.*
-- [ ] Fungsi pembangkit persamaan kuadrat acak yang seimbang (menghasilkan variasi $D > 0, D = 0, D < 0$)
-- [ ] Validasi nilai koefisien $a \neq 0$
-- [ ] Perhitungan bertahap:
-  1. Identifikasi $a, b, c$
-  2. Hitung $b^2$
-  3. Hitung $4 \times a \times c$
-  4. Kurangkan: $b^2 - 4ac$
-- [ ] Animasi perubahan rumus ABC saat $D$ positif, nol, atau negatif
+### Fase 3: Logika Matematika, Stage State, & DOM (JavaScript)
+*Fokus Belajar: State machine stage quest, event listener drag/input slot, kalkulasi step-by-step, update DOM dinamis.*
+- [ ] Struktur Data Soal (Database JSON lokal untuk Main Quest & Side Quest)
+- [ ] Fungsi validasi input slot koefisien $a, b, c$
+- [ ] Kalkulasi bertahap otomatis saat slot terisi:
+  1. $b^2$
+  2. $4 \times a \times c$
+  3. $D = b^2 - 4ac$
+- [ ] Dinamika rumus ABC: animasi penarikan akar $\sqrt{D}$
+- [ ] Validasi pilihan kesimpulan siswa dan pemberian feedback pedagogis
+- [ ] Logika tombol sandbox bebas (generate angka acak untuk coba-coba)
 
-### Fase 4: Sistem Quest & Gamifikasi Interaktif
-*Fokus Belajar: Array of objects (bank soal), validasi input jawaban siswa, sistem nyawa/bintang.*
-- [ ] Mode Tebak Sifat Akar: Diberikan persamaan acak, siswa menebak tanda $D$ dan jumlah akarnya
-- [ ] Mode Tantangan Main Quest (Latihan 5.2 No. 1a, 1b, 1c, dan No. 4)
-- [ ] Mode Side Quest (Parameter $k$ atau $p$ untuk akar kembar/berbeda)
-- [ ] Scoring, streak jawaban benar, dan pesan umpan balik pedagogis
+### Fase 4: Mekanik Game & Scaffolding Pedagogis
+*Fokus Belajar: Logika kelulusan stage, unlocking level berikutnya, petunjuk bertingkat (hints).*
+- [ ] Stage 1: Main Quest 1a ($D>0$), 1b ($D<0$), 1c ($D=0$)
+- [ ] Stage 2: Main Quest No. 4 ($kx^2 - kx + 3 = 0$, mencari nilai $k$ dengan syarat $D=0$ dan $a \neq 0$)
+- [ ] Stage 3: Side Quest No. 2 ($px^2 - (2p-2)x + p = 0$) & No. 8 (akar saling berlawanan $b=0$)
+- [ ] Sistem reward: Badge penguasaan "Master Diskriminan" & rangkuman capaian belajar
 
 ### Fase 5: Evaluasi & Finishing
 - [ ] Review kode bersama pengguna (penjelasan baris per baris)
