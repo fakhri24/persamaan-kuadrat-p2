@@ -27,35 +27,40 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Inisialisasi remote repository GitHub dan branching GitHub Pages (https://fakhri24.github.io/persamaan-kuadrat-p2/)
 
 ### Fase 1: Kerangka Dasar Antarmuka (HTML)
-*Fokus Belajar: Semantic HTML5, Komponen Slider, Card Display, dan Layout Arena Simulasi & Quest.*
-- [ ] Header & Navigasi Mode (Tab: "🔬 Lab Simulasi" & "⚔️ Level Quest")
-- [ ] Section Lab Simulasi: Panel slider koefisien ($a, b, c$), display formula $ax^2 + bx + c = 0$, dan canvas/kartu kurva parabola
-- [ ] Card Live Metric: Nilai $D = b^2 - 4ac$, indikator badge jenis akar, serta keterkaitan dengan rumus ABC ($\sqrt{D}$)
-- [ ] Section Level Quest: Container soal Main Quest (1a, 1b, 1c, No. 4) dan Side Quest (No. 2, No. 8)
+*Fokus Belajar: Semantic HTML5, Komponen Generator Acak, Input/Slot Rumus Aljabar, dan Kartu Rumus ABC.*
+- [ ] Header & Navigasi Mode (Eksplorasi Acak & Quest Tantangan)
+- [ ] Section Generator Persamaan: Tombol "Kocok / Acak Persamaan" ($ax^2 + bx + c = 0$)
+- [ ] Slot Interaktif Rumus Diskriminan: Tempat memasukkan / melihat substitusi nilai $(b)^2 - 4(a)(c)$
+- [ ] Kartu Kaitan Rumus ABC: Visualisasi $x = \frac{-b \pm \sqrt{D}}{2a}$ yang bereaksi terhadap hasil $D$
+- [ ] Section Quest & Tantangan: Soal esensial (Main Quest) & pengayaan parameter (Side Quest)
 
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
-*Fokus Belajar: CSS Variables, Glassmorphism/Dark UI, Flexbox/Grid, Animasi visual transisi indikator.*
-- [ ] Desain tema modern & responsif (mobile friendly)
-- [ ] Styling khusus slider koefisien dan badge dinamika status akar
-- [ ] Visual indicator warna untuk jenis akar:
-  - Hijau: $D > 0$ (2 akar riil berbeda, kurva memotong sumbu X di 2 titik)
-  - Kuning: $D = 0$ (Akar riil kembar, puncak kurva menyinggung sumbu X)
-  - Merah/Ungu: $D < 0$ (Tidak riil/imajiner, kurva melayang/tidak memotong sumbu X)
-- [ ] Efek animasi kartu quest dan feedback jawaban benar/salah
+*Fokus Belajar: CSS Variables, Styling kartu rumus aljabar, Animasi dadu/generator, dan Feedback warna status akar.*
+- [ ] Desain tema visual kartu matematika modern yang nyaman dibaca
+- [ ] Animasi visual saat menekan tombol "Kocok Persamaan"
+- [ ] Slot box bergaya kalkulator aljabar untuk nilai $a, b, c$
+- [ ] Indikator visual berbasis status tanda akar:
+  - Hijau: $D > 0 \rightarrow \sqrt{+ \dots}$ menghasilkan 2 solusi riil berlainan ($\pm$)
+  - Kuning: $D = 0 \rightarrow \sqrt{0}$ bernilai 0, solusi kembar ($x = -b / 2a$)
+  - Merah: $D < 0 \rightarrow \sqrt{- \dots}$ isi akar negatif, tidak memiliki akar riil (imajiner)
 
-### Fase 3: Logika Matematika, Canvas Kurva, & DOM (JavaScript)
-*Fokus Belajar: Event listener 'input', kalkulasi $D$, rendering grafik parabola sederhana di `<canvas>`, dan state sync.*
-- [ ] Event listener slider $a, b, c$ dengan pembatasan syarat persamaan kuadrat ($a \neq 0$)
-- [ ] Fungsi kalkulasi $D = b^2 - 4ac$ dan pemecahan langkah perhitungan
-- [ ] Visualisasi sederhana kurva parabola pada Canvas HTML5 secara real-time
-- [ ] Integrasi narasi pedagogis: kaitan tanda $D$ di dalam rumus ABC ($x = \frac{-b \pm \sqrt{D}}{2a}$)
+### Fase 3: Logika Generator, Substitusi Rumus, & DOM (JavaScript)
+*Fokus Belajar: Math.random(), event listener click/input, kalkulasi step-by-step, manipulasi innerHTML/textContent.*
+- [ ] Fungsi pembangkit persamaan kuadrat acak yang seimbang (menghasilkan variasi $D > 0, D = 0, D < 0$)
+- [ ] Validasi nilai koefisien $a \neq 0$
+- [ ] Perhitungan bertahap:
+  1. Identifikasi $a, b, c$
+  2. Hitung $b^2$
+  3. Hitung $4 \times a \times c$
+  4. Kurangkan: $b^2 - 4ac$
+- [ ] Animasi perubahan rumus ABC saat $D$ positif, nol, atau negatif
 
 ### Fase 4: Sistem Quest & Gamifikasi Interaktif
-*Fokus Belajar: Data struktur soal, validasi jawaban siswa, scaffolding feedback, dan skor.*
-- [ ] Generator/Daftar Soal Main Quest (Siswa menghitung $D$ dan menentukan sifat akar)
-- [ ] Quest Parameter Lanjutan (Tantangan mencari nilai $k$ atau $p$ agar $D=0$ atau $D>0$)
-- [ ] Sistem scaffolding: petunjuk bertahap (hint system) jika siswa kesulitan
-- [ ] Sistem skor, bintang, dan perayaan saat menyelesaikan quest
+*Fokus Belajar: Array of objects (bank soal), validasi input jawaban siswa, sistem nyawa/bintang.*
+- [ ] Mode Tebak Sifat Akar: Diberikan persamaan acak, siswa menebak tanda $D$ dan jumlah akarnya
+- [ ] Mode Tantangan Main Quest (Latihan 5.2 No. 1a, 1b, 1c, dan No. 4)
+- [ ] Mode Side Quest (Parameter $k$ atau $p$ untuk akar kembar/berbeda)
+- [ ] Scoring, streak jawaban benar, dan pesan umpan balik pedagogis
 
 ### Fase 5: Evaluasi & Finishing
 - [ ] Review kode bersama pengguna (penjelasan baris per baris)

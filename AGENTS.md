@@ -32,6 +32,5 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
 - **[2026-10-28] Pemisahan File Modular**: Proyek diputuskan menggunakan 3 file terpisah (`index.html`, `style.css`, `script.js`) dengan Vanilla JS untuk memaksimalkan pemahaman dasar web development.
 - **[2026-10-28] Pemisahan Dokumen Manajemen**: `AGENTS.md` khusus untuk aturan, arsitektur, dan keputusan permanen. `PLAN.md` khusus untuk to-do list, milestone, dan progres implementasi.
 - **[2026-10-28] Gaya Penjelasan Interaktif**: Setiap perubahan kode wajib disertai penjelasan edukatif seputar fungsi tag HTML, selektor CSS, dan alur logika event di JavaScript.
-- **[2026-10-28] Mekanik Utama Aplikasi**: Memilih format gabungan "Lab Simulasi Interaktif + Level Quest". Terdiri dari dua pilar utama:
-  1. *Lab Simulasi Visual*: Slider dinamis untuk koefisien $a, b, c$ yang memperlihatkan grafik parabola dan nilai $D = b^2 - 4ac$ secara real-time.
-  2. *Level Quest*: Mode tantangan bertingkat (Scaffolding: Main Quest untuk pemahaman esensial dan Side Quest untuk pengayaan parameter $k$ atau $p$).
+- **[2026-10-28] Fokus Pedagogis Tanpa Grafik**: Siswa belum mempelajari grafik fungsi kuadrat, sehingga visualisasi koordinat parabola ditiadakan. Fokus visual dialihkan 100% ke pemahaman aljabar, breakdown langkah rumus diskriminan $D = b^2 - 4ac$, dan kaitannya dengan bagian di dalam akar pada rumus ABC ($x = \frac{-b \pm \sqrt{D}}{2a}$).
+- **[2026-10-28] Generator Persamaan Acak (Randomizer Engine)**: Menggantikan slider statis dengan sistem generator angka/persamaan acak. Siswa diajak mengamati dan memasukkan nilai koefisien $a, b, c$ ke dalam cetakan rumus $D$ untuk menguji dampaknya secara interaktif.
