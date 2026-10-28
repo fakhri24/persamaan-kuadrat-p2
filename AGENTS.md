@@ -67,8 +67,11 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
     2. Tiga bola cahaya (*glow orbs*) terdistribusi secara strategis: Indigo Nebula di kiri atas, Violet Aurora di kanan bawah, dan Cyan Accent di tengah.
     3. Menggunakan animasi mengapung halus (`@keyframes orbFloat1, 2, 3`) dengan durasi berbeda (12s, 15s, 18s) sehingga tampak organik dan hidup.
     4. Kartu antarmuka (`.panel`) menggunakan *frosted glassmorphism* (`backdrop-filter: blur(16px)` dan semi-transparan `rgba(30, 41, 59, 0.82)`) agar aura cahaya di belakang memancar lembut di tepi kartu tanpa mengorbankan kenyamanan membaca rumus matematika.
-- **[2026-10-28] Penyempurnaan Efek Bulatan Bergerak (5 Floating Glowing Orbs & Stacking Context Fix)**:
-  - Memperbaiki isu *CSS Stacking Context*: warna latar dipindah ke elemen `html (#050811)`, kanvas orbs ditempatkan pada `z-index: 0`, dan konten utama `#app` pada `position: relative; z-index: 10` agar bola cahaya dijamin 100% muncul di atas latar hitam dan di bawah kartu.
-  - Menghadirkan 5 bulatan cahaya bercahaya nyata (*glowing orbs*) dengan radius blur proporsional (45px) dan inti warna neon tegas (Indigo, Electric Violet, Cyan Spark, Coral Warmth, Azure Blue).
-  - Menerapkan lintasan mengapung dinamis asinkron (11s - 21s) dengan variasi translasi dan skala napas (*pulse scale*), menciptakan atmosfer petualangan ruang angkasa yang hidup dan elegan.
+- **[2026-10-28] Latar Belakang Interaktif Math Canvas (Vector Grid & Graph Nodes)**:
+  - Menggantikan efek CSS orbs kabut dengan engine **HTML5 `<canvas>` interaktif**:
+    1. *Dynamic Radial Light*: Senter cahaya radial yang mengikuti kursor mouse secara halus (*spring interpolation*).
+    2. *Vector Needles Grid*: Titik jarum grid matematis yang bereaksi berputar dan berpendar terang saat didekati kursor mouse.
+    3. *Constellation Graph Nodes*: Titik-titik node yang saling terhubung garis jaring saat berdekatan.
+    4. *Floating Math Symbols*: Simbol matematika riil ($\pi, \sum, \int, \sqrt{\dots}, \infty, \Delta, \theta, \lambda, \partial, \nabla$) yang melayang dinamis pada node konstelasi.
+    5. *Performa Tinggi*: Berjalan pada 60 FPS menggunakan `requestAnimationFrame` dan penskalaan Retina display DPR tanpa lag.
 - **[2026-10-28] Alur Pembelajaran Terpadu (Story Mode Linier)**: Alur aplikasi dirancang sebagai progresi petualangan bertahap (Stage-by-Stage). Dimulai langsung dari Stage 1 (Main Quest: Latihan 5.2 No. 1a, 1b, 1c), menuju Stage 2 (Main Quest: Menentukan nilai parameter $k$ untuk akar kembar), hingga Stage 3 (Side Quest: Parameter $p$ dan $m$ dengan kondisi akar khusus). Di setiap stage, terdapat slot interaktif dan tombol bantuan "Coba Angka Bebas / Sandbox" jika siswa ingin menguji coba secara bebas.

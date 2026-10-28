@@ -6,7 +6,10 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Inisialisasi KaTeX Auto-Render untuk memformat rumus $...$ dan $$...$$
+  // 1. Inisialisasi Latar Belakang Interaktif Math Canvas (Vector Grid & Graph Nodes)
+  initMathBackground();
+
+  // 2. Inisialisasi KaTeX Auto-Render untuk memformat rumus $...$ dan $$...$$
   renderRumusMatematika();
 
   // State kuis koefisien saat ini
@@ -284,5 +287,104 @@ document.addEventListener('DOMContentLoaded', () => {
         throwOnError: false
       });
     }
+  }
+
+  // ========================================================================
+  // LATAR BELAKANG INTERAKTIF: Math Vector Grid & Constellation Nodes
+  // ========================================================================
+  function initMathBackground() {
+    const canvas = document.getElementById('math-bg-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const CFG = {
+      mode: 'hybrid',
+      gridStyle: 'needles',
+      mouseMode: 'repel',
+      showMathSymbols: true,
+      gridSpacing: 44,
+      nodeCount: 55,
+      mouseRadius: 180,
+      edgeDistance: 145,
+      speed: 1,
+      palette: {
+        bgInner: '#0B1120',
+        bgOuter: '#060911',
+        gridBase: 'rgba(148, 163, 184, 0.16)',
+        primaryRGB: '56, 189, 248',
+        secondaryRGB: '129, 140, 248',
+        accentHex: '#38BDF8'
+      }
+    };
+    const SYMBOLS = ['π','∑','∫','√','∞','Δ','θ','λ','∂','∇'];
+    let w = window.innerWidth, h = window.innerHeight, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let grid = [], nodes = [], time = 0;
+    const mouse = { x: w/2, y: h/2, tx: w/2, ty: h/2, active: false };
+
+    function resize() {
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      grid = [];
+      const cols = Math.ceil(w / CFG.gridSpacing) + 1, rows = Math.ceil(h / CFG.gridSpacing) + 1;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const ox = c * CFG.gridSpacing, oy = r * CFG.gridSpacing;
+          grid.push({ ox, oy, x: ox, y: oy, vx: 0, vy: 0, angle: 0, energy: 0 });
+        }
+      }
+    }
+    for (let i = 0; i < CFG.nodeCount; i++) {
+      nodes.push({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.65, vy: (Math.random() - 0.5) * 0.65,
+        r: 1.8 + Math.random() * 1.2, hasSym: Math.random() < 0.35,
+        sym: SYMBOLS[i % SYMBOLS.length]
+      });
+    }
+    window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', e => { mouse.tx = e.clientX; mouse.ty = e.clientY; mouse.active = true; });
+    window.addEventListener('mouseleave', () => mouse.active = false);
+    resize();
+
+    function loop() {
+      requestAnimationFrame(loop);
+      time += 0.012 * CFG.speed;
+      mouse.x += (mouse.tx - mouse.x) * 0.15; mouse.y += (mouse.ty - mouse.y) * 0.15;
+      const g = ctx.createRadialGradient(mouse.x, mouse.y, 20, w*0.5, h*0.5, Math.max(w, h)*0.85);
+      g.addColorStop(0, CFG.palette.bgInner); g.addColorStop(1, CFG.palette.bgOuter);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+
+      if (CFG.mode !== 'nodes') {
+        grid.forEach(pt => {
+          const dx = mouse.x - pt.x, dy = mouse.y - pt.y, d = Math.hypot(dx, dy) || 1;
+          let inf = (mouse.active && d < CFG.mouseRadius) ? Math.pow(1 - d / CFG.mouseRadius, 1.6) : 0;
+          pt.angle = inf > 0 ? Math.atan2(dy, dx) : Math.sin(pt.ox * 0.004 + time) + Math.cos(pt.oy * 0.004 + time);
+          pt.energy += (inf - pt.energy) * 0.15;
+          const len = 5 + pt.energy * 6;
+          ctx.beginPath();
+          ctx.moveTo(pt.x - Math.cos(pt.angle)*len*0.5, pt.y - Math.sin(pt.angle)*len*0.5);
+          ctx.lineTo(pt.x + Math.cos(pt.angle)*len*0.5, pt.y + Math.sin(pt.angle)*len*0.5);
+          ctx.strokeStyle = pt.energy > 0.03 ? `rgba(${CFG.palette.primaryRGB},${0.18 + pt.energy*0.65})` : CFG.palette.gridBase;
+          ctx.lineWidth = 1 + pt.energy; ctx.stroke();
+        });
+      }
+      if (CFG.mode !== 'grid') {
+        ctx.font = '12px monospace';
+        nodes.forEach((n, i) => {
+          n.x = (n.x + n.vx * CFG.speed + w) % w; n.y = (n.y + n.vy * CFG.speed + h) % h;
+          for (let j = i + 1; j < nodes.length; j++) {
+            const n2 = nodes[j], d = Math.hypot(n.x - n2.x, n.y - n2.y);
+            if (d < CFG.edgeDistance) {
+              ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(n2.x, n2.y);
+              ctx.strokeStyle = `rgba(${CFG.palette.secondaryRGB},${(1 - d/CFG.edgeDistance)*0.25})`; ctx.stroke();
+            }
+          }
+          ctx.fillStyle = `rgba(${CFG.palette.primaryRGB},0.45)`;
+          if (CFG.showMathSymbols && n.hasSym) ctx.fillText(n.sym, n.x, n.y);
+          else { ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI*2); ctx.fill(); }
+        });
+      }
+    }
+    loop();
   }
 });

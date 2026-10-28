@@ -48,7 +48,7 @@
 }
 
 html {
-  background-color: #050811;
+  background-color: #060911;
   min-height: 100vh;
 }
 
@@ -66,153 +66,23 @@ body {
 }
 
 /* ==========================================================================
-   AMBIENT AURORA & 5 FLOATING GLOWING ORBS (TEKNIK 2 DISEMPURNAKAN)
+   INTERACTIVE MATH VECTOR GRID & CONSTELLATION CANVAS
    ========================================================================== */
-.ambient-glow-backdrop {
+#math-bg-canvas {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0; /* Di atas html #060911 dan di bawah kartu #app (z-index: 10) */
   pointer-events: none;
-  z-index: 0; /* Di atas warna html #050811 dan di bawah #app (z-index: 10) */
-  overflow: hidden;
-}
-
-.glow-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(45px); /* Blur proporsional: bentuk bulat tetap nyata & berpendar */
-  will-change: transform, opacity;
-  pointer-events: none;
-}
-
-/* Orb 1: Indigo Nebula (Besar di kiri atas) */
-.glow-orb-1 {
-  width: min(380px, 75vw);
-  height: min(380px, 75vw);
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.75) 0%, rgba(79, 70, 229, 0.35) 45%, rgba(99, 102, 241, 0) 70%);
-  top: 2%;
-  left: 2%;
-  animation: orbMove1 16s ease-in-out infinite alternate;
-}
-
-/* Orb 2: Electric Violet (Sedang di kanan bawah) */
-.glow-orb-2 {
-  width: min(350px, 70vw);
-  height: min(350px, 70vw);
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.75) 0%, rgba(147, 51, 234, 0.35) 45%, rgba(168, 85, 247, 0) 70%);
-  bottom: 4%;
-  right: 2%;
-  animation: orbMove2 19s ease-in-out infinite alternate;
-}
-
-/* Orb 3: Neon Cyan Spark (Segar melayang di area tengah) */
-.glow-orb-3 {
-  width: min(260px, 55vw);
-  height: min(260px, 55vw);
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.8) 0%, rgba(14, 165, 233, 0.35) 45%, rgba(6, 182, 212, 0) 70%);
-  top: 30%;
-  left: 42%;
-  animation: orbMove3 12s ease-in-out infinite alternate;
-}
-
-/* Orb 4: Coral Warmth (Aksen hangat di kiri bawah) */
-.glow-orb-4 {
-  width: min(240px, 50vw);
-  height: min(240px, 50vw);
-  background: radial-gradient(circle, rgba(244, 63, 94, 0.65) 0%, rgba(245, 158, 11, 0.25) 45%, rgba(244, 63, 94, 0) 70%);
-  bottom: 12%;
-  left: 10%;
-  animation: orbMove4 15s ease-in-out infinite alternate;
-}
-
-/* Orb 5: Deep Azure Blue (Di kanan atas) */
-.glow-orb-5 {
-  width: min(300px, 60vw);
-  height: min(300px, 60vw);
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.75) 0%, rgba(37, 99, 235, 0.3) 45%, rgba(59, 130, 246, 0) 70%);
-  top: 15%;
-  right: 12%;
-  animation: orbMove5 21s ease-in-out infinite alternate;
-}
-
-@keyframes orbMove1 {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.65;
-  }
-  50% {
-    transform: translate(90px, 70px) scale(1.18);
-    opacity: 0.85;
-  }
-  100% {
-    transform: translate(40px, 130px) scale(0.95);
-    opacity: 0.7;
-  }
-}
-
-@keyframes orbMove2 {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translate(-80px, -90px) scale(1.2);
-    opacity: 0.85;
-  }
-  100% {
-    transform: translate(-130px, -40px) scale(0.9);
-    opacity: 0.65;
-  }
-}
-
-@keyframes orbMove3 {
-  0% {
-    transform: translate(0, 0) scale(0.9);
-    opacity: 0.55;
-  }
-  50% {
-    transform: translate(70px, -60px) scale(1.25);
-    opacity: 0.85;
-  }
-  100% {
-    transform: translate(-60px, 60px) scale(1.05);
-    opacity: 0.65;
-  }
-}
-
-@keyframes orbMove4 {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.5;
-  }
-  50% {
-    transform: translate(60px, -50px) scale(1.15);
-    opacity: 0.75;
-  }
-  100% {
-    transform: translate(110px, 30px) scale(0.9);
-    opacity: 0.55;
-  }
-}
-
-@keyframes orbMove5 {
-  0% {
-    transform: translate(0, 0) scale(0.95);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translate(-70px, 80px) scale(1.18);
-    opacity: 0.85;
-  }
-  100% {
-    transform: translate(-120px, 20px) scale(1);
-    opacity: 0.65;
-  }
+  background: #060911;
 }
 
 /* Container Utama */
 .app-container {
   position: relative;
-  z-index: 10; /* Berada kokoh di atas bola cahaya latar */
+  z-index: 10; /* Berada kokoh di atas canvas interaktif latar */
   width: 100%;
   max-width: 1200px;
   display: flex;
