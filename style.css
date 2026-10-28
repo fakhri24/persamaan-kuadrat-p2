@@ -49,9 +49,9 @@
 
 body {
   font-family: var(--font-family);
-  background: linear-gradient(-45deg, #070b14, #0f172a, #1e1b4b, #111827, #131d36);
-  background-size: 400% 400%;
-  animation: bgGradientShift 18s ease infinite;
+  background: linear-gradient(135deg, #1e1b4b 0%, #090d16 50%, #2e1065 100%);
+  background-size: 200% 200%;
+  animation: bgGradientShift 14s ease infinite alternate;
   color: var(--text-main);
   min-height: 100vh;
   line-height: 1.5;
@@ -62,13 +62,10 @@ body {
 
 @keyframes bgGradientShift {
   0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
+    background-position: 0% 0%;
   }
   100% {
-    background-position: 0% 50%;
+    background-position: 100% 100%;
   }
 }
 
