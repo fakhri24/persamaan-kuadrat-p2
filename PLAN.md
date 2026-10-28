@@ -27,23 +27,25 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Inisialisasi remote repository GitHub dan branching GitHub Pages (https://fakhri24.github.io/persamaan-kuadrat-p2/)
 
 ### Fase 1: Kerangka Dasar Antarmuka (HTML)
-*Fokus Belajar: Semantic HTML5, Stage Progression Container, Slot Formula Interaktif, dan Card Kaitan Rumus ABC.*
+*Fokus Belajar: Semantic HTML5, Stage Progression Container, Kepingan Draggable, Dropzone Formula, dan Card Kaitan Rumus ABC.*
 - [ ] Header & Status Bar Petualangan (Indikator Stage/Level, Nyawa/Bintang, & Poin)
 - [ ] Container Quest Terpadu (Stage 1: Main Quest Esensial, Stage 2: Main Quest Parameter $k$, Stage 3: Side Quest Pengayaan)
-- [ ] Slot Interaktif Rumus Diskriminan per Soal:
-  - Kotak slot untuk $b$: `( [ b ] )²`
-  - Kotak slot untuk $a$: `- 4( [ a ] )`
-  - Kotak slot untuk $c$: `( [ c ] )`
+- [ ] Bank Kepingan Koefisien (Elemen Draggable untuk nilai $a, b, c$)
+- [ ] Slot Interaktif Rumus Diskriminan (Dropzone):
+  - Dropzone slot untuk $b$: `( [ Drop b ] )²`
+  - Dropzone slot untuk $a$: `- 4( [ Drop a ] )`
+  - Dropzone slot untuk $c$: `( [ Drop c ] )`
 - [ ] Area Kalkulasi Bertahap (Step-by-step reveal: Hitung $b^2$, hitung $4ac$, hasil akhir $D$)
 - [ ] Kartu Kaitan Rumus ABC: Visualisasi $x = \frac{-b \pm \sqrt{D}}{2a}$ yang menunjukkan nilai di dalam tanda akar
 - [ ] Pilihan Kesimpulan Sifat Akar (3 Tombol: 2 Akar Riil Berbeda, Akar Kembar, Tidak Riil)
 - [ ] Tombol & Modal Bantuan Sandbox ("🎲 Coba Angka Bebas / Uji Rumus Sendiri")
 
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
-*Fokus Belajar: CSS Variables, Styling stage petualangan bertingkat, Visual feedback benar/salah, dan Responsive design.*
+*Fokus Belajar: CSS Variables, Styling kepingan drag-and-drop, Dropzone hover/active states, Visual feedback benar/salah, dan Responsive design.*
 - [ ] Desain tema modern, bersih, dan edukatif (Dark UI elegan)
 - [ ] Status bar dan progress bar penyelesaian quest
-- [ ] Slot box interaktif dengan efek fokus dan highlight koefisien
+- [ ] Kepingan kartu draggable: cursor grab, bayangan elevasi, dan warna pembeda koefisien
+- [ ] Dropzone slot box dengan animasi border berkedip / dashed saat siap menerima kepingan
 - [ ] Indikator visual berbasis tanda diskriminan di dalam akar:
   - Hijau: $D > 0 \rightarrow \sqrt{+ \dots}$ (2 solusi riil berlainan)
   - Kuning: $D = 0 \rightarrow \sqrt{0}$ (Solusi kembar)
@@ -51,10 +53,11 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [ ] Modal/popover untuk mode Sandbox "Coba Angka Bebas"
 
 ### Fase 3: Logika Matematika, Stage State, & DOM (JavaScript)
-*Fokus Belajar: State machine stage quest, event listener drag/input slot, kalkulasi step-by-step, update DOM dinamis.*
+*Fokus Belajar: Drag & Drop API / Touch Pointer events, state machine stage quest, kalkulasi step-by-step, update DOM dinamis.*
 - [ ] Struktur Data Soal (Database JSON lokal untuk Main Quest & Side Quest)
-- [ ] Fungsi validasi input slot koefisien $a, b, c$
-- [ ] Kalkulasi bertahap otomatis saat slot terisi:
+- [ ] Mekanisme Drag-and-Drop (Mendukung mouse drag & touch pointer pada layar HP)
+- [ ] Penempatan koefisien pada dropzone yang tepat ($b, a, c$) dan validasi posisi
+- [ ] Kalkulasi bertahap otomatis saat ketiga slot terisi:
   1. $b^2$
   2. $4 \times a \times c$
   3. $D = b^2 - 4ac$
