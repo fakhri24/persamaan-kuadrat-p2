@@ -439,16 +439,21 @@ body {
   gap: 0.35rem;
 }
 
+/* Label satu baris: "Nilai a:" — titik dua menempel langsung pada nilainya.
+   Sengaja tanpa `display:flex` agar teks, simbol KaTeX, dan titik dua mengalir
+   inline; `nowrap` menjaga ketiganya tidak terpisah ke baris baru. */
 .input-group label {
   font-size: 0.85rem;
   font-weight: 600;
-  word-break: break-word;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
-.input-group small {
-  color: var(--text-muted);
-  font-weight: 400;
-  display: block;
+/* KaTeX menyisipkan "strut" (penyangga tak terlihat) yang membuat baris
+   label sedikit lebih tinggi. Ukuran simbol dikecilkan agar proporsinya
+   seimbang dengan teks "Nilai". */
+.input-group label .katex {
+  font-size: 1em;
 }
 
 .input-group input {
@@ -470,6 +475,28 @@ body {
 .input-group input:focus {
   border-color: var(--border-focus);
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Sembunyikan panah spinner bawaan input number: di kolom sempit (HP) panah
+   itu memakan ruang sehingga contoh di placeholder terpotong. Siswa tetap
+   bisa mengetik angka negatif langsung lewat tanda minus. */
+.input-group input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.input-group input[type="number"]::-webkit-outer-spin-button,
+.input-group input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Placeholder diperkecil agar contoh seperti "contoh: -11" tetap utuh
+   di dalam kotak input yang sempit. */
+.input-group input::placeholder {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
 }
 
 .quiz-actions {

@@ -50,6 +50,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Styling kartu rumus KaTeX dengan background kontras dan sorotan warna (highlight)
 - [x] Animasi transisi membuka panel kanan setelah tombol konfirmasi ditekan
 - [x] Styling input kuis identifikasi nilai $a, b, c$ dan tombol interaktif
+- [x] Penyederhanaan label input: "Nilai $a$:" satu baris tanpa teks kecil *(koefisien $x^2$)* / *(konstanta)*, serta perapian placeholder di layar sempit
 
 ### Fase 3: Logika Generator Persamaan & Kuis Identifikasi (JavaScript)
 *Fokus Belajar: Math.floor(Math.random()), integrasi renderMathInElement (KaTeX), event listener click, validasi angka.*
