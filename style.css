@@ -47,9 +47,14 @@
   padding: 0;
 }
 
+html {
+  background-color: #050811;
+  min-height: 100vh;
+}
+
 body {
   font-family: var(--font-family);
-  background-color: #060913;
+  background: transparent;
   color: var(--text-main);
   min-height: 100vh;
   line-height: 1.5;
@@ -61,96 +66,153 @@ body {
 }
 
 /* ==========================================================================
-   AMBIENT AURORA & SPOTLIGHT GLOW MESH BACKDROP (STRATEGI 2)
+   AMBIENT AURORA & 5 FLOATING GLOWING ORBS (TEKNIK 2 DISEMPURNAKAN)
    ========================================================================== */
 .ambient-glow-backdrop {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0; /* Di atas warna html #050811 dan di bawah #app (z-index: 10) */
   overflow: hidden;
 }
 
 .glow-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(45px); /* Blur proporsional: bentuk bulat tetap nyata & berpendar */
   will-change: transform, opacity;
+  pointer-events: none;
 }
 
-/* Spotlight 1: Indigo Nebula di pojok kiri atas */
+/* Orb 1: Indigo Nebula (Besar di kiri atas) */
 .glow-orb-1 {
-  width: min(550px, 80vw);
-  height: min(550px, 80vw);
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, rgba(99, 102, 241, 0) 70%);
-  top: -100px;
-  left: -80px;
-  animation: orbFloat1 15s ease-in-out infinite alternate;
+  width: min(380px, 75vw);
+  height: min(380px, 75vw);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.75) 0%, rgba(79, 70, 229, 0.35) 45%, rgba(99, 102, 241, 0) 70%);
+  top: 2%;
+  left: 2%;
+  animation: orbMove1 16s ease-in-out infinite alternate;
 }
 
-/* Spotlight 2: Violet Aurora di pojok kanan bawah */
+/* Orb 2: Electric Violet (Sedang di kanan bawah) */
 .glow-orb-2 {
-  width: min(600px, 85vw);
-  height: min(600px, 85vw);
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.38) 0%, rgba(139, 92, 246, 0) 70%);
-  bottom: -120px;
-  right: -100px;
-  animation: orbFloat2 18s ease-in-out infinite alternate;
+  width: min(350px, 70vw);
+  height: min(350px, 70vw);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.75) 0%, rgba(147, 51, 234, 0.35) 45%, rgba(168, 85, 247, 0) 70%);
+  bottom: 4%;
+  right: 2%;
+  animation: orbMove2 19s ease-in-out infinite alternate;
 }
 
-/* Spotlight 3: Cyan Accent halus di area tengah */
+/* Orb 3: Neon Cyan Spark (Segar melayang di area tengah) */
 .glow-orb-3 {
-  width: min(380px, 60vw);
-  height: min(380px, 60vw);
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.22) 0%, rgba(14, 165, 233, 0) 70%);
-  top: 40%;
-  left: 25%;
-  animation: orbFloat3 12s ease-in-out infinite alternate;
+  width: min(260px, 55vw);
+  height: min(260px, 55vw);
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.8) 0%, rgba(14, 165, 233, 0.35) 45%, rgba(6, 182, 212, 0) 70%);
+  top: 30%;
+  left: 42%;
+  animation: orbMove3 12s ease-in-out infinite alternate;
 }
 
-@keyframes orbFloat1 {
+/* Orb 4: Coral Warmth (Aksen hangat di kiri bawah) */
+.glow-orb-4 {
+  width: min(240px, 50vw);
+  height: min(240px, 50vw);
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.65) 0%, rgba(245, 158, 11, 0.25) 45%, rgba(244, 63, 94, 0) 70%);
+  bottom: 12%;
+  left: 10%;
+  animation: orbMove4 15s ease-in-out infinite alternate;
+}
+
+/* Orb 5: Deep Azure Blue (Di kanan atas) */
+.glow-orb-5 {
+  width: min(300px, 60vw);
+  height: min(300px, 60vw);
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.75) 0%, rgba(37, 99, 235, 0.3) 45%, rgba(59, 130, 246, 0) 70%);
+  top: 15%;
+  right: 12%;
+  animation: orbMove5 21s ease-in-out infinite alternate;
+}
+
+@keyframes orbMove1 {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate(90px, 70px) scale(1.18);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(40px, 130px) scale(0.95);
+    opacity: 0.7;
+  }
+}
+
+@keyframes orbMove2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-80px, -90px) scale(1.2);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-130px, -40px) scale(0.9);
+    opacity: 0.65;
+  }
+}
+
+@keyframes orbMove3 {
+  0% {
+    transform: translate(0, 0) scale(0.9);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate(70px, -60px) scale(1.25);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-60px, 60px) scale(1.05);
+    opacity: 0.65;
+  }
+}
+
+@keyframes orbMove4 {
   0% {
     transform: translate(0, 0) scale(1);
     opacity: 0.5;
   }
   50% {
-    transform: translate(60px, 45px) scale(1.15);
-    opacity: 0.7;
+    transform: translate(60px, -50px) scale(1.15);
+    opacity: 0.75;
   }
   100% {
-    transform: translate(30px, 80px) scale(0.95);
+    transform: translate(110px, 30px) scale(0.9);
     opacity: 0.55;
   }
 }
 
-@keyframes orbFloat2 {
+@keyframes orbMove5 {
   0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.45;
+    transform: translate(0, 0) scale(0.95);
+    opacity: 0.6;
   }
   50% {
-    transform: translate(-50px, -60px) scale(1.18);
+    transform: translate(-70px, 80px) scale(1.18);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-120px, 20px) scale(1);
     opacity: 0.65;
-  }
-  100% {
-    transform: translate(-90px, -20px) scale(1);
-    opacity: 0.5;
-  }
-}
-
-@keyframes orbFloat3 {
-  0% {
-    transform: translate(0, 0) scale(0.9);
-    opacity: 0.2;
-  }
-  100% {
-    transform: translate(45px, -30px) scale(1.25);
-    opacity: 0.4;
   }
 }
 
 /* Container Utama */
 .app-container {
+  position: relative;
+  z-index: 10; /* Berada kokoh di atas bola cahaya latar */
   width: 100%;
   max-width: 1200px;
   display: flex;
