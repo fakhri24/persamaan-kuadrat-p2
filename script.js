@@ -108,7 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ========================================================================
-  // FUNGSI: Generator Persamaan Kuadrat Acak (Anti-Hafalan Urutan: 6 Permutasi Lengkap)
+  // FUNGSI: Generator Persamaan Kuadrat Acak
+  // Kuis Langkah 2 memakai 5 pola urutan (bentuk normal sengaja dihilangkan)
   // ========================================================================
   function generatePersamaanAcak() {
     // 1. Pilih nilai a yang tidak boleh nol (-5 s/d 5, kecuali 0)
@@ -133,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentProblem = { a, b, c };
 
     // Tampilkan ke layar dan render KaTeX
-    equationDisplay.innerHTML = `$$${buatLatexPersamaan(currentProblem)} = 0$$`;
+    equationDisplay.innerHTML = `$$${buatLatexPersamaan(currentProblem, { tanpaBentukNormal: true })} = 0$$`;
     renderRumusMatematika(equationDisplay);
 
     // Reset input form & feedback
@@ -150,16 +151,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========================================================================
   // HELPER: Menyusun LaTeX persamaan dengan urutan suku yang diacak
   // (Dipisah agar bisa dipakai kuis Langkah 2 dan misi Langkah 3)
+  // Opsi tanpaBentukNormal = true membuang pola ax² + bx + c untuk kuis.
   // ========================================================================
-  function buatLatexPersamaan({ a, b, c }) {
+  function buatLatexPersamaan({ a, b, c }, { tanpaBentukNormal = false } = {}) {
     // Format masing-masing suku secara aljabar LaTeX
     const sukuA = formatSukuA(a);
     const sukuB = formatSukuB(b);
     const sukuC = formatSukuC(c);
 
-    // Kumpulan 6 variasi permutasi urutan suku (Peluang kemunculan posisi masing-masing suku seimbang 1/3)
+    // Kumpulan 6 variasi permutasi urutan suku.
+    // Pola pertama (bentuk normal) bisa dibuang lewat shift() di bawah.
     const polaUrutan = [
-      // 1. [A, B, C] -> ax^2 + bx + c = 0 (Bentuk Standar)
+      // 1. [A, B, C] -> ax^2 + bx + c = 0 (bentuk normal)
       gabungSuku([sukuA, sukuB, sukuC]),
       // 2. [A, C, B] -> ax^2 + c + bx = 0
       gabungSuku([sukuA, sukuC, sukuB]),
@@ -172,6 +175,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // 6. [C, B, A] -> c + bx + ax^2 = 0
       gabungSuku([sukuC, sukuB, sukuA])
     ];
+
+    // Kuis Langkah 2: buang bentuk normal, sisakan 5 kemungkinan.
+    if (tanpaBentukNormal) {
+      polaUrutan.shift();
+    }
 
     // Pilih salah satu pola secara acak
     return polaUrutan[Math.floor(Math.random() * polaUrutan.length)];

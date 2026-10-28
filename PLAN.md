@@ -36,7 +36,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
     - Dialog Modal interaktif untuk rincian koefisien $a, b, c$ dan penjelasan bagian di dalam akar
     - Tombol konfirmasi interaktif: "Saya Sudah Paham! Buka Kuis Cepat"
   - **Panel Kanan (Kuis Singkat Identifikasi)**:
-    - Wadah soal persamaan kuadrat acak dengan 6 variasi permutasi urutan suku ($3! = 6$) agar seimbang
+    - Wadah soal persamaan kuadrat acak dengan 5 variasi urutan suku (bentuk normal $ax^2 + bx + c = 0$ tidak ditampilkan agar tidak mudah ditebak dari posisi suku)
     - Tiga kotak input angka berdampingan: $a = [ \dots ]$, $b = [ \dots ]$, $c = [ \dots ]$
     - Tombol "Periksa Jawaban" & tombol "Ganti Persamaan Lain"
     - Area pesan umpan balik ramah / refleksi pedagogis jika salah tanda minus atau tertukar koefisien
@@ -51,12 +51,13 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Animasi transisi membuka panel kanan setelah tombol konfirmasi ditekan
 - [x] Styling input kuis identifikasi nilai $a, b, c$ dan tombol interaktif
 - [x] Penyederhanaan label input: "Nilai $a$:" satu baris tanpa teks kecil *(koefisien $x^2$)* / *(konstanta)*, serta perapian placeholder di layar sempit
+- [x] Gradasi diagonal ambient pada panel pembahasan/soal (indigo → cyan, sudut 120°) + rim cahaya 1px diagonal, dengan intensitas yang bisa disetel lewat variabel CSS
 
 ### Fase 3: Logika Generator Persamaan & Kuis Identifikasi (JavaScript)
 *Fokus Belajar: Math.floor(Math.random()), integrasi renderMathInElement (KaTeX), event listener click, validasi angka.*
 - [x] Inisialisasi rendering KaTeX saat DOM siap
 - [x] Logika tombol konfirmasi di panel kiri untuk membuka/mengaktifkan panel kanan
-- [x] Fungsi pembuat persamaan kuadrat acak dengan 6 variasi permutasi posisi suku aljabar
+- [x] Fungsi pembuat persamaan kuadrat acak: kuis Langkah 2 memakai 5 variasi (tanpa bentuk normal), Stage 2 tetap 6 pola urutan
 - [x] Pengecekan jawaban siswa untuk nilai $a$, $b$, dan $c$
 - [x] Umpan balik langsung: highlight hijau jika benar, petunjuk ramah jika keliru (misal: "Hati-hati dengan tanda minus pada koefisien $b$")
 - [x] Tombol lanjut ke Modul Menghitung Diskriminan setelah berhasil menjawab

@@ -48,7 +48,7 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
   2. *Panel Kanan (50%)*: Muncul setelah siswa mengonfirmasi pemahaman di panel kiri. Menyajikan persamaan kuadrat acak dan kuis singkat bagi siswa untuk melatih ketepatan mengidentifikasi nilai $a$, $b$, dan $c$ (termasuk tanda negatif) sebelum masuk ke perhitungan diskriminan.
 - **[2026-10-28] Mekanik Kuis Koefisien (Anti-Hafalan Urutan & 3 Input Box)**:
   - Siswa mengetik nilai $a$, $b$, dan $c$ pada 3 input box berdampingan lalu menekan tombol "Periksa Jawaban".
-  - *Fitur Anti-Hafalan (6 Permutasi Lengkap)*: Urutan suku pada persamaan kuadrat menggunakan seluruh kombinasi matematis ($3! = 6$ variasi):
+  - *Fitur Anti-Hafalan (6 Permutasi Lengkap, direvisi 2026-10-29 menjadi 5 tanpa bentuk normal)*: Urutan suku pada persamaan kuadrat menggunakan seluruh kombinasi matematis ($3! = 6$ variasi):
     1. $ax^2 + bx + c = 0$
     2. $ax^2 + c + bx = 0$
     3. $bx + ax^2 + c = 0$
@@ -56,6 +56,7 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
     5. $c + ax^2 + bx = 0$
     6. $c + bx + ax^2 = 0$  
     Hal ini memastikan bobot posisi suku $x^2$, $x$, dan konstanta terdistribusi seimbang (masing-masing 33.3% di posisi depan) tanpa bias.
+    *Catatan: aturan ini direvisi pada 2026-10-29 — kuis Langkah 2 kini memakai 5 pola tanpa bentuk normal, sehingga distribusinya tidak lagi tepat 1/3.*
 - **[2026-10-28] Standar Layout Simetris CSS Grid (50:50 Rigid)**:
   - Menggunakan `grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)` dan `min-width: 0` pada panel kontainer. Hal ini mencegah perilaku default `1fr` (`minmax(auto, 1fr)`) yang dapat terdistorsi melebar akibat konten form/input di panel kanan.
 - **[2026-10-28] Desain Minimalis & Pop-up Keterangan On-Demand**:
@@ -133,3 +134,15 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
   - *Gerbang*: bila koleksi belum 3/3, kartu "Semua langkah aman!" diganti kartu kuning **"Koleksi belum lengkap"** yang menyebut sifat yang masih kurang (memakai `LABEL_SIFAT`) + tombol "Soal Baru". Tombol Lanjut hanya muncul saat ketiga kotak penuh.
   - *Kasus melewati soal*: `jenisRiwayat` mencatat soal yang ditampilkan, sedangkan kotak hanya terisi saat selesai. Jika tiga soal pertama dilewati, soal ke-4 acak sesuai permintaan; siswa perlu menyelesaikan 3 jenis berbeda agar koleksi penuh.
   - *Uji*: siklus pertama menghasilkan Kembar → Tidak riil → Dua (3/3, CTA terbuka), soal ke-4 acak dan tetap 3/3; kartu terkunci tampil di 1/3 dan 2/3 dengan daftar sifat yang kurang.
+- **[2026-10-29] Gradasi Diagonal Ambient pada Panel Pembahasan/Soal**: Panel `.panel` tidak lagi berwarna datar, tetapi tetap tenang agar rumus KaTeX mudah dibaca.
+  - *Dua lapis gradasi*: (1) `radial-gradient` indigo lembut di sudut kiri-atas sebagai sumber cahaya, dan (2) `linear-gradient(120deg)` yang berjalan indigo → ungu transparan di tengah → cyan di kanan-bawah. Semua warna memakai alpha rendah (0,16 / 0,05 / 0,15) dan ditumpuk di atas `background-color: rgba(15, 23, 42, 0.72)` yang sudah ada.
+  - *Rim cahaya diagonal*: pseudo-element `.panel::before` setebal 1px memakai gradasi yang sama arahnya (lavender di kiri-atas → cyan redup di kanan-bawah), dibuat dengan teknik `padding: 1px` + `mask: ... content-box` + `mask-composite: exclude`. Efeknya tepi kartu seperti menangkap cahaya dari sumber yang sama, bukan garis putih rata.
+  - *Tanpa animasi*: gradasi sengaja statis. Latar canvas sudah bergerak 60 FPS; animasi gradasi di area seluas panel + `backdrop-filter` hanya akan menambah repaint dan berebut perhatian dengan materi.
+  - *Hierarki tetap jelas*: gradasi hanya dipasang di panel luar, **tidak** di setiap kartu dalam (`concept-card`, `step-card`, `quest-card`, `flashcard`). Panel berperan sebagai "cahaya ambient", kartu dalam tetap berupa "sumur gelap" tempat siswa membaca rumus.
+  - *Mudah disetel*: intensitas dan warna cukup diubah lewat variabel `--panel-sheen-start`, `--panel-sheen-mid`, `--panel-sheen-end`, `--panel-edge-start`, `--panel-edge-end` di `:root`. Arah diagonal diatur dari sudut `120deg` pada dua deklarasi gradasi.
+  - *Uji visual*: dicek di Stage 1 (panel materi + kuis), Stage 2 (panggung rumus + bedah langkah), lebar desktop 1440px dan HP 390px — teks, tombol, dan KaTeX tetap kontras; tidak ada pergeseran layout karena `::before` memakai `position: absolute` dan `pointer-events: none`.
+- **[2026-10-29] Revisi Kuis Langkah 2: Bentuk Normal Dihapus, Sisa 5 Pola**: Kuis "Temukan $a$, $b$, dan $c$" tidak lagi menampilkan bentuk standar $ax^2 + bx + c = 0$.
+  - *Alasan pedagogis*: bentuk normal membuat sebagian soal terlalu mudah ditebak dari posisi suku; siswa bisa benar tanpa benar-benar membaca koefisien. Tanpa bentuk normal, setiap soal memaksa siswa mencari suku $x^2$, suku $x$, dan konstanta dari bentuk aljabarnya.
+  - *Lima pola tersisa*: $ax^2 + c + bx$, $bx + ax^2 + c$, $bx + c + ax^2$, $c + ax^2 + bx$, dan $c + bx + ax^2$.
+  - *Teknis*: `buatLatexPersamaan` menerima parameter kedua `{ tanpaBentukNormal }`. Saat bernilai `true`, `polaUrutan.shift()` membuang pola indeks 0 (bentuk normal) sebelum pemilihan acak. Kuis Langkah 2 mengirim opsi ini; soal Stage 2 tetap memakai 6 pola karena fokusnya latihan membaca koefisien dalam konteks perhitungan, bukan kuis kecepatan.
+  - *Uji*: 80 kali klik "Ganti Persamaan" menghasilkan 0 bentuk normal; kelima pola lain muncul (ACB 14, BAC 24, BCA 15, CAB 11, CBA 16).
