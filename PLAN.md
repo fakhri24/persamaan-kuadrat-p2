@@ -27,11 +27,16 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Inisialisasi remote repository GitHub dan branching GitHub Pages (https://fakhri24.github.io/persamaan-kuadrat-p2/)
 
 ### Fase 1: Kerangka Dasar Antarmuka (HTML)
-*Fokus Belajar: Semantic HTML5, Komponen Generator Acak, Input/Slot Rumus Aljabar, dan Kartu Rumus ABC.*
+*Fokus Belajar: Semantic HTML5, Komponen Generator Acak, Slot Input Interaktif Formula `(..)^2 - 4(..)(..)`, dan Kartu Rumus ABC.*
 - [ ] Header & Navigasi Mode (Eksplorasi Acak & Quest Tantangan)
-- [ ] Section Generator Persamaan: Tombol "Kocok / Acak Persamaan" ($ax^2 + bx + c = 0$)
-- [ ] Slot Interaktif Rumus Diskriminan: Tempat memasukkan / melihat substitusi nilai $(b)^2 - 4(a)(c)$
-- [ ] Kartu Kaitan Rumus ABC: Visualisasi $x = \frac{-b \pm \sqrt{D}}{2a}$ yang bereaksi terhadap hasil $D$
+- [ ] Section Generator Persamaan: Tampilan persamaan acak $ax^2 + bx + c = 0$ dan tombol "Kocok Persamaan"
+- [ ] Slot Interaktif Rumus Diskriminan:
+  - Kotak slot untuk $b$: `( [ b ] )²`
+  - Kotak slot untuk $a$: `- 4( [ a ] )`
+  - Kotak slot untuk $c$: `( [ c ] )`
+- [ ] Area Kalkulasi Bertahap (Step-by-step reveal: Hitung $b^2$, hitung $4ac$, lalu hasil akhir $D$)
+- [ ] Kartu Kaitan Rumus ABC: Visualisasi $x = \frac{-b \pm \sqrt{D}}{2a}$ yang menunjukkan isi di dalam akar
+- [ ] Pilihan Kesimpulan Sifat Akar (3 Tombol: 2 Akar Riil Berbeda, Akar Kembar, Tidak Riil)
 - [ ] Section Quest & Tantangan: Soal esensial (Main Quest) & pengayaan parameter (Side Quest)
 
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
