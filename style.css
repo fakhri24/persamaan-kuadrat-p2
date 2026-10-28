@@ -49,13 +49,27 @@
 
 body {
   font-family: var(--font-family);
-  background-color: var(--bg-main);
+  background: linear-gradient(-45deg, #070b14, #0f172a, #1e1b4b, #111827, #131d36);
+  background-size: 400% 400%;
+  animation: bgGradientShift 18s ease infinite;
   color: var(--text-main);
   min-height: 100vh;
   line-height: 1.5;
   display: flex;
   justify-content: center;
   padding: 1.5rem 1rem;
+}
+
+@keyframes bgGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Container Utama */
