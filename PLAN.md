@@ -52,6 +52,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Styling input kuis identifikasi nilai $a, b, c$ dan tombol interaktif
 - [x] Penyederhanaan label input: "Nilai $a$:" satu baris tanpa teks kecil *(koefisien $x^2$)* / *(konstanta)*, serta perapian placeholder di layar sempit
 - [x] Gradasi diagonal ambient pada panel pembahasan/soal (indigo → cyan, sudut 120°) + rim cahaya 1px diagonal, dengan intensitas yang bisa disetel lewat variabel CSS
+- [x] Panggung rumus modal yang konsisten: bentuk umum dan rumus ABC memakai wadah `.math-display` dengan border tipis + sheen diagonal
 
 ### Fase 3: Logika Generator Persamaan & Kuis Identifikasi (JavaScript)
 *Fokus Belajar: Math.floor(Math.random()), integrasi renderMathInElement (KaTeX), event listener click, validasi angka.*

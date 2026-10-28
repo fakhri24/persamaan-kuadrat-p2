@@ -729,6 +729,19 @@ body {
   gap: 1rem;
 }
 
+/* "Panggung" rumus di dalam modal: wadah gelap + border tipis + sheen diagonal
+   agar rumus tidak menyatu dengan latar modal yang lebih terang. */
+.modal-body > .math-display {
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  background-image: linear-gradient(
+    120deg,
+    rgba(99, 102, 241, 0.10),
+    rgba(11, 17, 32, 0) 48%,
+    rgba(56, 189, 248, 0.08)
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
 .modal-footer {
   padding: 1rem 1.5rem;
   border-top: 1px solid var(--border-color);

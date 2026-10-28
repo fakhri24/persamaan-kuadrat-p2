@@ -146,3 +146,8 @@ Dokumen ini adalah single source of truth untuk peran kerja, standar teknis, gay
   - *Lima pola tersisa*: $ax^2 + c + bx$, $bx + ax^2 + c$, $bx + c + ax^2$, $c + ax^2 + bx$, dan $c + bx + ax^2$.
   - *Teknis*: `buatLatexPersamaan` menerima parameter kedua `{ tanpaBentukNormal }`. Saat bernilai `true`, `polaUrutan.shift()` membuang pola indeks 0 (bentuk normal) sebelum pemilihan acak. Kuis Langkah 2 mengirim opsi ini; soal Stage 2 tetap memakai 6 pola karena fokusnya latihan membaca koefisien dalam konteks perhitungan, bukan kuis kecepatan.
   - *Uji*: 80 kali klik "Ganti Persamaan" menghasilkan 0 bentuk normal; kelima pola lain muncul (ACB 14, BAC 24, BCA 15, CAB 11, CBA 16).
+- **[2026-10-29] Panggung Rumus Konsisten di Kedua Modal**: Rumus bentuk umum $ax^2 + bx + c = 0$ di modal "Keterangan Koefisien" tidak lagi menyatu dengan latar modal.
+  - *Masalah*: formula masih berada di dalam `<p class="concept-desc">`, sehingga tidak mendapat wadah `.math-display`, ukurannya mengecil mengikuti 0.9rem, dan tampak "nge-bland" di atas latar modal yang lebih terang (`--bg-surface`).
+  - *Solusi*: label "Pada bentuk umum:" dipisah, formula dipindah ke `<p class="math-display">` — struktur yang sama dengan rumus ABC di modal diskriminan.
+  - *Poles*: `.modal-body > .math-display` diberi border 1px tipis, sheen diagonal 120° (indigo → transparan → cyan), dan inset highlight. Selector `>` dipakai agar kotak $D = b^2 - 4ac$ di dalam `.highlight-box` tidak ikut berubah.
+  - *Uji*: modal koefisien dan modal diskriminan di desktop 1200px + HP 390px; formula tetap di tengah, tidak overflow, dan tinggi modal masih di bawah 90vh.
