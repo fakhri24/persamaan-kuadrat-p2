@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   
   <!-- File CSS eksternal kita dengan cache-buster -->
-  <link rel="stylesheet" href="style.css?v=3.5">
+  <link rel="stylesheet" href="style.css?v=3.6">
 
   <!-- 2. KaTeX JS Core & Auto-render Extension -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -334,8 +334,82 @@
               <div class="done-icon" aria-hidden="true">🎉</div>
               <h3>Satu putaran selesai!</h3>
               <p id="flashcard-result">Skor kamu: 0 dari 9</p>
-              <button id="btn-ulang-putaran" class="btn btn-secondary" type="button">↺ Ulangi putaran</button>
+              <div class="flashcard-done-actions">
+                <button id="btn-ulang-putaran" class="btn btn-secondary" type="button">↺ Ulangi putaran</button>
+                <button id="btn-ke-misi" class="btn btn-accent" type="button">
+                  <span>Lanjut ke Misi Buku</span>
+                  <span class="btn-arrow">&rarr;</span>
+                </button>
+              </div>
             </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           LANGKAH 6: MISI BUKU SUPERMATH
+           Panel kiri  : info buku, instruksi mencatat, progres misi
+           Panel kanan : 3 soal Latihan 5.2 No. 1a-1c, 5 pilihan tiap soal
+           Tanpa pembahasan: hanya konfirmasi benar/salah.
+           ======================================================== -->
+      <section id="stage-misi" class="stage-diskriminan hidden" aria-labelledby="stage6-heading">
+        <div class="stage-topbar">
+          <button id="btn-kembali-flashcard" class="btn-back" type="button">
+            <span aria-hidden="true">&larr;</span> Flashcard
+          </button>
+          <span class="stage-mission">📘 Langkah 6 &middot; Misi Buku Supermath</span>
+        </div>
+
+        <div class="split-layout">
+          <!-- PANEL KIRI: BRIEFING MISI -->
+          <section class="panel panel-left">
+            <div class="card-header">
+              <span class="step-pill">Langkah 6</span>
+              <h2 id="stage6-heading">Misi Buku Supermath</h2>
+            </div>
+
+            <div class="book-card">
+              <span class="book-icon" aria-hidden="true">📘</span>
+              <div>
+                <span class="book-label">Buku Supermath</span>
+                <p class="book-detail">Latihan 5.2 &middot; No. 1a&ndash;1c</p>
+                <p class="book-page">Halaman 133</p>
+              </div>
+            </div>
+
+            <div class="notebook-box">
+              <h3>✍️ Tulis di buku tulismu</h3>
+              <p>Tulis langkah lengkapnya: hitung $b^2$, lalu $4ac$, lalu $D = b^2 - 4ac$, baru simpulkan sifat akarnya.</p>
+              <p class="notebook-note">Di aplikasi ini hanya ada <strong>benar</strong> atau <strong>salah</strong>. Pembahasan lengkapnya ada di catatanmu.</p>
+            </div>
+
+            <div class="quest-progress">
+              <div class="quest-progress-head">
+                <span>Progres misi</span>
+                <span id="quest-score">0 dari 3</span>
+              </div>
+              <div class="quest-dots" aria-hidden="true">
+                <span class="quest-dot" data-soal="0">1a</span>
+                <span class="quest-dot" data-soal="1">1b</span>
+                <span class="quest-dot" data-soal="2">1c</span>
+              </div>
+            </div>
+
+            <div id="quest-done-note" class="quest-done-note hidden">
+              🎉 <strong>Misi selesai!</strong> Tunjukkan catatan langkah lengkapmu ke guru.
+            </div>
+
+            <button id="btn-ulang-misi" class="btn-link flashcard-reset" type="button">↺ Ulangi misi</button>
+          </section>
+
+          <!-- PANEL KANAN: 3 SOAL -->
+          <section class="panel panel-right">
+            <div class="card-header">
+              <span class="step-pill step-pill-alt">Latihan 5.2</span>
+              <h2>No. 1a, 1b, dan 1c</h2>
+            </div>
+
+            <div id="quest-list" class="quest-list"></div>
           </section>
         </div>
       </section>
@@ -415,6 +489,6 @@
   </div>
 
   <!-- Script JavaScript vanilla kita dengan cache-buster -->
-  <script src="script.js?v=3.5" defer></script>
+  <script src="script.js?v=3.6" defer></script>
 </body>
 </html>

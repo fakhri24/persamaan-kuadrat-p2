@@ -11,7 +11,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] **Fase 2**: Penataan Gaya Dual-Panel 50-50 & Card Visual (CSS)
 - [x] **Fase 3**: Logika Generator Persamaan & Kuis Identifikasi a, b, c (JS)
 - [x] **Fase 4**: Modul Inti Diskriminan: Menghitung D via Slot Drag-Drop & Tanda Akar ABC
-- [ ] **Fase 5**: Level Quest & Soal Tantangan (Main Quest & Side Quest)
+- [ ] **Fase 5**: Level Quest & Soal Tantangan (Main Quest Stage 1 selesai, Stage 2-3 berikutnya)
 - [ ] **Fase 6**: Finishing, Polish, & Dokumentasi Belajar
 
 ---
@@ -75,7 +75,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 
 ### Fase 5: Level Quest & Scaffolding Tantangan (Main & Side Quest)
 *Fokus Belajar: State machine quest bertingkat, penanganan soal parameter aljabar kx^2 - kx + 3 = 0.*
-- [ ] Main Quest Stage 1: Latihan esensial 1a ($D>0$), 1b ($D<0$), 1c ($D=0$)
+- [x] Main Quest Stage 1 (Langkah 6 - Misi Buku Supermath): 3 soal tetap Latihan 5.2 No. 1a ($D>0$), 1b ($D<0$), 1c ($D=0$) di halaman 133, masing-masing 5 pilihan kesimpulan ($D$ + sifat akar), hanya konfirmasi benar/salah tanpa pembahasan, plus instruksi mencatat langkah lengkap di buku tulis
 - [ ] Main Quest Stage 2: Soal parameter $k$ dengan panduan aljabar pemfaktoran dan eliminasi syarat $a \neq 0$
 - [ ] Side Quest Stage 3: Pengayaan parameter $p$ dan akar saling berlawanan/berkebalikan ($b=0$ / $a=c$)
 

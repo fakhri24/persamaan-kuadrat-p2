@@ -316,10 +316,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const flashcardResult = document.getElementById('flashcard-result');
   const btnUlangFlashcard = document.getElementById('btn-ulang-flashcard');
   const btnUlangPutaran = document.getElementById('btn-ulang-putaran');
+  const btnKeMisi = document.getElementById('btn-ke-misi');
+
+  // Referensi Langkah 6: misi buku Supermath
+  const stage6Section = document.getElementById('stage-misi');
+  const btnKembaliFlashcard = document.getElementById('btn-kembali-flashcard');
+  const questList = document.getElementById('quest-list');
+  const questScore = document.getElementById('quest-score');
+  const questDots = Array.from(document.querySelectorAll('.quest-dot'));
+  const questDoneNote = document.getElementById('quest-done-note');
+  const btnUlangMisi = document.getElementById('btn-ulang-misi');
 
   const SUBTITLE_STAGE1 = 'Memahami karakteristik dan sifat akar melalui analisis nilai $D = b^2 - 4ac$';
   const SUBTITLE_STAGE2 = 'Susun nilai $D = b^2 - 4ac$, hitung bertahap, lalu simpulkan sifat akarnya.';
   const SUBTITLE_STAGE5 = 'Cukup lihat tanda $D$ untuk mengetahui sifat akar tanpa menghitung ulang.';
+  const SUBTITLE_STAGE6 = 'Kerjakan Latihan 5.2 halaman 133 di buku tulismu, lalu pilih kesimpulannya di sini.';
 
   // State misi diskriminan
   let soalD = null;              // { a, b, c } soal aktif di Stage 2
@@ -341,6 +352,59 @@ document.addEventListener('DOMContentLoaded', () => {
     locked: false,
     selesai: false,
     timer: null
+  };
+
+  // ------------------------------------------------------------------------
+  // Data Langkah 6: 3 soal tetap dari buku Supermath (Latihan 5.2 No. 1a-1c).
+  // Tiap soal punya 5 pilihan; hanya satu yang benar. Tidak ada pembahasan.
+  // ------------------------------------------------------------------------
+  const SOAL_MISI = [
+    {
+      kode: '1a',
+      latex: '2x^2 + 3x - 11 = 0',
+      opsi: [
+        { d: 97, sifat: 'dua', benar: true },   // 9 - 4(2)(-11) = 97
+        { d: 79, sifat: 'dua' },                // salah tanda
+        { d: 91, sifat: 'dua' },                // lupa mengkuadratkan b
+        { d: 53, sifat: 'dua' },                // 4ac salah hitung
+        { d: -79, sifat: 'tidak' }              // 9 - 88
+      ]
+    },
+    {
+      kode: '1b',
+      latex: '3x^2 + 4x + 4 = 0',
+      opsi: [
+        { d: -32, sifat: 'tidak', benar: true }, // 16 - 48 = -32
+        { d: 32, sifat: 'dua' },                 // salah tanda
+        { d: 64, sifat: 'dua' },                 // 16 + 48
+        { d: -8, sifat: 'tidak' },               // 4ac = 24
+        { d: 16, sifat: 'dua' }                  // lupa 4ac
+      ]
+    },
+    {
+      kode: '1c',
+      latex: '4x^2 - 16x + 16 = 0',
+      opsi: [
+        { d: 0, sifat: 'kembar', benar: true },  // 256 - 256 = 0
+        { d: 256, sifat: 'dua' },                // lupa 4ac
+        { d: 512, sifat: 'dua' },                // 256 + 256
+        { d: -256, sifat: 'tidak' },             // 256 - 512
+        { d: 128, sifat: 'dua' }                 // 4ac = 128
+      ]
+    }
+  ];
+
+  const LABEL_SIFAT = {
+    dua: 'dua akar riil berbeda',
+    kembar: 'akar kembar (satu akar)',
+    tidak: 'tidak punya akar riil'
+  };
+
+  const questState = {
+    rendered: false,
+    benar: 0,
+    terjawab: [false, false, false],
+    soal: []
   };
 
   // ------------------------------------------------------------------------
@@ -1091,6 +1155,130 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ------------------------------------------------------------------------
+  // Langkah 6: Misi Buku Supermath (benar/salah saja, tanpa pembahasan)
+  // ------------------------------------------------------------------------
+  function masukLangkah6() {
+    bersihkanTimerFlashcard();
+
+    stage5Section.classList.add('hidden');
+    stage6Section.classList.remove('hidden');
+
+    stage6Section.classList.remove('tampil');
+    void stage6Section.offsetWidth;
+    stage6Section.classList.add('tampil');
+
+    aturSubtitle(SUBTITLE_STAGE6);
+
+    if (!questState.rendered) {
+      renderMisiBuku();
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function kembaliKeFlashcard() {
+    stage6Section.classList.add('hidden');
+    stage5Section.classList.remove('hidden');
+    aturSubtitle(SUBTITLE_STAGE5);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Tanda minus tipografis agar sejajar dengan gaya rumus di aplikasi
+  function formatAngka(nilai) {
+    return String(nilai).replace('-', '\u2212');
+  }
+
+  function renderMisiBuku() {
+    // Acak urutan 5 pilihan tiap soal supaya jawaban benar tidak selalu di atas
+    questState.soal = SOAL_MISI.map((soal) => ({
+      ...soal,
+      opsi: acakUrutan(soal.opsi)
+    }));
+    questState.terjawab = [false, false, false];
+    questState.benar = 0;
+    questState.rendered = true;
+
+    questList.innerHTML = '';
+
+    questState.soal.forEach((soal, index) => {
+      const kartu = document.createElement('article');
+      kartu.className = 'quest-card';
+      kartu.dataset.soal = String(index);
+
+      kartu.innerHTML = `
+        <div class="quest-card-head">
+          <span class="quest-code">No. ${soal.kode}</span>
+          <span class="quest-check" aria-label="Sudah benar">✓</span>
+        </div>
+        <div class="quest-equation">$$${soal.latex}$$</div>
+        <p class="quest-prompt">Pilih satu kesimpulan yang paling tepat:</p>
+        <div class="quest-options" role="group" aria-label="Pilihan jawaban No. ${soal.kode}">
+          ${soal.opsi.map((opsi, i) => `
+            <button type="button" class="quest-option" data-opsi="${i}">
+              <strong>D = ${formatAngka(opsi.d)}</strong> &rarr; ${LABEL_SIFAT[opsi.sifat]}
+            </button>`).join('')}
+        </div>
+        <p class="quest-feedback" aria-live="polite"></p>
+      `;
+
+      questList.appendChild(kartu);
+      renderRumusMatematika(kartu);
+    });
+
+    updateQuestProgress();
+  }
+
+  function updateQuestProgress() {
+    questScore.textContent = `${questState.benar} dari ${SOAL_MISI.length}`;
+
+    questDots.forEach((dot) => {
+      const index = Number(dot.dataset.soal);
+      dot.classList.toggle('selesai', questState.terjawab[index]);
+    });
+
+    questDoneNote.classList.toggle('hidden', questState.benar !== SOAL_MISI.length);
+  }
+
+  function jawabMisiKuis(kartu, tombol) {
+    const index = Number(kartu.dataset.soal);
+    if (questState.terjawab[index]) return;
+
+    const opsi = questState.soal[index].opsi[Number(tombol.dataset.opsi)];
+    const feedback = kartu.querySelector('.quest-feedback');
+
+    if (opsi.benar) {
+      questState.terjawab[index] = true;
+      questState.benar++;
+
+      kartu.classList.add('terjawab');
+      kartu.querySelectorAll('.quest-option').forEach((opsiTombol) => {
+        opsiTombol.disabled = true;
+        opsiTombol.classList.remove('wrong');
+      });
+      tombol.classList.add('correct');
+
+      // Hanya konfirmasi, tanpa pembahasan atau bocoran jawaban
+      feedback.className = 'quest-feedback success';
+      feedback.textContent = '✔ Benar!';
+
+      updateQuestProgress();
+
+      if (questState.benar === SOAL_MISI.length && window.innerWidth < 900) {
+        setTimeout(() => {
+          questDoneNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 250);
+      }
+      return;
+    }
+
+    tombol.classList.add('wrong');
+    tombol.addEventListener('animationend', () => tombol.classList.remove('wrong'), { once: true });
+
+    feedback.className = 'quest-feedback error';
+    feedback.textContent = '✘ Belum tepat. Hitung ulang di buku, lalu pilih lagi.';
+  }
+
+  // ------------------------------------------------------------------------
   // Helper umpan balik
   // ------------------------------------------------------------------------
   function tampilkanFeedback(elemen, tipe, html) {
@@ -1135,6 +1323,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   flashcardOptions.forEach((tombol) => {
     tombol.addEventListener('click', () => jawabFlashcard(tombol.dataset.akar, tombol));
+  });
+
+  // Navigasi ke/dari Langkah 6 dan ulangi misi
+  btnKeMisi.addEventListener('click', masukLangkah6);
+  btnKembaliFlashcard.addEventListener('click', kembaliKeFlashcard);
+  btnUlangMisi.addEventListener('click', renderMisiBuku);
+
+  // Delegasi klik untuk 15 tombol pilihan yang dibuat dinamis
+  questList.addEventListener('click', (event) => {
+    const tombol = event.target.closest('.quest-option');
+    if (!tombol) return;
+
+    const kartu = tombol.closest('.quest-card');
+    if (kartu) jawabMisiKuis(kartu, tombol);
   });
 
   // Delegasi klik: tombol "Oke lanjut!" pada kartu langkah yang dibuat dinamis

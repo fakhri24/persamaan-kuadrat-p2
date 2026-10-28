@@ -1577,3 +1577,273 @@ body.is-dragging {
     padding: 1.2rem 0.8rem;
   }
 }
+
+/* ==========================================================================
+   LANGKAH 6: MISI BUKU SUPERMATH
+   ========================================================================== */
+
+/* Aksi di kartu penutup flashcard */
+.flashcard-done-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+/* --- Info buku --- */
+.book-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  background: rgba(56, 189, 248, 0.06);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.book-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.book-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+  margin-bottom: 0.2rem;
+}
+
+.book-detail {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.book-page {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+
+/* --- Instruksi mencatat --- */
+.notebook-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: rgba(245, 158, 11, 0.07);
+  border: 1px dashed rgba(245, 158, 11, 0.35);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.notebook-box h3 {
+  font-size: 0.9rem;
+  color: #fcd34d;
+}
+
+.notebook-box p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.notebook-box .notebook-note {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+/* --- Progres misi --- */
+.quest-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.quest-progress-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.quest-dots {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.quest-dot {
+  width: 38px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  background: rgba(30, 41, 59, 0.6);
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+}
+
+.quest-dot.selesai {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #6ee7b7;
+}
+
+.quest-done-note {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.85rem;
+  font-size: 0.82rem;
+  color: #a7f3d0;
+  line-height: 1.45;
+  animation: fadeIn 0.3s ease;
+}
+
+/* --- Daftar soal --- */
+.quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quest-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: rgba(11, 17, 32, 0.55);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  transition: border-color var(--transition-fast);
+}
+
+.quest-card.terjawab {
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+.quest-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quest-code {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #a5b4fc;
+}
+
+.quest-check {
+  display: none;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.quest-card.terjawab .quest-check {
+  display: inline-flex;
+}
+
+.quest-equation {
+  text-align: center;
+  font-size: 1.15rem;
+  padding: 0.25rem 0;
+  overflow-x: auto;
+}
+
+.quest-prompt {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.quest-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.quest-option {
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-main);
+  background: rgba(30, 41, 59, 0.55);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quest-option:hover {
+  border-color: #64748b;
+  background: rgba(51, 65, 85, 0.7);
+}
+
+.quest-option.correct {
+  border-color: var(--color-success);
+  background: rgba(16, 185, 129, 0.16);
+  color: #6ee7b7;
+}
+
+.quest-option.wrong {
+  border-color: var(--color-danger);
+  background: rgba(239, 68, 68, 0.14);
+  color: #fca5a5;
+  animation: slotShake 0.4s ease;
+}
+
+.quest-option:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.quest-option.correct:disabled {
+  opacity: 1;
+}
+
+.quest-feedback {
+  min-height: 1.1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.quest-feedback.success {
+  color: #6ee7b7;
+}
+
+.quest-feedback.error {
+  color: #fca5a5;
+}
+
+@media (max-width: 480px) {
+  .quest-card {
+    padding: 0.85rem;
+  }
+
+  .quest-equation {
+    font-size: 1.05rem;
+  }
+}
