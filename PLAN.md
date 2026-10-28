@@ -36,10 +36,10 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
     - Penanda fokus visual pada bagian di dalam akar: $D = b^2 - 4ac$
     - Tombol konfirmasi interaktif: "Saya Sudah Paham! Mulai Kuis Cepat"
   - **Panel Kanan (Kuis Singkat Identifikasi)**:
-    - Wadah soal persamaan kuadrat acak
-    - Tiga slot input/tebakan nilai $a$, $b$, dan $c$ (lengkap dengan penanganan tanda positif/negatif)
+    - Wadah soal persamaan kuadrat acak dengan urutan suku teracak dinamis (misal: $c + ax^2 + bx = 0$ atau $bx + c + ax^2 = 0$)
+    - Tiga kotak input angka berdampingan: $a = [ \dots ]$, $b = [ \dots ]$, $c = [ \dots ]$
     - Tombol "Periksa Jawaban" & tombol "Ganti Persamaan Lain"
-    - Area pesan umpan balik ramah / refleksi
+    - Area pesan umpan balik ramah / refleksi pedagogis jika salah tanda minus atau tertukar koefisien
 
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
 *Fokus Belajar: CSS Grid split-screen 50/50, Flexbox, Styling ekspresi KaTeX, Desain responsive mobile (stacking).*
