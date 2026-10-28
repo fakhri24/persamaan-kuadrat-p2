@@ -1,0 +1,105 @@
+/* ==========================================================================
+   STYLE DASAR PEMBELAJARAN INTERAKTIF
+   Tema: Modern, Clean, Edukatif & Gamified
+   ========================================================================== */
+
+:root {
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --bg-color: #0f172a;
+  --surface-color: #1e293b;
+  --card-border: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-green: #10b981;
+  --accent-yellow: #f59e0b;
+  --accent-rose: #f43f5e;
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  background-color: var(--surface-color);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.badge {
+  display: inline-block;
+  background: rgba(79, 70, 229, 0.2);
+  color: #818cf8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  margin-bottom: 0.75rem;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.main-content {
+  margin-bottom: 2rem;
+}
+
+.placeholder-card {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px dashed var(--card-border);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.placeholder-card h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: #38bdf8;
+}
+
+.placeholder-card p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.footer {
+  text-align: center;
+  border-top: 1px solid var(--card-border);
+  padding-top: 1.25rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
