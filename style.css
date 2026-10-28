@@ -1,23 +1,47 @@
 /* ==========================================================================
-   STYLE DASAR PEMBELAJARAN INTERAKTIF
-   Tema: Modern, Clean, Edukatif & Gamified
+   TEMA & VARIABEL GLOBAL (CSS CUSTOM PROPERTIES)
    ========================================================================== */
-
 :root {
-  --primary-color: #4f46e5;
-  --primary-hover: #4338ca;
-  --bg-color: #0f172a;
-  --surface-color: #1e293b;
-  --card-border: #334155;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --accent-green: #10b981;
-  --accent-yellow: #f59e0b;
-  --accent-rose: #f43f5e;
-  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bg-main: #0b1120;
+  --bg-surface: #1e293b;
+  --bg-surface-alt: #334155;
+  --border-color: #334155;
+  --border-focus: #6366f1;
+
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-success: #10b981;
+  --color-success-hover: #059669;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-accent: #8b5cf6;
+
+  /* Tag koefisien */
+  --chip-a-bg: rgba(99, 102, 241, 0.2);
+  --chip-a-text: #a5b4fc;
+  --chip-a-border: rgba(99, 102, 241, 0.4);
+
+  --chip-b-bg: rgba(16, 185, 129, 0.2);
+  --chip-b-text: #6ee7b7;
+  --chip-b-border: rgba(16, 185, 129, 0.4);
+
+  --chip-c-bg: rgba(245, 158, 11, 0.2);
+  --chip-c-text: #fcd34d;
+  --chip-c-border: rgba(245, 158, 11, 0.4);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --transition-fast: 0.2s ease;
 }
 
-* {
+/* Reset Dasar */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -25,81 +49,458 @@
 
 body {
   font-family: var(--font-family);
-  background-color: var(--bg-color);
-  color: var(--text-primary);
+  background-color: var(--bg-main);
+  color: var(--text-main);
   min-height: 100vh;
+  line-height: 1.5;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 1.5rem;
+  padding: 1.5rem 1rem;
 }
 
-.container {
+/* Container Utama */
+.app-container {
   width: 100%;
-  max-width: 800px;
-  background-color: var(--surface-color);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.header {
+/* Header */
+.app-header {
   text-align: center;
-  margin-bottom: 2rem;
+  padding: 1rem 0;
+}
+
+.header-tag {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .badge {
   display: inline-block;
-  background: rgba(79, 70, 229, 0.2);
-  color: #818cf8;
-  font-size: 0.85rem;
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  font-size: 0.8rem;
   font-weight: 600;
-  padding: 0.35rem 0.85rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 9999px;
-  border: 1px solid rgba(129, 140, 248, 0.3);
-  margin-bottom: 0.75rem;
+  border: 1px solid rgba(99, 102, 241, 0.3);
 }
 
-.header h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--text-primary);
+.badge-accent {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.app-header h1 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
   margin-bottom: 0.5rem;
 }
 
-.subtitle {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
+.app-header .subtitle {
+  color: var(--text-muted);
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.main-content {
-  margin-bottom: 2rem;
+/* ==========================================================================
+   SPLIT LAYOUT (50% KIRI - 50% KANAN)
+   ========================================================================== */
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
 }
 
-.placeholder-card {
-  background: rgba(15, 23, 42, 0.5);
-  border: 1px dashed var(--card-border);
-  border-radius: 12px;
-  padding: 2rem;
-  text-align: center;
+@media (min-width: 900px) {
+  .split-layout {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
 }
 
-.placeholder-card h2 {
+/* Panel Card */
+.panel {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+.card-header h2 {
   font-size: 1.25rem;
-  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.step-pill {
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.step-pill-alt {
+  background: var(--color-warning);
+}
+
+/* Concept Cards & KaTeX */
+.concept-card {
+  background: rgba(11, 17, 32, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.concept-card h3 {
+  font-size: 1.05rem;
   color: #38bdf8;
 }
 
-.placeholder-card p {
-  color: var(--text-secondary);
-  line-height: 1.6;
+.concept-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }
 
-.footer {
+.math-display {
   text-align: center;
-  border-top: 1px solid var(--card-border);
-  padding-top: 1.25rem;
-  color: var(--text-secondary);
+  padding: 0.75rem 0.5rem;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: var(--radius-sm);
+  font-size: 1.2rem;
+  overflow-x: auto;
+}
+
+/* Chips & Koefisien */
+.coefficient-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.coefficient-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.coefficient-list li p {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.chip {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.chip-a {
+  background: var(--chip-a-bg);
+  color: var(--chip-a-text);
+  border: 1px solid var(--chip-a-border);
+}
+
+.chip-b {
+  background: var(--chip-b-bg);
+  color: var(--chip-b-text);
+  border: 1px solid var(--chip-b-border);
+}
+
+.chip-c {
+  background: var(--chip-c-bg);
+  color: var(--chip-c-text);
+  border: 1px solid var(--chip-c-border);
+}
+
+/* Highlight Box Diskriminan */
+.highlight-box {
+  background: rgba(99, 102, 241, 0.1);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.highlight-box h4 {
+  color: #a5b4fc;
+  font-size: 0.95rem;
+}
+
+.formula-d {
+  background: rgba(99, 102, 241, 0.2);
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.highlight-note {
   font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   TOMBOL & INTERAKSI
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-success {
+  background-color: var(--color-success);
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  background-color: var(--color-success-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-surface-alt);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: #475569;
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #ffffff;
+  width: 100%;
+}
+
+.btn-accent:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.btn-arrow {
+  transition: transform var(--transition-fast);
+}
+
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   PANEL KANAN & KUIS IDENTIFIKASI
+   ========================================================================== */
+.panel-locked {
+  position: relative;
+}
+
+.locked-view {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lock-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.locked-view h3 {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+}
+
+.locked-view p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  max-width: 320px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.quiz-active-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.instruction-box {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fde68a;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+}
+
+.equation-display-card {
+  background: rgba(15, 23, 42, 0.9);
+  border: 2px dashed #475569;
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.label-badge {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.equation-text {
+  font-size: 1.5rem;
+}
+
+/* Input Grid */
+.inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.input-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.input-group small {
+  color: var(--text-muted);
+  font-weight: 400;
+  display: block;
+}
+
+.input-group input {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.input-group input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.quiz-actions {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.75rem;
+}
+
+/* Feedback Card */
+.feedback-card {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  animation: fadeIn 0.25s ease;
+}
+
+.feedback-card.success {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid var(--color-success);
+  color: #6ee7b7;
+}
+
+.feedback-card.error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid var(--color-danger);
+  color: #fca5a5;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 0.5rem 0;
+}
+
+.app-footer {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  padding-top: 1rem;
 }

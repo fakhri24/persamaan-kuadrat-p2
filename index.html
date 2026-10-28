@@ -7,30 +7,176 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Eksplorasi Diskriminan Persamaan Kuadrat</title>
+  <title>Eksplorasi Diskriminan & Jenis Akar Kuadrat</title>
+
+  <!-- 1. KaTeX CSS: Mempercantik tampilan rumus matematika -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  
+  <!-- File CSS eksternal kita -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- 2. KaTeX JS Core & Auto-render Extension -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 </head>
 <body>
-  <div id="app" class="container">
-    <header class="header">
-      <span class="badge">Matematika Interaktif</span>
-      <h1>Petualangan Diskriminan ($D = b^2 - 4ac$)</h1>
-      <p class="subtitle">Pelajari sifat dan jenis akar persamaan kuadrat lewat tantangan interaktif!</p>
+  <div id="app" class="app-container">
+    <!-- Header Utama -->
+    <header class="app-header">
+      <div class="header-tag">
+        <span class="badge">Matematika Fase E / Kelas X</span>
+        <span class="badge badge-accent">Standar TKA Nasional</span>
+      </div>
+      <h1>Petualangan Diskriminan Persamaan Kuadrat</h1>
+      <p class="subtitle">Memahami karakteristik dan sifat akar melalui analisis nilai $D = b^2 - 4ac$</p>
     </header>
 
-    <main class="main-content">
-      <!-- Area interaktif dan arena game akan kita bangun bertahap di sini -->
-      <section class="placeholder-card">
-        <h2>Persiapan Petualangan</h2>
-        <p>Struktur dasar telah siap. Langkah berikutnya adalah membangun arena interaktif sesuai ide seru yang kamu miliki!</p>
+    <!-- Layout Utama: Split 50% - 50% -->
+    <main class="split-layout">
+      
+      <!-- ========================================================
+           PANEL KIRI (50%): Fondasi Materi & Kaitan Rumus ABC
+           ======================================================== -->
+      <section id="panel-materi" class="panel panel-left">
+        <div class="card-header">
+          <span class="step-pill">Langkah 1</span>
+          <h2>Mengenal Bentuk & Formula</h2>
+        </div>
+
+        <!-- Bagian Bentuk Umum -->
+        <article class="concept-card">
+          <h3>1. Bentuk Umum Persamaan Kuadrat</h3>
+          <p class="math-display">$$ax^2 + bx + c = 0$$</p>
+          <p class="concept-desc">Perhatikan setiap bagian dari persamaan di atas:</p>
+          <ul class="coefficient-list">
+            <li>
+              <span class="chip chip-a">$a$</span>
+              <div>
+                <strong>Koefisien $x^2$</strong>
+                <p>Angka yang menempel pada $x^2$. Syarat mutlak: $a \neq 0$.</p>
+              </div>
+            </li>
+            <li>
+              <span class="chip chip-b">$b$</span>
+              <div>
+                <strong>Koefisien $x$</strong>
+                <p>Angka yang menempel pada variabel $x$ berpangkat 1.</p>
+              </div>
+            </li>
+            <li>
+              <span class="chip chip-c">$c$</span>
+              <div>
+                <strong>Konstanta</strong>
+                <p>Bilangan murni yang berdiri sendiri tanpa variabel $x$.</p>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <!-- Bagian Rumus ABC & Posisi Diskriminan -->
+        <article class="concept-card">
+          <h3>2. Rumus ABC & "Kunci Rahasia" Diskriminan</h3>
+          <p>Untuk mencari akar-akar solusi ($x$), kita menggunakan rumus ABC:</p>
+          <p class="math-display">$$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$</p>
+          
+          <div class="highlight-box">
+            <h4>💡 Mengapa Bagian di Dalam Akar Begitu Spesial?</h4>
+            <p>
+              Perhatikan nilai di dalam tanda akar: <strong>$b^2 - 4ac$</strong>. Nilai ini disebut sebagai 
+              <strong>Diskriminan ($D$)</strong>:
+            </p>
+            <p class="math-display formula-d">$$D = b^2 - 4ac$$</p>
+            <p class="highlight-note">
+              Nilai $D$ inilah yang menentukan apakah persamaan memiliki <strong>2 akar berbeda</strong>, 
+              <strong>akar kembar</strong>, atau <strong>tidak memiliki akar riil</strong>!
+            </p>
+          </div>
+        </article>
+
+        <!-- Tombol Aksi Konfirmasi Pemahaman -->
+        <div class="action-footer">
+          <button id="btn-paham" class="btn btn-primary">
+            <span>Saya Sudah Paham! Buka Kuis Cepat</span>
+            <span class="btn-arrow">&rarr;</span>
+          </button>
+        </div>
       </section>
+
+      <!-- ========================================================
+           PANEL KANAN (50%): Kuis Singkat Identifikasi Koefisien a, b, c
+           (Akan dibuka setelah tombol 'btn-paham' ditekan)
+           ======================================================== -->
+      <section id="panel-kuis" class="panel panel-right panel-locked">
+        <div class="card-header">
+          <span class="step-pill step-pill-alt">Langkah 2</span>
+          <h2>Kuis Cepat: Temukan $a$, $b$, dan $c$!</h2>
+        </div>
+
+        <div id="quiz-locked-view" class="locked-view">
+          <div class="lock-icon">🔒</div>
+          <h3>Panel Kuis Masih Terkunci</h3>
+          <p>Baca dan pahami materi di panel kiri terlebih dahulu, lalu tekan tombol <strong>"Saya Sudah Paham!"</strong> untuk memulai tantangan.</p>
+        </div>
+
+        <!-- Konten Kuis yang akan ditampilkan saat terbuka -->
+        <div id="quiz-active-view" class="quiz-active-view hidden">
+          <div class="instruction-box">
+            <p>⚠️ <strong>Awas jebakan!</strong> Urutan suku persamaan di bawah ini diacak. Temukan koefisien yang benar!</p>
+          </div>
+
+          <!-- Persamaan Kuadrat Acak yang akan dirender -->
+          <div class="equation-display-card">
+            <span class="label-badge">Soal Persamaan:</span>
+            <div id="equation-display" class="equation-text">$$2x^2 + 3x - 11 = 0$$</div>
+          </div>
+
+          <!-- Form Input 3 Kotak Berdampingan -->
+          <div class="inputs-grid">
+            <div class="input-group">
+              <label for="input-a">Nilai $a$ <small>(koefisien $x^2$)</small>:</label>
+              <input type="number" id="input-a" placeholder="contoh: 2" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+              <label for="input-b">Nilai $b$ <small>(koefisien $x$)</small>:</label>
+              <input type="number" id="input-b" placeholder="contoh: 3" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+              <label for="input-c">Nilai $c$ <small>(konstanta)</small>:</label>
+              <input type="number" id="input-c" placeholder="contoh: -11" autocomplete="off">
+            </div>
+          </div>
+
+          <!-- Tombol Aksi Kuis -->
+          <div class="quiz-actions">
+            <button id="btn-periksa-abc" class="btn btn-success">Periksa Jawaban</button>
+            <button id="btn-acak-persamaan" class="btn btn-secondary">🔄 Ganti Persamaan</button>
+          </div>
+
+          <!-- Area Pesan Umpan Balik -->
+          <div id="quiz-feedback" class="feedback-card hidden"></div>
+
+          <!-- Tombol Lanjut ke Modul Diskriminan (Selalu aktif dan fleksibel) -->
+          <div class="module-next-container">
+            <hr class="divider">
+            <button id="btn-lanjut-diskriminan" class="btn btn-accent">
+              <span>🚀 Lanjut ke Petualangan Menghitung Diskriminan</span>
+              <span class="btn-arrow">&rarr;</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
     </main>
 
-    <footer class="footer">
-      <p>&copy; 2026 Pembelajaran Interaktif Persamaan Kuadrat</p>
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>&copy; 2026 Pembelajaran Interaktif Persamaan Kuadrat &bull; Dibangun secara bertahap bersama</p>
     </footer>
   </div>
 
+  <!-- Script JavaScript vanilla kita -->
   <script src="script.js" defer></script>
 </body>
 </html>

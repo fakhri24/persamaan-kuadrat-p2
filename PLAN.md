@@ -7,9 +7,9 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 
 ## Ringkasan Progres
 - [x] **Fase 0**: Inisialisasi Repositori & Template Dasar (5 File Inti) + Setup GitHub Pages
-- [ ] **Fase 1**: Fondasi Materi & Kuis Identifikasi Koefisien (HTML + KaTeX)
-- [ ] **Fase 2**: Penataan Gaya Dual-Panel 50-50 & Card Visual (CSS)
-- [ ] **Fase 3**: Logika Generator Persamaan & Kuis Identifikasi a, b, c (JS)
+- [x] **Fase 1**: Fondasi Materi & Kuis Identifikasi Koefisien (HTML + KaTeX)
+- [x] **Fase 2**: Penataan Gaya Dual-Panel 50-50 & Card Visual (CSS)
+- [x] **Fase 3**: Logika Generator Persamaan & Kuis Identifikasi a, b, c (JS)
 - [ ] **Fase 4**: Modul Inti Diskriminan: Menghitung D via Slot Drag-Drop & Tanda Akar ABC
 - [ ] **Fase 5**: Level Quest & Soal Tantangan (Main Quest & Side Quest)
 - [ ] **Fase 6**: Finishing, Polish, & Dokumentasi Belajar
@@ -28,8 +28,8 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 
 ### Fase 1: Fondasi Materi & Kuis Identifikasi Koefisien (HTML + KaTeX)
 *Fokus Belajar: Integrasi KaTeX CDN untuk matematika LaTeX, Struktur Semantic Split Layout, Form Input Angka.*
-- [ ] Menghubungkan library KaTeX CDN (CSS + JS + auto-render extension) dengan delimiter `$...$` dan `$$...$$`
-- [ ] Struktur Layout Dual-Panel (Grid/Flex 50% - 50%):
+- [x] Menghubungkan library KaTeX CDN (CSS + JS + auto-render extension) dengan delimiter `$...$` dan `$$...$$`
+- [x] Struktur Layout Dual-Panel (Grid/Flex 50% - 50%):
   - **Panel Kiri (Materi Inti)**:
     - Display persamaan kuadrat umum: $ax^2 + bx + c = 0$ dengan penjelasan koefisien $a$, $b$, dan konstanta $c$
     - Display rumus ABC: $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
@@ -44,20 +44,20 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
 *Fokus Belajar: CSS Grid split-screen 50/50, Flexbox, Styling ekspresi KaTeX, Desain responsive mobile (stacking).*
-- [ ] Variabel warna tema edukatif & modern
-- [ ] Desain split container (50% kiri dan 50% kanan di desktop, vertikal stack di HP)
-- [ ] Styling kartu rumus KaTeX dengan background kontras dan sorotan warna (highlight)
-- [ ] Animasi transisi membuka panel kanan setelah tombol konfirmasi ditekan
-- [ ] Styling input kuis identifikasi nilai $a, b, c$ dan tombol interaktif
+- [x] Variabel warna tema edukatif & modern
+- [x] Desain split container (50% kiri dan 50% kanan di desktop, vertikal stack di HP)
+- [x] Styling kartu rumus KaTeX dengan background kontras dan sorotan warna (highlight)
+- [x] Animasi transisi membuka panel kanan setelah tombol konfirmasi ditekan
+- [x] Styling input kuis identifikasi nilai $a, b, c$ dan tombol interaktif
 
 ### Fase 3: Logika Generator Persamaan & Kuis Identifikasi (JavaScript)
 *Fokus Belajar: Math.floor(Math.random()), integrasi renderMathInElement (KaTeX), event listener click, validasi angka.*
-- [ ] Inisialisasi rendering KaTeX saat DOM siap
-- [ ] Logika tombol konfirmasi di panel kiri untuk membuka/mengaktifkan panel kanan
-- [ ] Fungsi pembuat persamaan kuadrat acak yang natural (variasi tanda minus, $a=1$, dll.)
-- [ ] Pengecekan jawaban siswa untuk nilai $a$, $b$, dan $c$
-- [ ] Umpan balik langsung: highlight hijau jika benar, petunjuk ramah jika keliru (misal: "Hati-hati dengan tanda minus pada koefisien $b$")
-- [ ] Tombol lanjut ke Modul Menghitung Diskriminan setelah berhasil menjawab
+- [x] Inisialisasi rendering KaTeX saat DOM siap
+- [x] Logika tombol konfirmasi di panel kiri untuk membuka/mengaktifkan panel kanan
+- [x] Fungsi pembuat persamaan kuadrat acak yang natural (variasi tanda minus, $a=1$, dll.)
+- [x] Pengecekan jawaban siswa untuk nilai $a$, $b$, dan $c$
+- [x] Umpan balik langsung: highlight hijau jika benar, petunjuk ramah jika keliru (misal: "Hati-hati dengan tanda minus pada koefisien $b$")
+- [x] Tombol lanjut ke Modul Menghitung Diskriminan setelah berhasil menjawab
 
 ### Fase 4: Modul Inti Diskriminan & Interaksi Slot (Pengembangan Lanjutan)
 *Fokus Belajar: Drag and drop kartu koefisien, kalkulasi bertahap b^2 - 4ac, kaitan dengan tanda di dalam akar ABC.*
