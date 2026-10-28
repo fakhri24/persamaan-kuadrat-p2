@@ -299,7 +299,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const stepsArea = document.getElementById('steps-area');
   const stepList = document.getElementById('step-list');
   const nextStageCard = document.getElementById('next-stage-card');
+  const nextStageLocked = document.getElementById('next-stage-locked');
+  const nextLockedText = document.getElementById('next-locked-text');
   const btnKeLangkah5 = document.getElementById('btn-ke-langkah5');
+  const btnSoalBaruLocked = document.getElementById('btn-soal-baru-locked');
+  const koleksiSkor = document.getElementById('koleksi-skor');
+  const sifatBoxes = Array.from(document.querySelectorAll('.sifat-box'));
 
   // Referensi Langkah 5: rangkuman + flashcard
   const stage5Section = document.getElementById('stage-flashcard');
@@ -347,6 +352,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // State misi diskriminan
   let soalD = null;              // { a, b, c } soal aktif di Stage 2
   let hasilD = 0;                // nilai D dari soal aktif
+
+  // Koleksi 3 sifat akar: soal pertama acak, dua berikutnya sifat lain,
+  // soal ke-4 dan seterusnya baru benar-benar acak.
+  const JENIS_SIFAT = ['dua', 'kembar', 'tidak'];
+  const MODE_JENIS = { dua: 'positif', kembar: 'nol', tidak: 'negatif' };
+  const sifatTercakup = { dua: false, kembar: false, tidak: false };
+  const jenisRiwayat = [];
+  let jenisSoalAktif = null;
   let slotValues = { b: null, a: null, c: null };
   let trayValues = [];           // angka yang masih ada di baki kepingan
   let selectedChipIndex = null;  // kepingan yang dipilih lewat ketukan
@@ -473,9 +486,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // ------------------------------------------------------------------------
   // Generator soal diskriminan dengan tiga rasa: D > 0, D = 0, dan D < 0
   // ------------------------------------------------------------------------
-  function buatSoalDiskriminan() {
-    // Pilih "rasa" soal secara adil supaya siswa melihat ketiga kemungkinan
-    const mode = ['positif', 'nol', 'negatif'][Math.floor(Math.random() * 3)];
+  function buatSoalDiskriminan(modePaksa) {
+    // Mode bisa dipaksa agar koleksi 3 sifat akar terpenuhi lebih dulu
+    const mode = modePaksa || ['positif', 'nol', 'negatif'][Math.floor(Math.random() * 3)];
 
     // Kasus D = 0 sengaja dikonstruksi: b = 2ak dan c = ak²,
     // sehingga b² − 4ac = 4a²k² − 4a²k² = 0 (pasti akar kembar).
@@ -516,12 +529,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // ------------------------------------------------------------------------
   // Menyiapkan ulang satu misi (dipanggil saat masuk stage & "Soal Baru")
   // ------------------------------------------------------------------------
+  function jenisDariNilaiD(nilai) {
+    if (nilai > 0) return 'dua';
+    if (nilai === 0) return 'kembar';
+    return 'tidak';
+  }
+
+  // Tiga soal pertama: jenis yang belum pernah tampil. Setelah itu null = acak.
+  function pilihJenisSoalBerikut() {
+    if (jenisRiwayat.length >= 3) return null;
+
+    const belumTampil = JENIS_SIFAT.filter((jenis) => !jenisRiwayat.includes(jenis));
+    if (belumTampil.length === 0) return null;
+
+    return belumTampil[Math.floor(Math.random() * belumTampil.length)];
+  }
+
   function muatMisiDiskriminan(soalPaksa) {
+    const jenisDipilih = soalPaksa ? null : pilihJenisSoalBerikut();
+
     // Guard: parameter ini hanya untuk soal paksa (pengujian), bukan event klik
-    soalD = (soalPaksa && Number.isFinite(soalPaksa.a)) ? soalPaksa : buatSoalDiskriminan();
+    soalD = (soalPaksa && Number.isFinite(soalPaksa.a))
+      ? soalPaksa
+      : buatSoalDiskriminan(jenisDipilih ? MODE_JENIS[jenisDipilih] : undefined);
 
     const { a, b, c } = soalD;
     hasilD = b * b - 4 * a * c;
+    jenisSoalAktif = jenisDipilih || jenisDariNilaiD(hasilD);
+
+    // Catat 3 soal pertama supaya jenisnya berbeda-beda
+    if (!soalPaksa && jenisRiwayat.length < 3) {
+      jenisRiwayat.push(jenisSoalAktif);
+    }
 
     slotValues = { b: null, a: null, c: null };
     trayValues = acakUrutan([a, b, c]);
@@ -541,9 +580,11 @@ document.addEventListener('DOMContentLoaded', () => {
     stepList.innerHTML = '';
     stepEls = [];
 
-    // Ajakan ke Langkah 5 kembali tersembunyi
+    // Ajakan ke Langkah 5 (dan kartu terkunci) kembali tersembunyi
     nextStageCard.classList.add('hidden');
     nextStageCard.classList.remove('muncul');
+    nextStageLocked.classList.add('hidden');
+    nextStageLocked.classList.remove('muncul');
 
     sembunyikanFeedback(slotFeedback);
 
@@ -982,18 +1023,68 @@ document.addEventListener('DOMContentLoaded', () => {
     if (index < stepEls.length - 1) {
       tampilkanStep(index + 1);
     } else {
-      tampilkanAjakanLangkah5();
+      selesaikanSoalDiskriminan();
     }
   }
 
-  // Setelah langkah 4 aman: tawarkan pindah ke Langkah 5 (rangkuman + flashcard)
+  // Setelah 4 langkah selesai: tandai sifat akar, lalu buka/kunci pintu lanjut
+  function selesaikanSoalDiskriminan() {
+    if (jenisSoalAktif) {
+      sifatTercakup[jenisSoalAktif] = true;
+    }
+    perbaruiKoleksi();
+
+    const lengkap = JENIS_SIFAT.every((jenis) => sifatTercakup[jenis]);
+
+    if (lengkap) {
+      tampilkanAjakanLangkah5();
+    } else {
+      tampilkanAjakanTertunda();
+    }
+  }
+
+  function perbaruiKoleksi() {
+    let jumlah = 0;
+
+    sifatBoxes.forEach((kotak) => {
+      const jenis = kotak.dataset.sifat;
+      const sudah = sifatTercakup[jenis];
+      kotak.classList.toggle('terkumpul', sudah);
+      if (sudah) jumlah++;
+    });
+
+    koleksiSkor.textContent = `${jumlah} / 3`;
+  }
+
+  // Semua 3 sifat sudah terkumpul: buka tombol lanjut ke Langkah 5
   function tampilkanAjakanLangkah5() {
+    nextStageLocked.classList.add('hidden');
     nextStageCard.classList.remove('hidden');
     nextStageCard.classList.add('muncul');
 
     if (window.innerWidth < 900) {
       setTimeout(() => {
         nextStageCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 250);
+    }
+  }
+
+  // Koleksi belum lengkap: tampilkan ajakan mencari soal dengan sifat lain
+  function tampilkanAjakanTertunda() {
+    const jumlah = JENIS_SIFAT.filter((jenis) => sifatTercakup[jenis]).length;
+    const belum = JENIS_SIFAT
+      .filter((jenis) => !sifatTercakup[jenis])
+      .map((jenis) => LABEL_SIFAT[jenis]);
+
+    nextStageCard.classList.add('hidden');
+    nextStageLocked.classList.remove('hidden');
+    nextStageLocked.classList.add('muncul');
+
+    nextLockedText.innerHTML = `Sifat akar terkumpul <strong>${jumlah} dari 3</strong>. Masih kurang: ${belum.join(' dan ')}. Tekan "Soal Baru" untuk mencari soal dengan sifat itu.`;
+
+    if (window.innerWidth < 900) {
+      setTimeout(() => {
+        nextStageLocked.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 250);
     }
   }
@@ -1477,6 +1568,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnKembaliFondasi.addEventListener('click', kembaliKeFondasi);
   btnCekSlot.addEventListener('click', periksaSusunan);
   btnSoalBaru.addEventListener('click', () => muatMisiDiskriminan());
+  btnSoalBaruLocked.addEventListener('click', () => muatMisiDiskriminan());
   btnResetSlots.addEventListener('click', kosongkanSemuaSlot);
 
   slotEls.forEach((slot) => {

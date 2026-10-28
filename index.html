@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   
   <!-- File CSS eksternal kita dengan cache-buster -->
-  <link rel="stylesheet" href="style.css?v=3.8">
+  <link rel="stylesheet" href="style.css?v=3.9">
 
   <!-- 2. KaTeX JS Core & Auto-render Extension -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -201,6 +201,31 @@
               <div id="chip-bank" class="chip-bank" aria-label="Kepingan angka koefisien"></div>
             </div>
 
+            <!-- Koleksi 3 sifat akar: terisi setelah soal benar-benar diselesaikan -->
+            <div class="sifat-collection">
+              <div class="sifat-collection-head">
+                <span>Koleksi Sifat Akar</span>
+                <span id="koleksi-skor">0 / 3</span>
+              </div>
+              <div class="sifat-boxes" aria-live="polite">
+                <div class="sifat-box" data-sifat="dua">
+                  <span class="sifat-box-check" aria-hidden="true">✓</span>
+                  <span class="sifat-box-title">Dua akar</span>
+                  <span class="sifat-box-sub">D &gt; 0</span>
+                </div>
+                <div class="sifat-box" data-sifat="kembar">
+                  <span class="sifat-box-check" aria-hidden="true">✓</span>
+                  <span class="sifat-box-title">Kembar</span>
+                  <span class="sifat-box-sub">D = 0</span>
+                </div>
+                <div class="sifat-box" data-sifat="tidak">
+                  <span class="sifat-box-check" aria-hidden="true">✓</span>
+                  <span class="sifat-box-title">Tidak riil</span>
+                  <span class="sifat-box-sub">D &lt; 0</span>
+                </div>
+              </div>
+            </div>
+
             <div class="quiz-actions">
               <button id="btn-cek-slot" class="btn btn-success" type="button">Periksa Susunan</button>
               <button id="btn-soal-baru" class="btn btn-secondary" type="button">🔄 Soal Baru</button>
@@ -241,6 +266,18 @@
                   <span>Lanjut ke Rangkuman &amp; Latihan</span>
                   <span class="btn-arrow">&rarr;</span>
                 </button>
+              </div>
+
+              <!-- Muncul saat soal selesai tapi koleksi 3 sifat belum lengkap -->
+              <div id="next-stage-locked" class="next-stage-locked hidden">
+                <div class="next-stage-head">
+                  <span class="next-stage-icon" aria-hidden="true">🔒</span>
+                  <div>
+                    <h3>Koleksi belum lengkap</h3>
+                    <p id="next-locked-text">Sifat akar terkumpul 1 dari 3. Cari soal dengan sifat akar lainnya.</p>
+                  </div>
+                </div>
+                <button id="btn-soal-baru-locked" class="btn btn-secondary" type="button">🔄 Soal Baru</button>
               </div>
             </div>
           </section>
@@ -574,6 +611,6 @@
   </div>
 
   <!-- Script JavaScript vanilla kita dengan cache-buster -->
-  <script src="script.js?v=3.8" defer></script>
+  <script src="script.js?v=3.9" defer></script>
 </body>
 </html>
