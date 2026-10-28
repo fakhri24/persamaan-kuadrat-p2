@@ -27,30 +27,35 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Inisialisasi remote repository GitHub dan branching GitHub Pages (https://fakhri24.github.io/persamaan-kuadrat-p2/)
 
 ### Fase 1: Kerangka Dasar Antarmuka (HTML)
-*Fokus Belajar: Semantic HTML5, Form input kuadrat ($a, b, c$), Card display, dan Tombol Aksi.*
-- [ ] Struktur Container Utama (Header, Game Arena, Control Panel, Scoreboard)
-- [ ] Input koefisien persamaan kuadrat $ax^2 + bx + c = 0$
-- [ ] Area visualisasi kondisi Diskriminan ($D > 0, D = 0, D < 0$)
-- [ ] Section Main Quest (Latihan dasar) dan Side Quest (Pengayaan parameter $k$ atau $p$)
+*Fokus Belajar: Semantic HTML5, Komponen Slider, Card Display, dan Layout Arena Simulasi & Quest.*
+- [ ] Header & Navigasi Mode (Tab: "🔬 Lab Simulasi" & "⚔️ Level Quest")
+- [ ] Section Lab Simulasi: Panel slider koefisien ($a, b, c$), display formula $ax^2 + bx + c = 0$, dan canvas/kartu kurva parabola
+- [ ] Card Live Metric: Nilai $D = b^2 - 4ac$, indikator badge jenis akar, serta keterkaitan dengan rumus ABC ($\sqrt{D}$)
+- [ ] Section Level Quest: Container soal Main Quest (1a, 1b, 1c, No. 4) dan Side Quest (No. 2, No. 8)
 
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
-*Fokus Belajar: CSS Variables, Flexbox/Grid, Animasi transisi, dan Desain responsif mobile-first.*
-- [ ] Desain tema visual kartu interaktif yang menarik untuk siswa
-- [ ] Efek hover, fokus input, dan tombol interaktif
-- [ ] Visual indicator warna untuk jenis akar (misal: Hijau = 2 Real Berbeda, Kuning = Real Kembar, Ungu/Merah = Imajiner)
+*Fokus Belajar: CSS Variables, Glassmorphism/Dark UI, Flexbox/Grid, Animasi visual transisi indikator.*
+- [ ] Desain tema modern & responsif (mobile friendly)
+- [ ] Styling khusus slider koefisien dan badge dinamika status akar
+- [ ] Visual indicator warna untuk jenis akar:
+  - Hijau: $D > 0$ (2 akar riil berbeda, kurva memotong sumbu X di 2 titik)
+  - Kuning: $D = 0$ (Akar riil kembar, puncak kurva menyinggung sumbu X)
+  - Merah/Ungu: $D < 0$ (Tidak riil/imajiner, kurva melayang/tidak memotong sumbu X)
+- [ ] Efek animasi kartu quest dan feedback jawaban benar/salah
 
-### Fase 3: Logika Matematika & DOM Manipulation (JavaScript)
-*Fokus Belajar: Event Listener, Fungsi kalkulasi aljabar, Manipulasi text & class HTML.*
-- [ ] Ekstraksi nilai $a, b, c$ dari elemen input
-- [ ] Fungsi kalkulasi $D = b^2 - 4ac$
-- [ ] Evaluasi sifat akar (2 akar berbeda jika $D > 0$, kembar jika $D = 0$, tidak riil jika $D < 0$)
-- [ ] Validasi syarat persamaan kuadrat ($a \neq 0$)
+### Fase 3: Logika Matematika, Canvas Kurva, & DOM (JavaScript)
+*Fokus Belajar: Event listener 'input', kalkulasi $D$, rendering grafik parabola sederhana di `<canvas>`, dan state sync.*
+- [ ] Event listener slider $a, b, c$ dengan pembatasan syarat persamaan kuadrat ($a \neq 0$)
+- [ ] Fungsi kalkulasi $D = b^2 - 4ac$ dan pemecahan langkah perhitungan
+- [ ] Visualisasi sederhana kurva parabola pada Canvas HTML5 secara real-time
+- [ ] Integrasi narasi pedagogis: kaitan tanda $D$ di dalam rumus ABC ($x = \frac{-b \pm \sqrt{D}}{2a}$)
 
-### Fase 4: Mekanik Game & Mode Latihan
-*Fokus Belajar: State management sederhana, pergantian soal dinamis, timer/skor.*
-- [ ] Mode Eksplorasi Bebas (Siswa bebas geser/masukkan nilai $a, b, c$ dan melihat kurva/karakteristik $D$)
-- [ ] Mode Tebak Tantangan / Main Quest (Soal menghitung $D$ dan memilih sifat akar)
-- [ ] Mode Parameter Lanjutan / Side Quest (Mencari nilai $k$ agar akar kembar $D = 0$)
+### Fase 4: Sistem Quest & Gamifikasi Interaktif
+*Fokus Belajar: Data struktur soal, validasi jawaban siswa, scaffolding feedback, dan skor.*
+- [ ] Generator/Daftar Soal Main Quest (Siswa menghitung $D$ dan menentukan sifat akar)
+- [ ] Quest Parameter Lanjutan (Tantangan mencari nilai $k$ atau $p$ agar $D=0$ atau $D>0$)
+- [ ] Sistem scaffolding: petunjuk bertahap (hint system) jika siswa kesulitan
+- [ ] Sistem skor, bintang, dan perayaan saat menyelesaikan quest
 
 ### Fase 5: Evaluasi & Finishing
 - [ ] Review kode bersama pengguna (penjelasan baris per baris)
