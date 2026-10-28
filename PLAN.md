@@ -28,7 +28,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 
 ### Fase 1: Kerangka Dasar Antarmuka (HTML)
 *Fokus Belajar: Semantic HTML5, Stage Progression Container, Kepingan Draggable, Dropzone Formula, dan Card Kaitan Rumus ABC.*
-- [ ] Header & Status Bar Petualangan (Indikator Stage/Level, Nyawa/Bintang, & Poin)
+- [ ] Header & Status Bar Petualangan (Indikator Stage/Level, Progress Bar Capaian, & Lencana Penguasaan)
 - [ ] Container Quest Terpadu (Stage 1: Main Quest Esensial, Stage 2: Main Quest Parameter $k$, Stage 3: Side Quest Pengayaan)
 - [ ] Bank Kepingan Koefisien (Elemen Draggable untuk nilai $a, b, c$)
 - [ ] Slot Interaktif Rumus Diskriminan (Dropzone):
@@ -38,6 +38,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [ ] Area Kalkulasi Bertahap (Step-by-step reveal: Hitung $b^2$, hitung $4ac$, hasil akhir $D$)
 - [ ] Kartu Kaitan Rumus ABC: Visualisasi $x = \frac{-b \pm \sqrt{D}}{2a}$ yang menunjukkan nilai di dalam tanda akar
 - [ ] Pilihan Kesimpulan Sifat Akar (3 Tombol: 2 Akar Riil Berbeda, Akar Kembar, Tidak Riil)
+- [ ] Kotak Umpan Balik Reflektif (Kartu petunjuk konstruktif ramah saat siswa butuh arahan)
 - [ ] Tombol & Modal Bantuan Sandbox ("🎲 Coba Angka Bebas / Uji Rumus Sendiri")
 
 ### Fase 2: Penataan Gaya & Layout Modern (CSS)
