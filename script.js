@@ -132,6 +132,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Simpan ke state
     currentProblem = { a, b, c };
 
+    // Tampilkan ke layar dan render KaTeX
+    equationDisplay.innerHTML = `$$${buatLatexPersamaan(currentProblem)} = 0$$`;
+    renderRumusMatematika(equationDisplay);
+
+    // Reset input form & feedback
+    inputA.value = '';
+    inputB.value = '';
+    inputC.value = '';
+    inputA.classList.remove('input-correct', 'input-wrong');
+    inputB.classList.remove('input-correct', 'input-wrong');
+    inputC.classList.remove('input-correct', 'input-wrong');
+    feedbackEl.className = 'feedback-card hidden';
+    feedbackEl.innerHTML = '';
+  }
+
+  // ========================================================================
+  // HELPER: Menyusun LaTeX persamaan dengan urutan suku yang diacak
+  // (Dipisah agar bisa dipakai kuis Langkah 2 dan misi Langkah 3)
+  // ========================================================================
+  function buatLatexPersamaan({ a, b, c }) {
     // Format masing-masing suku secara aljabar LaTeX
     const sukuA = formatSukuA(a);
     const sukuB = formatSukuB(b);
@@ -154,21 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // Pilih salah satu pola secara acak
-    const formulaLatex = polaUrutan[Math.floor(Math.random() * polaUrutan.length)];
-
-    // Tampilkan ke layar dan render KaTeX
-    equationDisplay.innerHTML = `$$${formulaLatex} = 0$$`;
-    renderRumusMatematika(equationDisplay);
-
-    // Reset input form & feedback
-    inputA.value = '';
-    inputB.value = '';
-    inputC.value = '';
-    inputA.classList.remove('input-correct', 'input-wrong');
-    inputB.classList.remove('input-correct', 'input-wrong');
-    inputC.classList.remove('input-correct', 'input-wrong');
-    feedbackEl.className = 'feedback-card hidden';
-    feedbackEl.innerHTML = '';
+    return polaUrutan[Math.floor(Math.random() * polaUrutan.length)];
   }
 
   // ========================================================================
@@ -270,9 +276,610 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Tombol Lanjut ke Modul Diskriminan
-  btnLanjut.addEventListener('click', () => {
-    alert('🎯 Hebat! Pondasi identifikasi nilai a, b, dan c sudah kamu kuasai. Kita siap melangkah ke Modul Inti Diskriminan D = b² - 4ac!');
+  btnLanjut.addEventListener('click', masukStage2);
+
+  // ========================================================================
+  // STAGE 2: MISI MENGHITUNG DISKRIMINAN (FASE 4)
+  // Alur: susun slot b² − 4ac → bedah langkah → simpulkan sifat akar
+  // ========================================================================
+  const stage1Layout = document.getElementById('stage1-layout');
+  const stage2Section = document.getElementById('stage-diskriminan');
+  const appSubtitle = document.getElementById('app-subtitle');
+
+  const stage2Equation = document.getElementById('stage2-equation');
+  const chipBank = document.getElementById('chip-bank');
+  const slotEls = Array.from(document.querySelectorAll('#formula-slots .slot'));
+  const btnCekSlot = document.getElementById('btn-cek-slot');
+  const btnSoalBaru = document.getElementById('btn-soal-baru');
+  const btnResetSlots = document.getElementById('btn-reset-slots');
+  const btnKembaliFondasi = document.getElementById('btn-kembali-fondasi');
+  const slotFeedback = document.getElementById('slot-feedback');
+
+  const stepsLocked = document.getElementById('steps-locked');
+  const stepsArea = document.getElementById('steps-area');
+  const stepList = document.getElementById('step-list');
+  const sqrtFormula = document.getElementById('sqrt-formula');
+  const sqrtNote = document.getElementById('sqrt-note');
+  const rootOptions = Array.from(document.querySelectorAll('#root-options .root-option'));
+  const rootFeedback = document.getElementById('root-feedback');
+
+  const SUBTITLE_STAGE1 = 'Memahami karakteristik dan sifat akar melalui analisis nilai $D = b^2 - 4ac$';
+  const SUBTITLE_STAGE2 = 'Susun nilai $D = b^2 - 4ac$, hitung bertahap, lalu simpulkan sifat akarnya.';
+
+  // State misi diskriminan
+  let soalD = null;              // { a, b, c } soal aktif di Stage 2
+  let hasilD = 0;                // nilai D dari soal aktif
+  let slotValues = { b: null, a: null, c: null };
+  let trayValues = [];           // angka yang masih ada di baki kepingan
+  let selectedChipIndex = null;  // kepingan yang dipilih lewat ketukan
+  let dragState = null;          // data seret aktif (pointer)
+  let suppressSlotClickUntil = 0;
+  let stage2Locked = false;      // true setelah susunan benar
+  let rootLocked = false;        // true setelah sifat akar dijawab benar
+
+  // ------------------------------------------------------------------------
+  // Perpindahan stage
+  // ------------------------------------------------------------------------
+  function masukStage2() {
+    // Sembunyikan total fondasi + kuis a, b, c (Stage 1)
+    stage1Layout.classList.add('hidden');
+    stage2Section.classList.remove('hidden');
+
+    // Paksa animasi masuk diputar ulang setiap kali stage dibuka
+    stage2Section.classList.remove('tampil');
+    void stage2Section.offsetWidth;
+    stage2Section.classList.add('tampil');
+
+    aturSubtitle(SUBTITLE_STAGE2);
+    muatMisiDiskriminan();
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function kembaliKeFondasi() {
+    stage2Section.classList.add('hidden');
+    stage1Layout.classList.remove('hidden');
+    aturSubtitle(SUBTITLE_STAGE1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function aturSubtitle(teks) {
+    appSubtitle.innerHTML = teks;
+    renderRumusMatematika(appSubtitle);
+  }
+
+  // ------------------------------------------------------------------------
+  // Generator soal diskriminan dengan tiga rasa: D > 0, D = 0, dan D < 0
+  // ------------------------------------------------------------------------
+  function buatSoalDiskriminan() {
+    // Pilih "rasa" soal secara adil supaya siswa melihat ketiga kemungkinan
+    const mode = ['positif', 'nol', 'negatif'][Math.floor(Math.random() * 3)];
+
+    // Kasus D = 0 sengaja dikonstruksi: b = 2ak dan c = ak²,
+    // sehingga b² − 4ac = 4a²k² − 4a²k² = 0 (pasti akar kembar).
+    if (mode === 'nol') {
+      const daftarA = [-2, -1, 1, 2];
+      const daftarK = [-2, -1, 1, 2];
+      const a = daftarA[Math.floor(Math.random() * daftarA.length)];
+      const k = daftarK[Math.floor(Math.random() * daftarK.length)];
+      return { a, b: 2 * a * k, c: a * k * k };
+    }
+
+    let a = 0;
+    let b = 0;
+    let c = 0;
+    let percobaan = 0;
+
+    do {
+      a = Math.floor(Math.random() * 6) - 3;   // -3 s/d 3
+      b = Math.floor(Math.random() * 11) - 5;  // -5 s/d 5
+      c = Math.floor(Math.random() * 13) - 6;  // -6 s/d 6
+      percobaan++;
+    } while (
+      percobaan < 300 &&
+      (a === 0 || b === 0 || c === 0 ||
+        (mode === 'positif' ? b * b - 4 * a * c <= 0 : b * b - 4 * a * c >= 0))
+    );
+
+    // Jaring pengaman: kalau perulangan gagal, pakai soal yang pasti valid
+    if (a === 0 || b === 0 || c === 0) {
+      a = 2;
+      b = 3;
+      c = -1;
+    }
+
+    return { a, b, c };
+  }
+
+  // ------------------------------------------------------------------------
+  // Menyiapkan ulang satu misi (dipanggil saat masuk stage & "Soal Baru")
+  // ------------------------------------------------------------------------
+  function muatMisiDiskriminan(soalPaksa) {
+    // Guard: parameter ini hanya untuk soal paksa (pengujian), bukan event klik
+    soalD = (soalPaksa && Number.isFinite(soalPaksa.a)) ? soalPaksa : buatSoalDiskriminan();
+
+    const { a, b, c } = soalD;
+    hasilD = b * b - 4 * a * c;
+
+    slotValues = { b: null, a: null, c: null };
+    trayValues = acakUrutan([a, b, c]);
+    selectedChipIndex = null;
+    stage2Locked = false;
+    rootLocked = false;
+
+    // Tampilkan persamaan (urutan suku tetap diacak seperti kuis sebelumnya)
+    stage2Equation.innerHTML = `$$${buatLatexPersamaan(soalD)} = 0$$`;
+    renderRumusMatematika(stage2Equation);
+
+    renderChipBank();
+    perbaruiSlot();
+
+    // Kembalikan panel kanan ke kondisi "menunggu susunan"
+    stepsLocked.classList.remove('hidden');
+    stepsArea.classList.add('hidden');
+    stepList.innerHTML = '';
+    sqrtFormula.innerHTML = '';
+    sqrtNote.textContent = '';
+
+    rootOptions.forEach((tombol) => {
+      tombol.disabled = false;
+      tombol.classList.remove('correct', 'wrong');
+    });
+
+    sembunyikanFeedback(slotFeedback);
+    sembunyikanFeedback(rootFeedback);
+
+    btnCekSlot.disabled = false;
+    btnResetSlots.disabled = false;
+
+    // Di layar sempit, bawa siswa kembali ke panggung rumus
+    if (window.innerWidth < 900) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Fisher-Yates: mengacu angka kepingan agar tidak selalu urutan a, b, c
+  function acakUrutan(daftar) {
+    const hasil = daftar.slice();
+    for (let i = hasil.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [hasil[i], hasil[j]] = [hasil[j], hasil[i]];
+    }
+    return hasil;
+  }
+
+  // ------------------------------------------------------------------------
+  // Baki kepingan angka
+  // ------------------------------------------------------------------------
+  function renderChipBank() {
+    chipBank.innerHTML = '';
+
+    if (trayValues.length === 0) {
+      const info = document.createElement('span');
+      info.className = 'tray-empty';
+      info.textContent = 'Semua kepingan sudah dipasang ✓';
+      chipBank.appendChild(info);
+      return;
+    }
+
+    trayValues.forEach((nilai, index) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip-drag';
+      if (index === selectedChipIndex) chip.classList.add('selected');
+      chip.textContent = String(nilai);
+      chip.dataset.index = String(index);
+      chip.setAttribute('aria-pressed', index === selectedChipIndex ? 'true' : 'false');
+      chip.setAttribute('aria-label', `Kepingan angka ${nilai}`);
+
+      // Pointer: bisa diseret (mouse & sentuh)
+      chip.addEventListener('pointerdown', (event) => mulaiSeret(event, chip, index));
+
+      // Keyboard: Enter/Space menghasilkan click dengan detail = 0
+      chip.addEventListener('click', (event) => {
+        if (event.detail === 0) pilihChip(index);
+      });
+
+      chipBank.appendChild(chip);
+    });
+  }
+
+  function pilihChip(index) {
+    if (stage2Locked) return;
+    selectedChipIndex = selectedChipIndex === index ? null : index;
+    renderChipBank();
+  }
+
+  // ------------------------------------------------------------------------
+  // Slot rumus
+  // ------------------------------------------------------------------------
+  function perbaruiSlot() {
+    slotEls.forEach((slot) => {
+      const kunci = slot.dataset.slot;
+      const nilai = slotValues[kunci];
+      const placeholder = slot.querySelector('.slot-placeholder');
+      const valueEl = slot.querySelector('.slot-value');
+
+      slot.classList.remove('wrong', 'ok', 'pulse-ok');
+
+      if (nilai === null) {
+        slot.classList.remove('filled');
+        valueEl.textContent = '';
+        placeholder.hidden = false;
+      } else {
+        slot.classList.add('filled');
+        valueEl.textContent = String(nilai);
+        placeholder.hidden = true;
+      }
+    });
+  }
+
+  function tempatkanChip(kunciSlot, indexBaki) {
+    if (stage2Locked) return;
+
+    const nilai = trayValues[indexBaki];
+    if (nilai === undefined) return;
+
+    // Kalau slot sudah terisi, isi lamanya dikembalikan ke baki
+    if (slotValues[kunciSlot] !== null) trayValues.push(slotValues[kunciSlot]);
+
+    trayValues.splice(indexBaki, 1);
+    slotValues[kunciSlot] = nilai;
+    selectedChipIndex = null;
+
+    perbaruiSlot();
+    renderChipBank();
+    sembunyikanFeedback(slotFeedback);
+  }
+
+  function kosongkanSlot(kunciSlot) {
+    if (stage2Locked || slotValues[kunciSlot] === null) return;
+
+    trayValues.push(slotValues[kunciSlot]);
+    slotValues[kunciSlot] = null;
+    selectedChipIndex = null;
+
+    perbaruiSlot();
+    renderChipBank();
+    sembunyikanFeedback(slotFeedback);
+  }
+
+  function kosongkanSemuaSlot() {
+    if (stage2Locked) return;
+
+    Object.keys(slotValues).forEach((kunci) => {
+      if (slotValues[kunci] !== null) trayValues.push(slotValues[kunci]);
+      slotValues[kunci] = null;
+    });
+
+    trayValues = acakUrutan(trayValues);
+    selectedChipIndex = null;
+
+    perbaruiSlot();
+    renderChipBank();
+    sembunyikanFeedback(slotFeedback);
+  }
+
+  // ------------------------------------------------------------------------
+  // Mekanisme seret (Pointer Events: mouse + sentuh, plus fallback ketuk)
+  // ------------------------------------------------------------------------
+  function mulaiSeret(event, chip, index) {
+    if (stage2Locked) return;
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+    event.preventDefault();
+
+    dragState = {
+      chip,
+      index,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      ghost: null,
+      moved: false,
+      hoverSlot: null
+    };
+
+    document.addEventListener('pointermove', saatSeret, { passive: false });
+    document.addEventListener('pointerup', akhiriSeret);
+    document.addEventListener('pointercancel', akhiriSeret);
+  }
+
+  function saatSeret(event) {
+    if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+    const jarak = Math.hypot(event.clientX - dragState.startX, event.clientY - dragState.startY);
+
+    // Ghost baru dibuat setelah gerakan melewati ambang, supaya ketukan biasa tidak berkedip
+    if (!dragState.moved && jarak > 6) {
+      buatGhost(event.clientX, event.clientY);
+      dragState.moved = true;
+    }
+
+    if (!dragState.moved) return;
+
+    event.preventDefault();
+    pindahkanGhost(event.clientX, event.clientY);
+    tandaiSlotHover(event.clientX, event.clientY);
+  }
+
+  function buatGhost(x, y) {
+    const kotak = dragState.chip.getBoundingClientRect();
+    const ghost = document.createElement('div');
+    ghost.className = 'drag-ghost';
+    ghost.textContent = dragState.chip.textContent;
+    ghost.style.width = `${kotak.width}px`;
+    ghost.style.height = `${kotak.height}px`;
+    ghost.style.left = `${x}px`;
+    ghost.style.top = `${y}px`;
+    document.body.appendChild(ghost);
+
+    dragState.chip.classList.add('dragging');
+    dragState.ghost = ghost;
+  }
+
+  function pindahkanGhost(x, y) {
+    if (!dragState || !dragState.ghost) return;
+    dragState.ghost.style.left = `${x}px`;
+    dragState.ghost.style.top = `${y}px`;
+  }
+
+  function slotDiTitik(x, y) {
+    const elemen = document.elementFromPoint(x, y);
+    return elemen ? elemen.closest('.slot') : null;
+  }
+
+  function tandaiSlotHover(x, y) {
+    const slot = slotDiTitik(x, y);
+
+    if (dragState.hoverSlot && dragState.hoverSlot !== slot) {
+      dragState.hoverSlot.classList.remove('drop-hover');
+    }
+
+    if (slot && !slot.classList.contains('filled')) {
+      slot.classList.add('drop-hover');
+      dragState.hoverSlot = slot;
+    } else {
+      dragState.hoverSlot = null;
+    }
+  }
+
+  function akhiriSeret(event) {
+    document.removeEventListener('pointermove', saatSeret);
+    document.removeEventListener('pointerup', akhiriSeret);
+    document.removeEventListener('pointercancel', akhiriSeret);
+
+    const state = dragState;
+    dragState = null;
+    if (!state) return;
+
+    state.chip.classList.remove('dragging');
+    if (state.hoverSlot) state.hoverSlot.classList.remove('drop-hover');
+    if (state.ghost) state.ghost.remove();
+
+    if (state.moved) {
+      // Cegah click "bayangan" dari slot yang baru saja menerima drop
+      suppressSlotClickUntil = Date.now() + 350;
+
+      if (event.type !== 'pointercancel') {
+        const slot = slotDiTitik(event.clientX, event.clientY);
+        if (slot && !stage2Locked) tempatkanChip(slot.dataset.slot, state.index);
+      }
+    } else {
+      // Tidak diseret = dianggap ketukan untuk memilih kepingan
+      pilihChip(state.index);
+    }
+  }
+
+  // ------------------------------------------------------------------------
+  // Pemeriksaan susunan slot
+  // ------------------------------------------------------------------------
+  function periksaSusunan() {
+    if (stage2Locked) return;
+
+    const slotKosong = slotEls.filter((slot) => slotValues[slot.dataset.slot] === null);
+    if (slotKosong.length > 0) {
+      tampilkanFeedback(slotFeedback, 'error', '⚠️ Masih ada slot yang kosong. Lengkapi ketiga slot dulu, ya.');
+      return;
+    }
+
+    const slotSalah = slotEls.filter((slot) => slotValues[slot.dataset.slot] !== soalD[slot.dataset.slot]);
+
+    if (slotSalah.length === 0) {
+      stage2Locked = true;
+
+      slotEls.forEach((slot) => {
+        slot.classList.remove('wrong');
+        slot.classList.add('ok', 'pulse-ok');
+      });
+
+      btnCekSlot.disabled = true;
+      btnResetSlots.disabled = true;
+
+      tampilkanFeedback(
+        slotFeedback,
+        'success',
+        `🎯 <strong>Susunan tepat!</strong> Kepingan $a$, $b$, dan $c$ sudah duduk di posisi yang benar. Sekarang lihat bedah perhitungan di panel kanan.`
+      );
+
+      bukaBedahPerhitungan();
+      return;
+    }
+
+    // Penanda slot keliru (hijau tetap, merah perlu diperbaiki)
+    slotEls.forEach((slot) => {
+      const kunci = slot.dataset.slot;
+      slot.classList.toggle('wrong', slotValues[kunci] !== soalD[kunci]);
+    });
+
+    let petunjuk = '🔍 <strong>Belum pas, tapi kamu hampir!</strong> Periksa lagi peta rumusnya:<br>';
+
+    if (slotValues.b !== soalD.b) {
+      petunjuk += '&bull; Bagian yang <strong>dikuadratkan</strong> adalah koefisien $b$, yaitu angka di depan variabel $x$.<br>';
+    }
+    if (slotValues.a !== soalD.a) {
+      petunjuk += '&bull; Angka pengali pertama setelah $4$ adalah koefisien $a$, yaitu angka di depan $x^2$.<br>';
+    }
+    if (slotValues.c !== soalD.c) {
+      petunjuk += '&bull; Slot terakhir berisi konstanta $c$, yaitu angka yang berdiri sendiri tanpa $x$.<br>';
+    }
+    if ([soalD.a, soalD.b, soalD.c].some((nilai) => Math.abs(nilai) === 1)) {
+      petunjuk += '&bull; Kalau di depan variabel tidak tertulis angka, ingat bahwa koefisiennya adalah $1$.<br>';
+    }
+
+    tampilkanFeedback(slotFeedback, 'error', petunjuk);
+  }
+
+  // ------------------------------------------------------------------------
+  // Bedah perhitungan: b² → 4ac → D, lalu visualisasi akar
+  // ------------------------------------------------------------------------
+  function bukaBedahPerhitungan() {
+    stepsLocked.classList.add('hidden');
+    stepsArea.classList.remove('hidden');
+    renderLangkahPerhitungan();
+
+    if (window.innerWidth < 900) {
+      setTimeout(() => {
+        stepsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+  }
+
+  // Membungkus angka negatif dengan kurung agar LaTeX terbaca benar: (-4)
+  function dalamKurung(nilai) {
+    return nilai < 0 ? `(${nilai})` : `${nilai}`;
+  }
+
+  function renderLangkahPerhitungan() {
+    const { a, b, c } = soalD;
+    const b2 = b * b;
+    const ac4 = 4 * a * c;
+
+    stepList.innerHTML = `
+      <li class="step-item">
+        <span class="step-num">1</span>
+        <div class="step-body">
+          <p class="step-title">Kuadratkan koefisien $b$</p>
+          <p class="step-math">$$b^2 = ${dalamKurung(b)}^2 = ${b2}$$</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <span class="step-num">2</span>
+        <div class="step-body">
+          <p class="step-title">Kalikan $4 \\cdot a \\cdot c$</p>
+          <p class="step-math">$$4ac = 4 \\times ${dalamKurung(a)} \\times ${dalamKurung(c)} = ${ac4}$$</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <span class="step-num">3</span>
+        <div class="step-body">
+          <p class="step-title">Kurangkan: $D = b^2 - 4ac$</p>
+          <p class="step-math">$$D = ${b2} - ${dalamKurung(ac4)} = ${hasilD}$$</p>
+        </div>
+      </li>
+    `;
+    renderRumusMatematika(stepList);
+
+    // Visualisasi: nilai D dimasukkan kembali ke dalam akar rumus ABC
+    sqrtFormula.innerHTML = `$$x = \\frac{-(${b}) \\pm \\sqrt{${hasilD}}}{2(${a})}$$`;
+    renderRumusMatematika(sqrtFormula);
+
+    if (hasilD > 0) {
+      sqrtNote.innerHTML = `Nilai $D$ positif, sehingga $\\sqrt{D}$ adalah bilangan riil. Tanda $\\pm$ memberi <strong>dua</strong> jawaban berbeda.`;
+    } else if (hasilD === 0) {
+      sqrtNote.innerHTML = `Nilai $D = 0$, sehingga $\\sqrt{0} = 0$. Bagian $\\pm$ hilang dan hanya tersisa <strong>satu</strong> akar (akar kembar).`;
+    } else {
+      sqrtNote.innerHTML = `Nilai $D$ negatif. Bilangan riil tidak punya akar kuadrat dari bilangan negatif, jadi <strong>tidak ada akar riil</strong>.`;
+    }
+    renderRumusMatematika(sqrtNote);
+  }
+
+  // ------------------------------------------------------------------------
+  // Pemilihan sifat akar
+  // ------------------------------------------------------------------------
+  function jawabSifatAkar(jenis, tombol) {
+    if (rootLocked) return;
+
+    const jawabanBenar = hasilD > 0 ? 'dua' : (hasilD === 0 ? 'kembar' : 'tidak');
+
+    if (jenis === jawabanBenar) {
+      rootLocked = true;
+      tombol.classList.add('correct');
+      rootOptions.forEach((opsi) => { opsi.disabled = true; });
+
+      let penjelasan = '';
+      if (hasilD > 0) {
+        penjelasan = `Karena $D = ${hasilD} > 0$, nilai $\\sqrt{D}$ nyata dan tanda $\\pm$ menghasilkan dua nilai $x$ yang berbeda.`;
+      } else if (hasilD === 0) {
+        penjelasan = `Karena $D = 0$, maka $\\sqrt{D} = 0$ sehingga kedua akar berimpit menjadi satu akar kembar.`;
+      } else {
+        penjelasan = `Karena $D = ${hasilD} < 0$, $\\sqrt{${hasilD}}$ bukan bilangan riil sehingga persamaan tidak punya akar riil.`;
+      }
+
+      tampilkanFeedback(
+        rootFeedback,
+        'success',
+        `✅ <strong>Benar!</strong> ${penjelasan}<br><br>Klik <em>"Soal Baru"</em> untuk mencoba persamaan lain.`
+      );
+      return;
+    }
+
+    tombol.classList.add('wrong');
+    tombol.addEventListener('animationend', () => tombol.classList.remove('wrong'), { once: true });
+
+    let petunjuk = '';
+    if (hasilD > 0) {
+      petunjuk = 'Hmm, belum tepat. Perhatikan nilai $D$ yang positif. Apakah $\\sqrt{D}$ menghasilkan bilangan nyata? Lalu apa efek tanda $\\pm$ pada jawaban?';
+    } else if (hasilD === 0) {
+      petunjuk = 'Hmm, belum tepat. Di sini $D = 0$. Berapa nilai $\\sqrt{0}$? Kalau angka di bawah akar nol, apakah masih ada dua jawaban berbeda?';
+    } else {
+      petunjuk = 'Hmm, belum tepat. Di sini $D$ bernilai negatif. Bisakah bilangan riil memiliki akar kuadrat dari bilangan negatif?';
+    }
+
+    tampilkanFeedback(rootFeedback, 'error', `🔍 <strong>Ayo pikirkan sekali lagi.</strong><br>${petunjuk}`);
+  }
+
+  // ------------------------------------------------------------------------
+  // Helper umpan balik
+  // ------------------------------------------------------------------------
+  function tampilkanFeedback(elemen, tipe, html) {
+    elemen.className = `feedback-card ${tipe}`;
+    elemen.innerHTML = html;
+    renderRumusMatematika(elemen);
+  }
+
+  function sembunyikanFeedback(elemen) {
+    elemen.className = 'feedback-card hidden';
+    elemen.innerHTML = '';
+  }
+
+  // ------------------------------------------------------------------------
+  // Event listener Stage 2
+  // ------------------------------------------------------------------------
+  btnKembaliFondasi.addEventListener('click', kembaliKeFondasi);
+  btnCekSlot.addEventListener('click', periksaSusunan);
+  btnSoalBaru.addEventListener('click', () => muatMisiDiskriminan());
+  btnResetSlots.addEventListener('click', kosongkanSemuaSlot);
+
+  slotEls.forEach((slot) => {
+    slot.addEventListener('click', () => {
+      if (Date.now() < suppressSlotClickUntil) return;
+      if (stage2Locked) return;
+
+      const kunci = slot.dataset.slot;
+
+      if (selectedChipIndex !== null) {
+        tempatkanChip(kunci, selectedChipIndex);
+      } else {
+        kosongkanSlot(kunci);
+      }
+    });
   });
+
+  rootOptions.forEach((tombol) => {
+    tombol.addEventListener('click', () => jawabSifatAkar(tombol.dataset.akar, tombol));
+  });
+
 
   // ========================================================================
   // FUNGSI HELPER: KaTeX Auto-Render

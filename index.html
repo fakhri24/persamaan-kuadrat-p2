@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   
   <!-- File CSS eksternal kita dengan cache-buster -->
-  <link rel="stylesheet" href="style.css?v=3.2">
+  <link rel="stylesheet" href="style.css?v=3.3">
 
   <!-- 2. KaTeX JS Core & Auto-render Extension -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -27,11 +27,11 @@
     <!-- Header Utama -->
     <header class="app-header">
       <h1>Petualangan Diskriminan Persamaan Kuadrat</h1>
-      <p class="subtitle">Memahami karakteristik dan sifat akar melalui analisis nilai $D = b^2 - 4ac$</p>
+      <p id="app-subtitle" class="subtitle">Memahami karakteristik dan sifat akar melalui analisis nilai $D = b^2 - 4ac$</p>
     </header>
 
     <!-- Layout Utama: Split 50% - 50% -->
-    <main class="split-layout">
+    <main id="stage1-layout" class="split-layout">
       
       <!-- ========================================================
            PANEL KIRI (50%): Fondasi Materi & Kaitan Rumus ABC
@@ -141,6 +141,113 @@
       </section>
 
     </main>
+
+      <!-- ========================================================
+           STAGE 2: MISI MENGHITUNG DISKRIMINAN (FASE 4)
+           Panel kiri  : panggung rumus D + slot drag-and-drop a, b, c
+           Panel kanan : bedah langkah b² − 4ac + pemilihan sifat akar
+           ======================================================== -->
+      <section id="stage-diskriminan" class="stage-diskriminan hidden" aria-labelledby="stage2-heading">
+        <div class="stage-topbar">
+          <button id="btn-kembali-fondasi" class="btn-back" type="button">
+            <span aria-hidden="true">&larr;</span> Fondasi &amp; Kuis
+          </button>
+          <span class="stage-mission">🎯 Stage 2 &middot; Misi Menghitung Diskriminan</span>
+        </div>
+
+        <div class="split-layout">
+          <!-- ========================================================
+               PANEL KIRI: PANGGUNG RUMUS D
+               ======================================================== -->
+          <section class="panel panel-left">
+            <div class="card-header">
+              <span class="step-pill">Langkah 3</span>
+              <h2 id="stage2-heading">Panggung Rumus $D$</h2>
+            </div>
+
+            <div class="equation-display-card">
+              <span class="label-badge">Soal Persamaan</span>
+              <div id="stage2-equation" class="equation-text"></div>
+            </div>
+
+            <div class="instruction-box">
+              <p><strong>Seret</strong> kepingan angka ke slot rumus. Di layar sentuh, <strong>ketuk kepingan</strong> lalu <strong>ketuk slotnya</strong>. Bagian yang dikuadratkan selalu koefisien $b$.</p>
+            </div>
+
+            <div class="formula-stage">
+              <div class="formula-stage-head">
+                <span>Susun Rumus Diskriminan</span>
+                <button id="btn-reset-slots" class="btn-link" type="button">Kosongkan</button>
+              </div>
+              <div id="formula-slots" class="formula-slots" aria-label="Rumus diskriminan dengan slot isian">
+                <span class="fx">D = (</span>
+                <button type="button" class="slot slot-b" data-slot="b" aria-label="Slot koefisien b">
+                  <span class="slot-placeholder">b</span><span class="slot-value"></span>
+                </button>
+                <span class="fx">)<sup>2</sup> &minus; 4 (</span>
+                <button type="button" class="slot slot-a" data-slot="a" aria-label="Slot koefisien a">
+                  <span class="slot-placeholder">a</span><span class="slot-value"></span>
+                </button>
+                <span class="fx">) (</span>
+                <button type="button" class="slot slot-c" data-slot="c" aria-label="Slot konstanta c">
+                  <span class="slot-placeholder">c</span><span class="slot-value"></span>
+                </button>
+                <span class="fx">)</span>
+              </div>
+            </div>
+
+            <div class="chips-tray">
+              <span class="tray-label">Kepingan angka</span>
+              <div id="chip-bank" class="chip-bank" aria-label="Kepingan angka koefisien"></div>
+            </div>
+
+            <div class="quiz-actions">
+              <button id="btn-cek-slot" class="btn btn-success" type="button">Periksa Susunan</button>
+              <button id="btn-soal-baru" class="btn btn-secondary" type="button">🔄 Soal Baru</button>
+            </div>
+
+            <div id="slot-feedback" class="feedback-card hidden"></div>
+          </section>
+
+          <!-- ========================================================
+               PANEL KANAN: BEDAH PERHITUNGAN D
+               ======================================================== -->
+          <section class="panel panel-right">
+            <div class="card-header">
+              <span class="step-pill step-pill-accent">Langkah 4</span>
+              <h2>Bedah Perhitungan $D$</h2>
+            </div>
+
+            <div id="steps-locked" class="steps-locked">
+              <div class="lock-icon">🧩</div>
+              <h3>Menunggu Susunan Rumus</h3>
+              <p>Susun kepingan angka di panel kiri. Begitu susunannya tepat, langkah perhitungan terbuka otomatis di sini.</p>
+            </div>
+
+            <div id="steps-area" class="steps-area hidden">
+              <p class="steps-lead">Kerjakan bertahap, satu langkah setiap baris:</p>
+              <ol id="step-list" class="step-list"></ol>
+
+              <div class="sqrt-visual">
+                <p class="sqrt-title">Nilai $D$ kembali ke dalam akar rumus ABC</p>
+                <div id="sqrt-formula" class="math-display"></div>
+                <p id="sqrt-note" class="sqrt-note"></p>
+              </div>
+
+              <div class="root-checker">
+                <p class="root-question">Berdasarkan nilai $D$ tersebut, bagaimana sifat akar persamaannya?</p>
+                <div id="root-options" class="root-options" role="group" aria-label="Pilihan sifat akar">
+                  <button type="button" class="root-option" data-akar="dua">Dua akar riil berbeda</button>
+                  <button type="button" class="root-option" data-akar="kembar">Akar kembar (satu akar)</button>
+                  <button type="button" class="root-option" data-akar="tidak">Tidak punya akar riil</button>
+                </div>
+              </div>
+
+              <div id="root-feedback" class="feedback-card hidden"></div>
+            </div>
+          </section>
+        </div>
+      </section>
   </div>
 
   <!-- ========================================================
@@ -217,6 +324,6 @@
   </div>
 
   <!-- Script JavaScript vanilla kita dengan cache-buster -->
-  <script src="script.js?v=3.2" defer></script>
+  <script src="script.js?v=3.3" defer></script>
 </body>
 </html>

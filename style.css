@@ -164,6 +164,8 @@ body {
   padding: 0.2rem 0.6rem;
   border-radius: 9999px;
   text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .step-pill-alt {
@@ -325,6 +327,18 @@ body {
 
 .btn-secondary:hover {
   background-color: #475569;
+}
+
+/* Tombol nonaktif: setelah susunan benar / jawaban terbuka */
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn:disabled:hover {
+  transform: none;
 }
 
 .btn-accent {
@@ -672,4 +686,566 @@ body {
   border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: flex-end;
+}
+
+/* ==========================================================================
+   STAGE 2: MISI MENGHITUNG DISKRIMINAN (FASE 4)
+   Panggung rumus slot + baki kepingan + bedah langkah + pilihan sifat akar
+   ========================================================================== */
+.stage-diskriminan {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Dipasang ulang tiap kali Stage 2 dibuka agar transisi masuknya tetap terasa */
+.stage-diskriminan.tampil {
+  animation: stageMasuk 0.4s ease;
+}
+
+.stage-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-back:hover {
+  color: var(--text-main);
+  border-color: #64748b;
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.stage-mission {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #c4b5fd;
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+}
+
+.step-pill-accent {
+  background: var(--color-accent);
+}
+
+/* --- Panggung rumus: slot isian --- */
+.formula-stage {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.formula-stage-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-link:hover {
+  color: var(--text-main);
+}
+
+.btn-link:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.formula-slots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text-main);
+}
+
+.formula-slots sup {
+  font-size: 0.6em;
+}
+
+.fx {
+  white-space: nowrap;
+}
+
+.slot {
+  flex: 0 0 auto; /* jangan menyusut saat rumus sempit */
+  width: clamp(42px, 11vw, 54px);
+  height: clamp(38px, 10vw, 46px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 6, 23, 0.7);
+  border: 2px dashed #475569;
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.slot:hover {
+  border-color: #64748b;
+  background: rgba(30, 41, 59, 0.6);
+}
+
+.slot-placeholder {
+  font-family: ui-serif, Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  opacity: 0.45;
+}
+
+.slot-value {
+  display: none;
+}
+
+.slot.filled {
+  border-style: solid;
+}
+
+.slot.filled .slot-placeholder {
+  display: none;
+}
+
+.slot.filled .slot-value {
+  display: inline;
+}
+
+.slot-b.filled {
+  border-color: var(--chip-b-border);
+  color: var(--chip-b-text);
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.slot-a.filled {
+  border-color: var(--chip-a-border);
+  color: var(--chip-a-text);
+  background: rgba(99, 102, 241, 0.14);
+}
+
+.slot-c.filled {
+  border-color: var(--chip-c-border);
+  color: var(--chip-c-text);
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.slot.wrong {
+  border-color: var(--color-danger) !important;
+  color: #fca5a5 !important;
+  background: rgba(239, 68, 68, 0.14) !important;
+  animation: slotShake 0.4s ease;
+}
+
+.slot.ok {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+}
+
+.slot.pulse-ok {
+  animation: slotPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.slot.drop-hover {
+  border-color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.15) !important;
+  transform: scale(1.06);
+}
+
+/* --- Baki kepingan angka --- */
+.chips-tray {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.tray-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.chip-bank {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  min-height: 42px;
+}
+
+.chip-drag {
+  flex: 0 0 auto; /* jaga ukuran kepingan tetap sama di semua layar */
+  width: 46px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, #334155, #1e293b);
+  border: 1px solid #475569;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: grab;
+  touch-action: none; /* Kunci: menyeret kepingan di HP tidak memicu scroll halaman */
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  animation: chipIn 0.22s ease;
+}
+
+.chip-drag:hover {
+  transform: translateY(-2px);
+  border-color: #94a3b8;
+}
+
+.chip-drag.selected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.28);
+  transform: translateY(-2px);
+}
+
+.chip-drag.dragging {
+  opacity: 0.28;
+}
+
+body.is-dragging {
+  cursor: grabbing;
+}
+
+.drag-ghost {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: rgba(99, 102, 241, 0.95);
+  color: #ffffff;
+  font-family: var(--font-family);
+  font-size: 1.05rem;
+  font-weight: 800;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.55);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.tray-empty {
+  font-size: 0.8rem;
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+/* --- Panel kanan: bedah langkah --- */
+.steps-locked {
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.steps-locked .lock-icon {
+  font-size: 2rem;
+}
+
+.steps-locked h3 {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.steps-locked p {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  max-width: 300px;
+}
+
+.steps-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.steps-lead {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.step-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.step-item {
+  display: flex;
+  gap: 0.7rem;
+  background: rgba(11, 17, 32, 0.6);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.8rem;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: stepMasuk 0.35s ease forwards;
+}
+
+.step-item:nth-child(2) { animation-delay: 0.1s; }
+.step-item:nth-child(3) { animation-delay: 0.2s; }
+
+.step-num {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.step-body {
+  min-width: 0;
+}
+
+.step-title {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+}
+
+.step-math {
+  font-size: 0.95rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+}
+
+/* Scrollbar tipis & menyatu dengan tema (bukan blok putih bawaan browser) */
+.step-math::-webkit-scrollbar {
+  height: 6px;
+}
+
+.step-math::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 9999px;
+}
+
+.step-math::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.step-math .katex-display {
+  margin: 0;
+  text-align: left;
+}
+
+/* --- Visualisasi nilai D di dalam akar --- */
+.sqrt-visual {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: fadeIn 0.35s ease 0.35s both;
+}
+
+.sqrt-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fcd34d;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sqrt-visual .math-display {
+  background: transparent;
+  padding: 0.25rem;
+  overflow-x: auto;
+}
+
+.sqrt-note {
+  font-size: 0.8rem;
+  color: #fde68a;
+  line-height: 1.45;
+}
+
+/* --- Pilihan sifat akar --- */
+.root-checker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.root-question {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.root-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 560px) {
+  .root-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.root-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 62px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.3;
+  padding: 0.6rem 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.root-option:hover {
+  border-color: #64748b;
+  background: rgba(51, 65, 85, 0.75);
+  transform: translateY(-1px);
+}
+
+.root-option.correct {
+  border-color: var(--color-success);
+  background: rgba(16, 185, 129, 0.16);
+  color: #6ee7b7;
+}
+
+.root-option.wrong {
+  border-color: var(--color-danger);
+  background: rgba(239, 68, 68, 0.14);
+  color: #fca5a5;
+  animation: slotShake 0.4s ease;
+}
+
+.root-option:disabled {
+  cursor: default;
+  opacity: 0.7;
+  transform: none;
+}
+
+.root-option.correct:disabled {
+  opacity: 1;
+}
+
+/* Di layar sempit, rumus langkah dikecilkan sedikit agar tidak perlu digeser */
+@media (max-width: 560px) {
+  .step-math .katex {
+    font-size: 1em;
+  }
+}
+
+/* Di layar sempit, rumus D = (b)² − 4(a)(c) dipadatkan agar tetap satu baris utuh */
+@media (max-width: 480px) {
+  .formula-slots {
+    font-size: 0.9rem;
+    gap: 0.2rem;
+  }
+
+  .slot {
+    width: 36px;
+    height: 34px;
+    font-size: 0.85rem;
+  }
+}
+
+/* --- Keyframes khas Stage 2 --- */
+@keyframes stepMasuk {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes chipIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slotPop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slotShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+@keyframes stageMasuk {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

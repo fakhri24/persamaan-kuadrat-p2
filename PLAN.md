@@ -10,7 +10,7 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] **Fase 1**: Fondasi Materi & Kuis Identifikasi Koefisien (HTML + KaTeX)
 - [x] **Fase 2**: Penataan Gaya Dual-Panel 50-50 & Card Visual (CSS)
 - [x] **Fase 3**: Logika Generator Persamaan & Kuis Identifikasi a, b, c (JS)
-- [ ] **Fase 4**: Modul Inti Diskriminan: Menghitung D via Slot Drag-Drop & Tanda Akar ABC
+- [x] **Fase 4**: Modul Inti Diskriminan: Menghitung D via Slot Drag-Drop & Tanda Akar ABC
 - [ ] **Fase 5**: Level Quest & Soal Tantangan (Main Quest & Side Quest)
 - [ ] **Fase 6**: Finishing, Polish, & Dokumentasi Belajar
 
@@ -61,12 +61,15 @@ Dokumen ini melacak daftar tugas, tahapan implementasi bertahap, dan progres fit
 - [x] Umpan balik langsung: highlight hijau jika benar, petunjuk ramah jika keliru (misal: "Hati-hati dengan tanda minus pada koefisien $b$")
 - [x] Tombol lanjut ke Modul Menghitung Diskriminan setelah berhasil menjawab
 
-### Fase 4: Modul Inti Diskriminan & Interaksi Slot (Pengembangan Lanjutan)
+### Fase 4: Modul Inti Diskriminan & Interaksi Slot
 *Fokus Belajar: Drag and drop kartu koefisien, kalkulasi bertahap b^2 - 4ac, kaitan dengan tanda di dalam akar ABC.*
-- [ ] Kepingan koefisien $a, b, c$ yang dapat di-drag ke template slot rumus `( [b] )² - 4( [a] )( [c] )`
-- [ ] Breakdown langkah perhitungan otomatis ($b^2$, lalu $4ac$, lalu hasil akhir $D$)
-- [ ] Animasi visualisasi nilai di dalam akar rumus ABC $\sqrt{D}$
-- [ ] Pemilihan sifat akar (2 akar riil berbeda, akar kembar, tidak riil)
+- [x] Tombol "Lanjut ke Petualangan Menghitung Diskriminan" menyembunyikan total Stage 1 (fondasi + kuis a, b, c) lalu menampilkan Stage 2 (Langkah 3 & 4)
+- [x] Kepingan koefisien $a, b, c$ yang dapat di-drag ke template slot rumus `( [b] )² - 4( [a] )( [c] )` (mouse + sentuh, plus fallback ketuk-kepingan-lalu-ketuk-slot)
+- [x] Generator soal Stage 2 yang seimbang untuk tiga kemungkinan: $D > 0$, $D = 0$ (dikonstruksi pasti kembar), dan $D < 0$
+- [x] Breakdown langkah perhitungan otomatis ($b^2$, lalu $4ac$, lalu hasil akhir $D$) yang terbuka setelah susunan slot tepat
+- [x] Animasi visualisasi nilai di dalam akar rumus ABC $\sqrt{D}$
+- [x] Pemilihan sifat akar (2 akar riil berbeda, akar kembar, tidak riil) dengan umpan balik konstruktif
+- [x] Tombol "Soal Baru" untuk mengulang misi dengan persamaan acak berikutnya
 
 ### Fase 5: Level Quest & Scaffolding Tantangan (Main & Side Quest)
 *Fokus Belajar: State machine quest bertingkat, penanganan soal parameter aljabar kx^2 - kx + 3 = 0.*
